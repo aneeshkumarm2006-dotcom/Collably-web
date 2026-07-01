@@ -284,6 +284,26 @@
     transform: translateX(-50%);
   }
 }
+/* Hero entrance: rise + fade. Applied with staggered animation-delay per element. */
+@keyframes cb-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Vertical auto-scroll for the hero phone feed (masked, duplicated content). */
+@keyframes cb-scroll-y {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

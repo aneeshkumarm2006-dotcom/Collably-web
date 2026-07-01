@@ -42,7 +42,7 @@ const SOCIALS = [
 export function Footer({ className }: { className?: string }) {
   return (
     <footer className={cn('bg-dark-sidebar text-white/60', className)}>
-      <div className="mx-auto max-w-[1320px] px-6 py-16">
+      <div className="mx-auto max-w-[1600px] px-6 py-16 lg:px-10">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
           <div className="col-span-2 md:col-span-1">
             <BrandMark onDark />

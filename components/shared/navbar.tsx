@@ -49,7 +49,7 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
         onDark ? 'border-dark-border bg-dark-sidebar/85' : 'border-hair bg-page/85',
       )}
     >
-      <div className="mx-auto flex h-full max-w-[1320px] items-center justify-between gap-4 px-6">
+      <div className="mx-auto flex h-full max-w-[1600px] items-center justify-between gap-4 px-6 lg:px-10">
         <div className="flex items-center gap-8">
           <Link href="/" aria-label="Collably home">
             <BrandMark onDark={onDark} />

@@ -127,7 +127,7 @@ export function ChatThread({
   }
 
   return (
-    <div className="flex h-[calc(100dvh-4rem)] flex-col bg-page md:h-[calc(100vh-4rem)]">
+    <div className="flex h-full flex-col bg-page">
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-hair bg-card px-4 py-3">
         <Link

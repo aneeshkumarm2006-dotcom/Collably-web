@@ -1,19 +1,25 @@
 import type { Metadata } from 'next';
-
-import { getSession } from '@/lib/auth/session';
-import { DashboardContainer, PageHeader } from '@/components/dashboard/page-shell';
-import { ConversationList } from '@/components/chat/conversation-list';
+import { MessagesSquare } from 'lucide-react';
 
 export const metadata: Metadata = { title: 'Messages' };
 
-export default async function CreatorMessagesPage() {
-  const session = await getSession();
+/**
+ * Right-pane placeholder when no thread is open. The conversation list lives in
+ * the route `layout.tsx` (the split-pane), so on desktop this sits beside it;
+ * on mobile the layout shows the list here instead and hides this pane.
+ */
+export default function CreatorMessagesPage() {
   return (
-    <DashboardContainer className="max-w-[820px]">
-      <PageHeader title="Messages" subtitle="Chat with the brands you’re collaborating with." />
-      <div className="rounded-2xl border border-hair bg-card p-4 shadow-card sm:p-5">
-        <ConversationList role="creator" meId={session!.user.id} />
+    <div className="flex h-full items-center justify-center p-8 text-center">
+      <div className="max-w-sm">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+          <MessagesSquare className="h-7 w-7" />
+        </span>
+        <h2 className="mt-4 font-display text-xl font-bold text-ink">Your messages</h2>
+        <p className="mt-1.5 text-sm text-muted">
+          Select a conversation to start chatting with the brands you’re collaborating with.
+        </p>
       </div>
-    </DashboardContainer>
+    </div>
   );
 }

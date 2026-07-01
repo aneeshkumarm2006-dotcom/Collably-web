@@ -143,6 +143,8 @@ const config: Config = {
           '50%': { transform: 'scale(2)', opacity: '0' },
         },
         'cb-marquee': { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-50%)' } },
+        'cb-rise': { from: { opacity: '0', transform: 'translateY(20px)' }, to: { opacity: '1', transform: 'none' } },
+        'cb-scroll-y': { from: { transform: 'translateY(0)' }, to: { transform: 'translateY(-50%)' } },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -152,6 +154,8 @@ const config: Config = {
         'cb-fill': 'cb-fill 4.2s ease-in-out infinite',
         'cb-pulse': 'cb-pulse 1.8s ease-out infinite',
         'cb-marquee': 'cb-marquee 26s linear infinite',
+        'cb-rise': 'cb-rise 0.7s cubic-bezier(0.2,0.7,0.2,1) both',
+        'cb-scroll-y': 'cb-scroll-y 16s linear infinite',
       },
     },
   },

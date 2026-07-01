@@ -1,0 +1,50 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/components/providers/auth-provider';
+import { ConversationList } from '@/components/chat/conversation-list';
+import { Skeleton } from '@/components/ui/skeleton';
+
+/**
+ * Messages split-pane: the conversation list (left) sits beside the active
+ * thread / placeholder (right), filling the dashboard content area. On mobile it
+ * collapses to a single pane — the list on the index route, the thread once a
+ * conversation is open (the thread's own back button returns to the list).
+ */
+export default function BusinessMessagesLayout({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const pathname = usePathname() ?? '';
+  const hasActive = /\/messages\/[^/]+/.test(pathname);
+
+  return (
+    <div className="flex h-[calc(100dvh-4rem)] overflow-hidden md:h-[calc(100vh-4rem)]">
+      <aside
+        className={cn(
+          'flex w-full shrink-0 flex-col overflow-y-auto border-r border-hair bg-card md:w-[340px]',
+          hasActive && 'hidden md:flex',
+        )}
+      >
+        <div className="border-b border-hair px-5 py-4">
+          <h1 className="font-display text-[22px] font-extrabold tracking-tight text-ink">Messages</h1>
+          <p className="mt-0.5 text-[13px] text-muted">Chat with the creators in your collabs.</p>
+        </div>
+        <div className="p-4">
+          {user ? (
+            <ConversationList role="business" meId={user.id} />
+          ) : (
+            <div className="space-y-2">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-[68px] w-full rounded-lg" />
+              ))}
+            </div>
+          )}
+        </div>
+      </aside>
+      <section className={cn('min-w-0 flex-1 bg-page', !hasActive && 'hidden md:block')}>
+        {children}
+      </section>
+    </div>
+  );
+}

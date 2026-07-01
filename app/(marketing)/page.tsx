@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {
   ArrowRight,
   BadgeCheck,
+  Bell,
   Coffee,
   Dumbbell,
   Gift,
@@ -37,6 +38,7 @@ import { CtaBand } from '@/components/marketing/cta-band';
 import { Faq } from '@/components/marketing/faq';
 import { faqPageJsonLd } from '@/lib/faq';
 import { CampaignCard } from '@/components/shared/campaign-card';
+import { BrandGlyph } from '@/components/shared/brand-mark';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/shared/avatar';
 import { JsonLd } from '@/components/shared/json-ld';
@@ -49,6 +51,15 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const FEATURE_ICONS = { users: Users, gift: Gift, 'badge-check': BadgeCheck, 'map-pin': MapPin };
+
+/** Illustrative campaign cards for the hero phone's auto-scrolling app feed. */
+const PHONE_FEED = [
+  { initial: 'M', name: 'Maple & Oat', category: 'Café', reward: 'Brunch · $65', grad: 'linear-gradient(135deg,#0064E0,#3E8BFF)' },
+  { initial: 'G', name: 'Glow Bar', category: 'Beauty', reward: 'Facial · $210', grad: 'linear-gradient(135deg,#FF6A3D,#FF9E6B)' },
+  { initial: 'P', name: 'Peak Pilates', category: 'Fitness', reward: 'Membership · $220', grad: 'linear-gradient(135deg,#16C79A,#4FE0BC)' },
+  { initial: 'N', name: 'North Goods', category: 'Retail', reward: '$150 credit', grad: 'linear-gradient(135deg,#7B61FF,#A48CFF)' },
+  { initial: 'H', name: 'Harbour Tacos', category: 'Food', reward: 'Dinner · $90', grad: 'linear-gradient(135deg,#FF6A3D,#FFB020)' },
+];
 const REWARD_ICONS = {
   coffee: Coffee,
   sparkles: Sparkles,
@@ -106,25 +117,40 @@ export default async function LandingPage() {
         <Container className="relative py-16 sm:py-20 lg:py-24">
           <div className="grid items-center gap-14 lg:grid-cols-[1.04fr_0.96fr]">
             <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-hair bg-card px-3 py-1 text-[13px] font-bold text-brand shadow-card">
+              <span
+                className="inline-flex items-center gap-2 rounded-full border border-hair bg-card px-3 py-1 text-[13px] font-bold text-brand shadow-card animate-cb-rise"
+                style={{ animationDelay: '0ms' }}
+              >
                 <span className="text-warm">🍁</span>
                 Canada-first · Local collabs, easy ahead
               </span>
               <h1 className="mt-6 text-balance font-display text-[44px] font-extrabold leading-[0.96] tracking-[-0.04em] sm:text-6xl lg:text-[74px]">
-                Real collabs.
-                <br />
-                Real <span className="text-brand">rewards.</span>
-                <br />
-                Zero gatekeeping.
+                <span className="block animate-cb-rise" style={{ animationDelay: '90ms' }}>
+                  Real collabs.
+                </span>
+                <span className="block animate-cb-rise" style={{ animationDelay: '180ms' }}>
+                  Real <span className="text-brand">rewards.</span>
+                </span>
+                <span className="block animate-cb-rise" style={{ animationDelay: '270ms' }}>
+                  Zero gatekeeping.
+                </span>
               </h1>
-              <p className="mt-6 max-w-[500px] text-pretty text-[19px] leading-relaxed text-muted">
+              <p
+                className="mt-6 max-w-[500px] text-pretty text-[19px] leading-relaxed text-muted animate-cb-rise"
+                style={{ animationDelay: '380ms' }}
+              >
                 Collably matches Canadian creators with local spots for collabs that pay in real
                 meals, services and products. No agencies. No follower minimums. Just show up and
                 create.
               </p>
-              <HeroCta />
+              <div className="animate-cb-rise" style={{ animationDelay: '480ms' }}>
+                <HeroCta />
+              </div>
 
-              <div className="mt-9 flex flex-wrap items-center gap-4">
+              <div
+                className="mt-9 flex flex-wrap items-center gap-4 animate-cb-rise"
+                style={{ animationDelay: '580ms' }}
+              >
                 <div className="flex -space-x-3">
                   {HERO_AVATARS.map((a) => (
                     <span
@@ -143,8 +169,8 @@ export default async function LandingPage() {
               </div>
             </div>
 
-            {/* Right: floating product card mockup */}
-            <div className="relative mx-auto w-full max-w-[420px]">
+            {/* Right: floating phone app mockup */}
+            <div className="relative mx-auto w-full max-w-[440px] animate-cb-rise" style={{ animationDelay: '260ms' }}>
               {/* Decorative floating blobs */}
               <span
                 aria-hidden
@@ -155,66 +181,88 @@ export default async function LandingPage() {
                 className="pointer-events-none absolute -right-6 bottom-8 -z-0 h-20 w-20 rounded-[22px] bg-grape-soft animate-cb-float-b"
               />
 
-              {/* Product card */}
-              <div className="relative rounded-[26px] border border-hair bg-card shadow-card-hover">
-                <div
-                  className="relative overflow-hidden rounded-t-[26px] px-6 py-5"
-                  style={{ background: 'linear-gradient(130deg,#0064E0,#7B61FF)' }}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white">
-                      <span className="relative flex h-2 w-2">
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-white animate-cb-pulse" />
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+              {/* Phone */}
+              <div className="relative mx-auto w-[300px] animate-cb-float">
+                <div className="relative rounded-[48px] border-[12px] border-dark-sidebar bg-dark-sidebar shadow-card-hover">
+                  {/* Notch */}
+                  <span className="absolute left-1/2 top-0 z-20 h-6 w-32 -translate-x-1/2 rounded-b-2xl bg-dark-sidebar" />
+                  {/* Screen */}
+                  <div className="relative h-[600px] overflow-hidden rounded-[36px] bg-page">
+                    {/* App top bar */}
+                    <div className="flex items-center justify-between border-b border-hair bg-card px-4 py-3.5">
+                      <div className="flex items-center gap-2">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-white">
+                          <BrandGlyph className="h-3.5 w-3.5" />
+                        </span>
+                        <span className="font-display text-[15px] font-extrabold tracking-tight text-ink">
+                          Explore
+                        </span>
+                      </div>
+                      <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-muted">
+                        <Bell className="h-4 w-4" />
+                        <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-warm ring-2 ring-card" />
                       </span>
-                      Live
-                    </span>
-                    <span className="rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-bold text-white">
-                      Brunch collab
-                    </span>
-                  </div>
-                  <div className="mt-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/95 text-lg font-extrabold text-brand shadow-sm">
-                    M
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="font-display text-xl font-bold text-ink">Maple &amp; Oat · Gastown</h3>
-
-                  <div className="mt-4 flex items-center justify-between rounded-2xl bg-brand-soft px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-brand">
-                        <Gift className="h-4 w-4" />
+                    </div>
+                    {/* Location + live pill */}
+                    <div className="flex items-center justify-between px-4 pb-1 pt-3">
+                      <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-muted">
+                        <MapPin className="h-3.5 w-3.5 text-brand" /> Toronto, ON
                       </span>
-                      <div className="text-sm">
-                        <div className="font-bold text-ink">Brunch for 2</div>
-                        <div className="text-xs text-muted">$65 value</div>
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-mint-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-mint">
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-mint animate-cb-pulse" />
+                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-mint" />
+                        </span>
+                        18 live
+                      </span>
+                    </div>
+                    {/* Auto-scrolling feed (masked, duplicated for a seamless loop) */}
+                    <div
+                      className="h-[520px] overflow-hidden px-4"
+                      style={{
+                        maskImage: 'linear-gradient(180deg, transparent, #000 8%, #000 82%, transparent)',
+                        WebkitMaskImage:
+                          'linear-gradient(180deg, transparent, #000 8%, #000 82%, transparent)',
+                      }}
+                    >
+                      <div className="flex flex-col gap-3 pt-3 animate-cb-scroll-y">
+                        {[...PHONE_FEED, ...PHONE_FEED].map((c, i) => (
+                          <div
+                            key={`${c.name}-${i}`}
+                            className="overflow-hidden rounded-2xl border border-hair bg-card shadow-sm"
+                          >
+                            <div
+                              className="flex h-16 items-center justify-between px-3"
+                              style={{ background: c.grad }}
+                            >
+                              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/95 font-display text-base font-extrabold text-ink">
+                                {c.initial}
+                              </span>
+                              <span className="rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold text-ink">
+                                {c.category}
+                              </span>
+                            </div>
+                            <div className="p-3">
+                              <div className="text-[13px] font-bold text-ink">{c.name}</div>
+                              <div className="mt-1 flex items-center justify-between">
+                                <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[11px] font-bold text-[#0052BD]">
+                                  {c.reward}
+                                </span>
+                                <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-brand">
+                                  Apply <ArrowRight className="h-3 w-3" />
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                    <BadgeCheck className="h-5 w-5 text-brand" />
                   </div>
-
-                  <div className="mt-5">
-                    <div className="mb-1.5 flex items-center justify-between text-xs text-muted">
-                      <span>Applications</span>
-                      <span className="font-semibold text-ink">14 / 20</span>
-                    </div>
-                    <div className="h-2 w-full overflow-hidden rounded-full bg-hair">
-                      <span className="block h-full rounded-full bg-brand animate-cb-fill" />
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-brand text-sm font-semibold text-white transition-colors hover:bg-[#0052BD]"
-                  >
-                    Apply now <ArrowRight className="h-4 w-4" />
-                  </button>
                 </div>
               </div>
 
               {/* Floating "Reward unlocked" toast */}
-              <div className="absolute -left-6 top-32 flex items-center gap-2.5 rounded-2xl border border-hair bg-card px-3.5 py-2.5 shadow-card-hover animate-cb-float">
+              <div className="absolute -left-4 top-28 z-20 flex items-center gap-2.5 rounded-2xl border border-hair bg-card px-3.5 py-2.5 shadow-card-hover animate-cb-float">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mint-soft text-mint">
                   <BadgeCheck className="h-4 w-4" />
                 </span>
@@ -225,7 +273,7 @@ export default async function LandingPage() {
               </div>
 
               {/* Floating dark chip */}
-              <div className="absolute -bottom-4 right-2 rounded-full bg-dark-sidebar px-4 py-2 text-xs font-semibold text-white shadow-card-hover animate-cb-float-b">
+              <div className="absolute -bottom-2 right-0 z-20 rounded-full bg-dark-sidebar px-4 py-2 text-xs font-semibold text-white shadow-card-hover animate-cb-float-b">
                 +142 new collabs this week
               </div>
             </div>
