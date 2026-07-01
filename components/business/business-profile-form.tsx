@@ -109,11 +109,11 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
             {form.businessName || profile.businessName || 'Your business'}
           </h2>
           {profile.isVerified ? (
-            <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-[#E7F0FF] px-2.5 py-1 text-[12px] font-bold text-[#0052BD]">
+            <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-2.5 py-1 text-[12px] font-bold text-brand">
               <BadgeCheck className="h-3.5 w-3.5" /> Verified business
             </span>
           ) : (
-            <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-[#FFF3DA] px-2.5 py-1 text-[12px] font-bold text-[#B57F00]">
+            <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-warn-soft px-2.5 py-1 text-[12px] font-bold text-warn">
               Under review
             </span>
           )}

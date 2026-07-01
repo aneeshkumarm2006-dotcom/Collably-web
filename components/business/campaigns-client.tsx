@@ -278,10 +278,10 @@ export function BusinessCampaignsClient() {
 /** Domain status → design pill (label + soft tint colors). */
 const STATUS_PILL: Record<CampaignStatus, { label: string; className: string }> = {
   Active: { label: 'Live', className: 'bg-mint-soft text-[#0FA57E]' },
-  Paused: { label: 'Paused', className: 'bg-[#FFF3DA] text-[#B57F00]' },
+  Paused: { label: 'Paused', className: 'bg-warn-soft text-warn' },
   Draft: { label: 'Draft', className: 'bg-secondary text-muted' },
   Closed: { label: 'Closed', className: 'bg-secondary text-muted' },
-  Completed: { label: 'Completed', className: 'bg-[#E7F0FF] text-[#0052BD]' },
+  Completed: { label: 'Completed', className: 'bg-brand-soft text-brand' },
 };
 
 function CampaignRow({

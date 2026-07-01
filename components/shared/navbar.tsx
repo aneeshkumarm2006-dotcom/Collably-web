@@ -44,6 +44,9 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   // Signed-in users land on their dashboard from the logo; guests go to marketing home.
   const homeHref = user ? postAuthPath(user) : '/';
+  // The prospect-facing nav links are hidden once signed in — the dashboard sidebar
+  // + avatar menu are the app's navigation then.
+  const navLinks = user ? [] : LINKS;
 
   return (
     <nav
@@ -58,7 +61,7 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
             <BrandMark onDark={onDark} />
           </Link>
           <div className="hidden items-center gap-7 md:flex">
-            {LINKS.map((l) => (
+            {navLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
@@ -120,7 +123,7 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
                 </SheetTitle>
               </SheetHeader>
               <div className="mt-4 flex flex-col gap-1">
-                {LINKS.map((l) => (
+                {navLinks.map((l) => (
                   <SheetClose asChild key={l.href}>
                     <Link
                       href={l.href}

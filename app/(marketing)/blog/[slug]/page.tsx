@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {/* Back link */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-[#0052BD]"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-brand"
         >
           <ArrowLeft className="h-4 w-4" /> All posts
         </Link>

@@ -94,9 +94,9 @@ export default async function CreatorHomePage() {
       label: 'Completed',
       value: completedCount,
       glyph: <BadgeCheck />,
-      tile: 'bg-[#FFF3DA] text-[#B57F00]',
+      tile: 'bg-warn-soft text-warn',
       delta: 'Verified collabs',
-      deltaClass: 'text-[#B57F00]',
+      deltaClass: 'text-warn',
     },
   ];
 

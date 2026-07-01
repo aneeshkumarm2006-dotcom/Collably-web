@@ -51,7 +51,7 @@ export function LegalPage({
                       className={cn(
                         'block rounded-[11px] px-3.5 py-2.5 text-sm font-semibold transition-colors',
                         active
-                          ? 'bg-[#E7F0FF] text-brand dark:bg-brand/15'
+                          ? 'bg-brand-soft text-brand dark:bg-brand/15'
                           : 'text-muted hover:bg-secondary hover:text-ink',
                       )}
                     >

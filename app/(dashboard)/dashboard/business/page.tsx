@@ -134,7 +134,7 @@ export default async function BusinessHomePage() {
           label="Active campaigns"
           value={activeCampaigns.length}
           icon={<Flag />}
-          glyph={{ tile: 'bg-[#E7F0FF] text-brand', blob: 'bg-[#E7F0FF]' }}
+          glyph={{ tile: 'bg-brand-soft text-brand', blob: 'bg-brand-soft' }}
           delta={
             activeCampaigns.length > 0
               ? { text: `${activeCampaigns.length} filling fast`, className: 'text-brand' }
@@ -145,7 +145,7 @@ export default async function BusinessHomePage() {
           label="Total applicants"
           value={formatCompactNumber(totalApplications)}
           icon={<Star />}
-          glyph={{ tile: 'bg-[#EFEBFF] text-grape', blob: 'bg-[#EFEBFF]' }}
+          glyph={{ tile: 'bg-grape-soft text-grape', blob: 'bg-grape-soft' }}
           delta={
             pending.length > 0
               ? { text: `▲ ${pending.length} this week`, className: 'text-grape' }
@@ -162,7 +162,7 @@ export default async function BusinessHomePage() {
           label="Reward value given"
           value={formatCompactCurrency(rewardValueGiven)}
           icon={<DollarSign />}
-          glyph={{ tile: 'bg-[#FFF3DA] text-[#B57F00]', blob: 'bg-[#FFF3DA]' }}
+          glyph={{ tile: 'bg-warn-soft text-warn', blob: 'bg-warn-soft' }}
         />
       </div>
 
@@ -288,7 +288,7 @@ export default async function BusinessHomePage() {
           {pending.length > 0 && (
             <Link
               href="/dashboard/business/applications"
-              className="mt-4 flex items-center justify-between rounded-xl bg-[#E7F0FF] px-3.5 py-2.5 text-[13px] font-bold text-brand transition-opacity hover:opacity-80"
+              className="mt-4 flex items-center justify-between rounded-xl bg-brand-soft px-3.5 py-2.5 text-[13px] font-bold text-brand transition-opacity hover:opacity-80"
             >
               <span className="inline-flex items-center gap-2">
                 <BadgeCheck className="h-4 w-4" />

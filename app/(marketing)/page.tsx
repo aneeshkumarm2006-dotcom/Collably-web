@@ -245,7 +245,7 @@ export default async function LandingPage() {
                             <div className="p-3">
                               <div className="text-[13px] font-bold text-ink">{c.name}</div>
                               <div className="mt-1 flex items-center justify-between">
-                                <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[11px] font-bold text-[#0052BD]">
+                                <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[11px] font-bold text-brand">
                                   {c.reward}
                                 </span>
                                 <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-brand">

@@ -1,10 +1,11 @@
-import { SiteChrome } from '@/components/shared/site-chrome';
+import { PublicAppChrome } from '@/components/shared/public-app-chrome';
 
 /**
- * Public app views (explore, campaign/profile detail): guest-accessible, framed
- * by the same navbar + footer as the marketing site. Authed users keep their
- * avatar/bell in the navbar; gated actions (apply, etc.) prompt sign-up.
+ * Public app views (explore, campaign/profile detail): guest-accessible and
+ * shareable. Guests get the public navbar + footer; signed-in creators/businesses
+ * get the dashboard shell wrapped around the same content (so opening a campaign
+ * keeps them in the app instead of on the marketing header). See `PublicAppChrome`.
  */
 export default function PublicAppLayout({ children }: { children: React.ReactNode }) {
-  return <SiteChrome>{children}</SiteChrome>;
+  return <PublicAppChrome>{children}</PublicAppChrome>;
 }

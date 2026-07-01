@@ -16,21 +16,21 @@ const COOKIE_CATEGORIES = [
     description:
       'Keep you signed in (our session cookies) and operate core features. The site won’t work properly without these.',
     tag: 'Always on',
-    tagClass: 'bg-[#E4F8F2] text-[#0FA57E]',
+    tagClass: 'bg-mint-soft text-[#0FA57E]',
   },
   {
     name: 'Analytics',
     description:
       'Help us understand how the site is used so we can improve it. Aggregated and non-identifying where possible.',
     tag: 'Optional',
-    tagClass: 'bg-[#E7F0FF] text-[#0052BD]',
+    tagClass: 'bg-brand-soft text-brand',
   },
   {
     name: 'Marketing',
     description:
       'Measure the effectiveness of our campaigns and, where you opt in, show relevant content off-platform.',
     tag: 'Optional',
-    tagClass: 'bg-[#FFF3DA] text-[#B57F00]',
+    tagClass: 'bg-warn-soft text-warn',
   },
 ];
 
