@@ -98,7 +98,7 @@ export function ApplyPanel({
   // state-specific call-to-action passed in as children.
   function PanelShell({ children }: { children: React.ReactNode }) {
     return (
-      <div className="sticky top-[88px] rounded-2xl border border-hair bg-card p-6 shadow-card">
+      <div className="rounded-2xl border border-hair bg-card p-6 shadow-card">
         {/* Reward hero */}
         <div className="rounded-[14px] bg-[linear-gradient(120deg,#E7F0FF,#EFEBFF)] p-4 text-center">
           <div className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-brand">

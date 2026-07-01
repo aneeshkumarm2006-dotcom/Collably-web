@@ -115,7 +115,7 @@ export default async function LandingPage() {
           }}
         />
         <Container className="relative py-16 sm:py-20 lg:py-24">
-          <div className="grid items-center gap-14 lg:grid-cols-[1.04fr_0.96fr]">
+          <div className="mx-auto grid max-w-[1360px] items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] xl:gap-12">
             <div>
               <span
                 className="inline-flex items-center gap-2 rounded-full border border-hair bg-card px-3 py-1 text-[13px] font-bold text-brand shadow-card animate-cb-rise"
@@ -129,7 +129,7 @@ export default async function LandingPage() {
                   Real collabs.
                 </span>
                 <span className="block animate-cb-rise" style={{ animationDelay: '180ms' }}>
-                  Real <span className="text-brand">rewards.</span>
+                  Real <span className="cb-text-shine">rewards.</span>
                 </span>
                 <span className="block animate-cb-rise" style={{ animationDelay: '270ms' }}>
                   Zero gatekeeping.
@@ -415,10 +415,13 @@ export default async function LandingPage() {
               </Link>
             </Button>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="flex flex-wrap justify-center gap-6">
             {liveCampaigns.map((c) => (
-              <div key={c._id} className="flex flex-col gap-4">
-                <CampaignCard campaign={toCampaignCardData(c)} />
+              <div
+                key={c._id}
+                className="flex w-full flex-col gap-4 sm:w-[340px] lg:w-[300px] xl:w-[340px]"
+              >
+                <CampaignCard campaign={toCampaignCardData(c)} className="h-full" />
                 <GuestApplyButton />
               </div>
             ))}

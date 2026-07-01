@@ -292,8 +292,8 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
             </div>
           </div>
 
-          {/* RIGHT: sticky apply card */}
-          <aside>
+          {/* RIGHT: sticky apply card + more-from, stuck together as one block */}
+          <aside className="lg:sticky lg:top-[88px] lg:self-start">
             <ApplyPanel
               campaignId={campaign._id}
               campaignTitle={campaign.title}

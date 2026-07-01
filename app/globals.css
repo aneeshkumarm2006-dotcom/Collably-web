@@ -304,6 +304,20 @@
     transform: translateY(-50%);
   }
 }
+/* Continuous gradient shimmer for the highlighted hero word. */
+@keyframes cb-shine {
+  to {
+    background-position: -200% center;
+  }
+}
+.cb-text-shine {
+  background: linear-gradient(90deg, #0064e0, #7b61ff, #16c79a, #0064e0);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: cb-shine 4s linear infinite;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
