@@ -159,7 +159,7 @@ export function CreatorApplicationsClient() {
       ) : (
         <div className="overflow-hidden rounded-2xl border border-hair bg-card shadow-card">
           {/* Header row */}
-          <div className="flex items-center gap-4 border-b border-hair bg-[#F7F9FD] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
+          <div className="flex items-center gap-4 border-b border-hair bg-secondary px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
             <span className="flex-[2]">Campaign</span>
             <span className="hidden flex-1 sm:block">Reward</span>
             <span className="hidden flex-1 md:block">Applied</span>

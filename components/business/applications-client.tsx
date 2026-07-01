@@ -65,7 +65,7 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
             aria-pressed={tab === t}
             className={cn(
               'inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-bold transition-colors',
-              tab === t ? 'bg-brand text-white' : 'bg-[#EEF1F8] text-muted hover:text-ink',
+              tab === t ? 'bg-brand text-white' : 'bg-secondary text-muted hover:text-ink',
             )}
           >
             {t}

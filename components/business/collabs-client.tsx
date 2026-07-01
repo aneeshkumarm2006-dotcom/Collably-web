@@ -93,7 +93,7 @@ export function BusinessCollabsClient() {
             aria-pressed={filter === f}
             className={cn(
               'inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-bold transition-colors',
-              filter === f ? 'bg-brand text-white' : 'bg-[#EEF1F8] text-muted hover:text-ink',
+              filter === f ? 'bg-brand text-white' : 'bg-secondary text-muted hover:text-ink',
             )}
           >
             {FILTER_LABEL[f]}

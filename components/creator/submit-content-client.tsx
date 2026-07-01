@@ -256,7 +256,7 @@ export function SubmitContentClient({ application }: { application: PublicApplic
           ) : (
             <label
               className={cn(
-                'flex cursor-pointer flex-col items-center rounded-2xl border-2 border-dashed border-hair-strong bg-[#F7F9FD] p-8 text-center transition-colors hover:border-brand',
+                'flex cursor-pointer flex-col items-center rounded-2xl border-2 border-dashed border-hair-strong bg-secondary p-8 text-center transition-colors hover:border-brand',
                 proofUploading && 'pointer-events-none opacity-60',
               )}
             >

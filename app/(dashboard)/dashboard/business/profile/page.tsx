@@ -38,7 +38,7 @@ export default async function BusinessProfilePage() {
   }
 
   return (
-    <DashboardContainer className="max-w-[760px]">
+    <DashboardContainer>
       <PageHeader
         title="Business profile"
         subtitle="This is what creators see on your profile and campaigns."

@@ -197,7 +197,7 @@ export default async function BusinessHomePage() {
                 <li key={c._id}>
                   <Link
                     href={`/dashboard/business/campaigns/${c._id}/applications`}
-                    className="flex items-center gap-3.5 rounded-xl border border-hair p-3 transition-colors hover:bg-[#F7F9FD]"
+                    className="flex items-center gap-3.5 rounded-xl border border-hair p-3 transition-colors hover:bg-secondary"
                   >
                     <span
                       className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-display text-[15px] font-extrabold text-white"

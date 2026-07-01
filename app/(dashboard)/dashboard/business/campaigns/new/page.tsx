@@ -13,7 +13,7 @@ export default async function NewCampaignPage() {
   const session = await getSession();
 
   return (
-    <DashboardContainer className="max-w-[820px]">
+    <DashboardContainer>
       <Link
         href="/dashboard/business/campaigns"
         className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-bold text-muted transition-colors hover:text-ink"

@@ -24,7 +24,7 @@ export default async function EditCampaignPage({ params }: { params: Promise<{ i
   if (!res?.campaign || !ownsIt) notFound();
 
   return (
-    <DashboardContainer className="max-w-[820px]">
+    <DashboardContainer>
       <Link
         href="/dashboard/business/campaigns"
         className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-bold text-muted transition-colors hover:text-ink"

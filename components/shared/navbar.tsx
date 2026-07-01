@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Menu } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { postAuthPath } from '@/lib/auth/user';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import {
@@ -41,6 +42,8 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
   const { user, logout } = useAuth();
   const pathname = usePathname() ?? '/';
   const [menuOpen, setMenuOpen] = useState(false);
+  // Signed-in users land on their dashboard from the logo; guests go to marketing home.
+  const homeHref = user ? postAuthPath(user) : '/';
 
   return (
     <nav
@@ -51,7 +54,7 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
     >
       <div className="mx-auto flex h-full max-w-[1600px] items-center justify-between gap-4 px-6 lg:px-10">
         <div className="flex items-center gap-8">
-          <Link href="/" aria-label="Collably home">
+          <Link href={homeHref} aria-label={user ? 'Collably dashboard' : 'Collably home'}>
             <BrandMark onDark={onDark} />
           </Link>
           <div className="hidden items-center gap-7 md:flex">

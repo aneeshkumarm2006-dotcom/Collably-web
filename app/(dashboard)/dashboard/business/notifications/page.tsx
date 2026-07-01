@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Notifications' };
 
 export default function BusinessNotificationsPage() {
   return (
-    <DashboardContainer className="max-w-[760px]">
+    <DashboardContainer>
       <PageHeader title="Notifications" subtitle="Everything happening with your campaigns." />
       <NotificationsClient role="business" />
     </DashboardContainer>

@@ -38,7 +38,7 @@ export default async function CreatorProfilePage() {
   }
 
   return (
-    <DashboardContainer className="max-w-[760px]">
+    <DashboardContainer>
       <PageHeader
         title="Edit profile"
         subtitle="Keep your profile sharp. Brands see this when you apply."

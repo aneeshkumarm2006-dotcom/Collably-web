@@ -22,7 +22,7 @@ export default async function SubmitContentPage({
   if (!application) notFound();
 
   return (
-    <DashboardContainer className="max-w-[680px]">
+    <DashboardContainer>
       <SubmitContentClient application={application} />
     </DashboardContainer>
   );

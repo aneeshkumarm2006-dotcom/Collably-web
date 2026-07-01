@@ -171,7 +171,7 @@ export function CreatorCollabCard({
       </div>
 
       {campaign?.deliverables && campaign.deliverables.length > 0 && (
-        <div className="mt-4 rounded-xl bg-[#F7F9FD] p-3">
+        <div className="mt-4 rounded-xl bg-secondary p-3">
           <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
             Deliverable
           </p>

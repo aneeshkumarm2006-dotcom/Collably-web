@@ -12,7 +12,6 @@ import {
   Handshake,
   History,
   LayoutDashboard,
-  LogOut,
   type LucideIcon,
   Megaphone,
   MessageSquare,
@@ -22,7 +21,6 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { Avatar } from '@/components/shared/avatar';
 import { BrandGlyph, BrandMark } from '@/components/shared/brand-mark';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -137,10 +135,8 @@ function NavLink({
  */
 export function DashboardSidebar({
   role,
-  user,
   items,
   accountItems,
-  onLogout,
   defaultCollapsed = false,
   className,
 }: DashboardSidebarProps) {
@@ -211,31 +207,6 @@ export function DashboardSidebar({
             </>
           )}
         </button>
-
-        <div
-          className={cn(
-            'flex items-center gap-2.5 border-t border-dark-border p-3.5',
-            collapsed && 'justify-center',
-          )}
-        >
-          <Avatar name={user.name} src={user.avatar} size={36} />
-          {!collapsed && (
-            <>
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px] font-semibold text-white">{user.name}</div>
-                <div className="text-[11px] capitalize text-white/50">{user.role ?? role}</div>
-              </div>
-              <button
-                type="button"
-                onClick={onLogout}
-                aria-label="Log out"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-sm text-white/50 transition-colors hover:bg-dark-panel hover:text-white"
-              >
-                <LogOut className="h-[17px] w-[17px]" />
-              </button>
-            </>
-          )}
-        </div>
       </aside>
 
       {/* Mobile bottom tab bar */}

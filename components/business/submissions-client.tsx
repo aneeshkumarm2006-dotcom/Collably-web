@@ -175,7 +175,7 @@ function SubmissionCard({
         )}
 
         {app.submissionNote && (
-          <div className="mt-3 rounded-xl bg-[#F7F9FD] px-3.5 py-3 text-sm text-muted">
+          <div className="mt-3 rounded-xl bg-secondary px-3.5 py-3 text-sm text-muted">
             <span className="font-semibold text-ink">Creator note: </span>
             {app.submissionNote}
           </div>

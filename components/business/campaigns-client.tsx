@@ -135,7 +135,7 @@ export function BusinessCampaignsClient() {
     <>
       {/* View toggle + status pills */}
       <div className="mb-5 flex flex-wrap items-center gap-3">
-        <div className="inline-flex rounded-[11px] bg-[#EEF1F8] p-[3px]">
+        <div className="inline-flex rounded-[11px] bg-secondary p-[3px]">
           {(['list', 'map'] as const).map((v) => (
             <button
               key={v}
@@ -163,7 +163,7 @@ export function BusinessCampaignsClient() {
                 'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-bold transition-colors',
                 tab === t
                   ? 'bg-brand text-white'
-                  : 'bg-[#EEF1F8] text-muted hover:text-ink',
+                  : 'bg-secondary text-muted hover:text-ink',
               )}
             >
               {t}
@@ -279,8 +279,8 @@ export function BusinessCampaignsClient() {
 const STATUS_PILL: Record<CampaignStatus, { label: string; className: string }> = {
   Active: { label: 'Live', className: 'bg-mint-soft text-[#0FA57E]' },
   Paused: { label: 'Paused', className: 'bg-[#FFF3DA] text-[#B57F00]' },
-  Draft: { label: 'Draft', className: 'bg-[#EEF1F8] text-muted' },
-  Closed: { label: 'Closed', className: 'bg-[#EEF1F8] text-muted' },
+  Draft: { label: 'Draft', className: 'bg-secondary text-muted' },
+  Closed: { label: 'Closed', className: 'bg-secondary text-muted' },
   Completed: { label: 'Completed', className: 'bg-[#E7F0FF] text-[#0052BD]' },
 };
 

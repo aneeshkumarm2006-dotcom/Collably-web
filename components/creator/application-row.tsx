@@ -38,7 +38,7 @@ export function CreatorApplicationRow({
   return (
     <div
       className={cn(
-        'flex flex-wrap items-center gap-4 px-4 py-3.5 transition-colors hover:bg-[#F7F9FD]',
+        'flex flex-wrap items-center gap-4 px-4 py-3.5 transition-colors hover:bg-secondary',
         dimmed && 'opacity-65',
       )}
     >

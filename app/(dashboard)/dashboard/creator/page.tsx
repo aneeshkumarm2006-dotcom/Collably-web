@@ -165,7 +165,7 @@ export default async function CreatorHomePage() {
             </Link>
           </div>
           {activeCollabs.length === 0 ? (
-            <div className="rounded-xl bg-[#F7F9FD] p-6 text-center">
+            <div className="rounded-xl bg-secondary p-6 text-center">
               <p className="text-sm font-semibold text-ink">No active collabs yet</p>
               <p className="mt-1 text-[13px] text-muted">
                 Apply to campaigns that match your niche — accepted collabs show up here.
@@ -186,7 +186,7 @@ export default async function CreatorHomePage() {
                   <li key={a._id}>
                     <Link
                       href={`/dashboard/creator/collabs/${a._id}/submit`}
-                      className="flex items-center gap-3.5 rounded-xl border border-hair bg-card p-3 transition-colors hover:bg-[#F7F9FD]"
+                      className="flex items-center gap-3.5 rounded-xl border border-hair bg-card p-3 transition-colors hover:bg-secondary"
                     >
                       <InitialTile label={biz?.businessName} category={a.campaign?.category} />
                       <div className="min-w-0 flex-1">
@@ -231,7 +231,7 @@ export default async function CreatorHomePage() {
                   <li key={a._id}>
                     <Link
                       href={`/campaign/${a.campaignId}`}
-                      className="flex items-center gap-3 rounded-xl bg-[#F7F9FD] p-3 transition-colors hover:bg-brand-soft/60"
+                      className="flex items-center gap-3 rounded-xl bg-secondary p-3 transition-colors hover:bg-brand-soft/60"
                     >
                       <InitialTile label={biz?.businessName} category={a.campaign?.category} />
                       <div className="min-w-0 flex-1">
@@ -261,7 +261,7 @@ export default async function CreatorHomePage() {
                   <li key={n._id}>
                     <Link
                       href={notificationHref(n.deepLinkPath, 'creator')}
-                      className="flex items-start gap-3 rounded-lg p-2 transition-colors hover:bg-[#F7F9FD]"
+                      className="flex items-start gap-3 rounded-lg p-2 transition-colors hover:bg-secondary"
                     >
                       <span
                         className={`mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${NOTIF_CHIP_CLASS[dot]} [&_svg]:h-4 [&_svg]:w-4`}

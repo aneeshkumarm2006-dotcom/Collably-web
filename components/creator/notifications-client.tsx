@@ -64,7 +64,7 @@ export function NotificationsClient({ role }: { role: 'creator' | 'business' }) 
                   <Link
                     href={notificationHref(n.deepLinkPath, role)}
                     className={cn(
-                      'flex items-start gap-3.5 px-4 py-3.5 transition-colors hover:bg-[#F7F9FD]',
+                      'flex items-start gap-3.5 px-4 py-3.5 transition-colors hover:bg-secondary',
                       !n.isRead && 'bg-brand-soft/40',
                     )}
                   >

@@ -13,7 +13,7 @@ export function DashboardContainer({
   className?: string;
 }) {
   return (
-    <div className={cn('mx-auto w-full max-w-[1120px] px-5 py-7 sm:px-6', className)}>{children}</div>
+    <div className={cn('mx-auto w-full max-w-[1600px] px-5 py-7 sm:px-6 lg:px-10', className)}>{children}</div>
   );
 }
 

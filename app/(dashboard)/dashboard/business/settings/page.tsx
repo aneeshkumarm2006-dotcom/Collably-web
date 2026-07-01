@@ -11,7 +11,7 @@ export default async function BusinessSettingsPage() {
   const me = await serverApi.auth.me().catch(() => null);
 
   return (
-    <DashboardContainer className="max-w-[760px]">
+    <DashboardContainer>
       <PageHeader title="Settings" subtitle="Manage your account, notifications, and appearance." />
       {me?.user ? (
         <AccountSettings user={me.user} />
