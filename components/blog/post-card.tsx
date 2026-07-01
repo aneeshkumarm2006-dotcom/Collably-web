@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { formatDate } from '@/lib/format';
+import { formatDate, initials } from '@/lib/format';
+import { categoryGradient } from '@/lib/domain-meta';
 import type { BlogPostMeta } from '@/lib/blog/types';
 
 /** A blog post card for the index grid (`default`) or the featured hero (`feature`). */
@@ -17,57 +16,118 @@ export function PostCard({
   className?: string;
 }) {
   const feature = variant === 'feature';
+  const gradient = categoryGradient(post.category);
+
+  if (feature) {
+    return (
+      <Link
+        href={`/blog/${post.slug}`}
+        className={cn(
+          'group grid overflow-hidden rounded-[22px] border border-hair bg-card shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover lg:grid-cols-[1.1fr_.9fr]',
+          className,
+        )}
+      >
+        {/* Gradient panel */}
+        <div
+          className="relative flex min-h-[240px] items-end p-7 lg:min-h-full"
+          style={{ background: gradient }}
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl"
+          />
+          <span className="relative inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white backdrop-blur">
+            Featured · {post.category}
+          </span>
+        </div>
+
+        {/* Content */}
+        <div className="flex flex-col justify-center p-8">
+          <span className="text-[13px] font-extrabold uppercase tracking-[0.1em] text-brand">
+            {post.category}
+          </span>
+          <h2 className="mt-3 font-display text-[28px] font-extrabold leading-[1.1] tracking-[-0.02em] text-ink">
+            {post.title}
+          </h2>
+          <p className="mt-3 line-clamp-3 text-[15px] leading-relaxed text-muted">
+            {post.description}
+          </p>
+          <AuthorRow post={post} className="mt-6" />
+        </div>
+      </Link>
+    );
+  }
 
   return (
     <Link
       href={`/blog/${post.slug}`}
       className={cn(
-        'group flex overflow-hidden rounded-lg border border-hair bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover',
-        feature ? 'flex-col md:flex-row' : 'flex-col',
+        'group flex flex-col overflow-hidden rounded-2xl border border-hair bg-card shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover',
         className,
       )}
     >
-      <div
-        className={cn(
-          'relative shrink-0 overflow-hidden bg-secondary',
-          feature ? 'aspect-[16/10] md:aspect-auto md:w-1/2' : 'aspect-[16/9] w-full',
-        )}
-      >
-        {post.coverImage && (
-          <Image
-            src={post.coverImage}
-            alt=""
-            fill
-            sizes={feature ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 100vw, 33vw'}
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        )}
+      {/* Gradient header */}
+      <div className="relative h-[150px] shrink-0 p-4" style={{ background: gradient }}>
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/15 blur-2xl"
+        />
+        <span className="relative inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white backdrop-blur">
+          {post.category}
+        </span>
       </div>
 
-      <div className={cn('flex flex-1 flex-col p-6', feature && 'md:p-8 lg:justify-center')}>
-        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide text-muted">
-          <span className="text-brand">{post.category}</span>
-          <span className="h-1 w-1 rounded-full bg-hair-strong" />
-          <span>{post.readingMinutes} min read</span>
-        </div>
-        <h3
-          className={cn(
-            'mt-3 font-bold tracking-tight text-ink',
-            feature ? 'text-2xl sm:text-3xl' : 'line-clamp-2 text-lg',
-          )}
-        >
-          {post.title}
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="font-display text-[18px] font-bold leading-snug tracking-[-0.01em] text-ink">
+          <span className="line-clamp-2">{post.title}</span>
         </h3>
-        <p className={cn('mt-2 text-sm leading-relaxed text-muted', feature ? 'line-clamp-3' : 'line-clamp-2')}>
-          {post.description}
-        </p>
-        <div className="mt-5 flex items-center justify-between">
-          <span className="text-[13px] text-faint">{formatDate(post.date)}</span>
-          <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-brand">
-            Read <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </span>
-        </div>
+        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">{post.description}</p>
+        <AuthorRow post={post} compact className="mt-5" />
       </div>
     </Link>
+  );
+}
+
+/** Author avatar + name · date row. `compact` uses a small gradient avatar for grid cards. */
+function AuthorRow({
+  post,
+  compact,
+  className,
+}: {
+  post: BlogPostMeta;
+  compact?: boolean;
+  className?: string;
+}) {
+  const size = compact ? 28 : 40;
+  return (
+    <div className={cn('flex items-center gap-3', className)}>
+      <span
+        aria-hidden
+        className="flex shrink-0 items-center justify-center rounded-full font-display text-xs font-bold text-white"
+        style={{
+          width: size,
+          height: size,
+          background: categoryGradient(post.category),
+          fontSize: Math.max(10, Math.round(size * 0.36)),
+        }}
+      >
+        {initials(post.author.name)}
+      </span>
+      <div className="min-w-0 text-[13px]">
+        {compact ? (
+          <span className="text-muted">
+            <span className="font-semibold text-ink">{post.author.name}</span> ·{' '}
+            {formatDate(post.date)}
+          </span>
+        ) : (
+          <>
+            <div className="font-semibold text-ink">{post.author.name}</div>
+            <div className="text-[12px] text-muted">
+              {formatDate(post.date)} · {post.readingMinutes} min read
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 }

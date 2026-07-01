@@ -2,16 +2,15 @@ import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 import { BrandMark } from '@/components/shared/brand-mark';
-import { CampaignCard, type CampaignCardData } from '@/components/shared/campaign-card';
 
 /**
- * Shared auth shell: the split-screen brand panel (left, dark) + form panel
+ * Shared auth shell: the split-screen brand panel (left, gradient) + form panel
  * (right). Used by every `(auth)` page so login / signup / forgot / reset share
- * one branded frame; only the copy (`tagline`, `subtitle`, `proof`) and the form
- * (`children`) change per page.
+ * one branded frame; only the form (`children`) changes per page. The optional
+ * copy props are preserved for API compatibility but the brand panel now renders
+ * a fixed marketing message + testimonial (per the redesign mockups).
  *
- * Server component (purely presentational). The brand panel renders decorative
- * floating campaign-card previews + a social-proof row; it collapses below `lg`
+ * Server component (purely presentational). The brand panel collapses below `md`
  * so the form gets the full width on mobile.
  */
 
@@ -20,100 +19,78 @@ export interface ProofStat {
   label: string;
 }
 
-/** Decorative campaign previews that float over the brand panel (guest eye-candy). */
-const PREVIEW_CAMPAIGNS: CampaignCardData[] = [
-  {
-    id: 'preview-maple-oak',
-    title: 'Cozy autumn brunch: shoot our new seasonal menu',
-    category: 'Food & Beverage',
-    business: { name: 'Maple & Oak', city: 'Toronto' },
-    reward: { type: 'Product', description: 'Brunch for two, on us', estimatedValue: 120 },
-    platform: 'Instagram',
-    contentType: 'Reel',
-    spotsLeft: 3,
-    applicationsCount: 18,
-  },
-  {
-    id: 'preview-bloom-beauty',
-    title: 'Glow drop launch: unboxing + first impressions',
-    category: 'Beauty',
-    business: { name: 'Bloom Beauty', city: 'Vancouver' },
-    reward: { type: 'Cash+Product', description: '$250 + full product set', estimatedValue: 250 },
-    platform: 'TikTok',
-    contentType: 'Video',
-    spotsLeft: 5,
-    applicationsCount: 41,
-  },
-];
-
 export interface AuthLayoutProps {
   children: React.ReactNode;
-  /** Big headline on the brand panel. */
-  tagline: string;
-  /** Supporting line under the tagline. */
-  subtitle: string;
-  /** Social-proof stats shown beneath the subtitle. */
-  proof: ProofStat[];
+  /** Big headline on the brand panel (unused by the redesigned panel; kept for API compat). */
+  tagline?: string;
+  /** Supporting line under the tagline (kept for API compat). */
+  subtitle?: string;
+  /** Social-proof stats (kept for API compat). */
+  proof?: ProofStat[];
 }
 
-export function AuthLayout({ children, tagline, subtitle, proof }: AuthLayoutProps) {
+export function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="grid min-h-screen lg:grid-cols-[2fr_3fr]">
+    <div className="flex min-h-screen">
       {/* Brand panel (hidden on small screens) */}
-      <aside className="relative hidden overflow-hidden bg-dark-sidebar p-11 text-white lg:flex lg:flex-col">
-        {/* Subtle grid texture */}
-        <div
+      <aside
+        className="relative hidden flex-[0_0_44%] flex-col justify-between overflow-hidden p-11 text-white md:flex"
+        style={{ background: 'linear-gradient(150deg,#0064E0,#7B61FF)' }}
+      >
+        {/* Decorative floating blobs */}
+        <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.5]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
+          className="animate-cb-float pointer-events-none absolute -right-16 top-24 h-56 w-56 rounded-full bg-white/10"
         />
-        {/* Brand-blue radial glow */}
-        <div
+        <span
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full opacity-40 blur-3xl"
-          style={{ background: 'radial-gradient(circle, var(--brand-primary), transparent 70%)' }}
+          className="animate-cb-float-b pointer-events-none absolute -left-10 bottom-32 h-40 w-40 rounded-[36px] bg-white/[0.08]"
+        />
+        <span
+          aria-hidden
+          className="animate-cb-float pointer-events-none absolute right-24 bottom-16 h-24 w-24 rounded-full bg-white/[0.07]"
         />
 
         <Link href="/" className="relative z-10 w-fit">
           <BrandMark onDark />
         </Link>
 
-        {/* Floating campaign previews */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 hidden xl:block">
-          <div className="absolute -right-10 top-28 w-[280px] rotate-[3deg] opacity-95 shadow-2xl">
-            <CampaignCard campaign={PREVIEW_CAMPAIGNS[0]} decorative />
-          </div>
-          <div className="absolute right-16 top-[420px] w-[250px] -rotate-2 opacity-95 shadow-2xl">
-            <CampaignCard campaign={PREVIEW_CAMPAIGNS[1]} variant="compact" decorative />
-          </div>
-        </div>
-
-        <div className="relative z-10 mt-auto max-w-[380px]">
-          <h2 className="text-balance text-[34px] font-semibold leading-tight tracking-tight">
-            {tagline}
+        <div className="relative z-10 max-w-[440px]">
+          <h2 className="font-display text-[40px] font-extrabold leading-[1.08] tracking-[-0.03em]">
+            Local collabs.
+            <br />
+            Real rewards.
           </h2>
-          <p className="mt-3.5 text-[15px] leading-relaxed text-white/60">{subtitle}</p>
+          <p className="mt-4 text-[15px] leading-relaxed text-[#DCEAFF]">
+            Join 3,200+ Canadian creators and 640+ local businesses collaborating the honest way.
+          </p>
 
-          <dl className="mt-8 flex gap-8">
-            {proof.map((stat) => (
-              <div key={stat.label}>
-                <dd className="font-mono text-2xl font-semibold text-money">{stat.value}</dd>
-                <dt className="mt-0.5 text-xs tracking-wide text-white/45">{stat.label}</dt>
-              </div>
-            ))}
-          </dl>
+          <figure className="mt-8 rounded-2xl border border-white/20 bg-white/12 p-[18px]">
+            <blockquote className="text-[15px] leading-relaxed text-white">
+              &ldquo;I earned a $180 dinner in my first week — no follower minimum, no agency.&rdquo;
+            </blockquote>
+            <figcaption className="mt-3.5 flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/25 text-[13px] font-bold text-white">
+                MK
+              </span>
+              <span className="text-[13px] leading-tight">
+                <span className="block font-bold text-white">Maya K.</span>
+                <span className="block text-[#DCEAFF]">Food creator · Toronto</span>
+              </span>
+            </figcaption>
+          </figure>
         </div>
+
+        <p className="relative z-10 text-[13px] text-[#DCEAFF]">
+          © 2026 Collably · Proudly Canadian 🍁
+        </p>
       </aside>
 
       {/* Form panel */}
-      <main className="flex items-center justify-center bg-card px-6 py-12">
-        <div className="w-full max-w-[420px]">
-          {/* Mobile brand (brand panel is hidden < lg) */}
-          <Link href="/" className="mb-8 inline-flex lg:hidden">
+      <main className="flex flex-1 items-center justify-center bg-card p-10">
+        <div className="w-full max-w-[400px]">
+          {/* Mobile brand (brand panel is hidden < md) */}
+          <Link href="/" className="mb-8 inline-flex md:hidden">
             <BrandMark />
           </Link>
           {children}

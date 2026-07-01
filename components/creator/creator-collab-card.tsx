@@ -1,11 +1,10 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Calendar, CheckCircle2, ExternalLink, MapPin, MessageSquare } from 'lucide-react';
 
 import type { PublicApplication } from '@/lib/api/types';
 import type { CampaignDeliverable } from '@/lib/shared';
 import { cn } from '@/lib/utils';
-import { categoryIcon, categoryGradient } from '@/lib/domain-meta';
+import { categoryGradient } from '@/lib/domain-meta';
 import { formatDate, isOverdue } from '@/lib/format';
 import { CountdownChip } from '@/components/shared/collab-card';
 import { RewardPill } from '@/components/shared/reward-pill';
@@ -37,29 +36,27 @@ function progressStatus(app: PublicApplication): string {
   return 'Not started';
 }
 
-function CollabCover({
+/** A small square gradient tile with the business/campaign initial. */
+function InitialTile({
+  label,
   category,
-  cover,
   className,
 }: {
+  label?: string;
   category?: string;
-  cover?: string | null;
   className?: string;
 }) {
-  const CategoryIcon = categoryIcon(category ?? '');
   return (
-    <div
-      className={cn('relative shrink-0 overflow-hidden rounded-md bg-secondary', className)}
-      style={{ background: categoryGradient(category) }}
-    >
-      {cover ? (
-        <Image src={cover} alt="" fill sizes="160px" className="object-cover" />
-      ) : (
-        <span className="absolute inset-0 flex items-center justify-center opacity-90">
-          <CategoryIcon className="h-8 w-8 text-white/85" />
-        </span>
+    <span
+      className={cn(
+        'flex shrink-0 items-center justify-center rounded-xl font-display font-bold text-white',
+        className,
       )}
-    </div>
+      style={{ background: categoryGradient(category) }}
+      aria-hidden
+    >
+      {(label ?? '?').charAt(0).toUpperCase()}
+    </span>
   );
 }
 
@@ -107,11 +104,15 @@ export function CreatorCollabCard({
     return (
       <div
         className={cn(
-          'flex items-center gap-3.5 rounded-lg border border-hair bg-card p-3.5 shadow-sm',
+          'flex items-center gap-3.5 rounded-2xl border border-hair bg-card p-3.5 shadow-card',
           overdue && 'border-l-4 border-l-danger',
         )}
       >
-        <CollabCover category={campaign?.category} cover={campaign?.coverImage} className="h-[60px] w-[84px]" />
+        <InitialTile
+          label={business?.businessName ?? campaign?.title}
+          category={campaign?.category}
+          className="h-11 w-11 text-lg"
+        />
         <div className="min-w-0 flex-1">
           <h3 className="truncate font-semibold leading-tight text-ink">
             {campaign?.title ?? 'Campaign'}
@@ -136,20 +137,20 @@ export function CreatorCollabCard({
   return (
     <div
       className={cn(
-        'rounded-lg border border-hair bg-card p-5 shadow-sm transition-shadow hover:shadow-md',
+        'flex flex-col rounded-2xl border border-hair bg-card p-5 shadow-card transition hover:-translate-y-1 hover:shadow-card-hover',
         overdue && 'border-l-4 border-l-danger',
       )}
     >
-      <div className="flex flex-wrap items-start gap-4">
-        <CollabCover
+      <div className="flex items-start gap-3.5">
+        <InitialTile
+          label={business?.businessName ?? campaign?.title}
           category={campaign?.category}
-          cover={campaign?.coverImage}
-          className="h-[84px] w-[120px]"
+          className="h-12 w-12 text-xl"
         />
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="text-lg font-bold leading-snug text-ink">
+              <h3 className="font-display text-lg font-bold leading-snug text-ink">
                 {campaign?.title ?? 'Campaign'}
               </h3>
               <p className="mt-0.5 flex items-center gap-1.5 text-[13px] text-muted">
@@ -170,13 +171,13 @@ export function CreatorCollabCard({
       </div>
 
       {campaign?.deliverables && campaign.deliverables.length > 0 && (
-        <div className="mt-4 border-t border-hair pt-4">
-          <p className="mb-2 font-mono text-[11px] font-bold uppercase tracking-wider text-faint">
-            What to create
+        <div className="mt-4 rounded-xl bg-[#F7F9FD] p-3">
+          <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
+            Deliverable
           </p>
           <ul className="space-y-1.5">
             {campaign.deliverables.map((d, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-muted">
+              <li key={i} className="flex items-start gap-2 text-[13px] text-muted">
                 <CheckCircle2
                   className={cn('mt-0.5 h-4 w-4 shrink-0', submitted ? 'text-success' : 'text-faint')}
                 />
@@ -187,28 +188,29 @@ export function CreatorCollabCard({
         </div>
       )}
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-hair pt-4">
+      <div className="mt-4 flex flex-wrap items-center gap-2">
         {campaign?.deadline && <CountdownChip deadline={campaign.deadline} />}
         {campaign?.deadline && (
           <span className="inline-flex items-center gap-1.5 text-[13px] text-muted">
             <Calendar className="h-3.5 w-3.5" /> Deadline {formatDate(campaign.deadline)}
           </span>
         )}
-        <div className="ml-auto flex items-center gap-2">
-          {application.conversationId && (
-            <Button asChild variant="outline" size="sm">
-              <Link href={`/dashboard/creator/messages/${application.conversationId}`}>
-                <MessageSquare className="h-4 w-4" /> Message
-              </Link>
-            </Button>
-          )}
-          {briefingHref && (
-            <Button asChild variant="outline" size="sm">
-              <Link href={briefingHref}>View briefing</Link>
-            </Button>
-          )}
-          {submitAction}
-        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-hair pt-4">
+        {submitAction}
+        {application.conversationId && (
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/dashboard/creator/messages/${application.conversationId}`}>
+              <MessageSquare className="h-4 w-4" /> Message
+            </Link>
+          </Button>
+        )}
+        {briefingHref && (
+          <Button asChild variant="outline" size="sm">
+            <Link href={briefingHref}>View briefing</Link>
+          </Button>
+        )}
       </div>
     </div>
   );

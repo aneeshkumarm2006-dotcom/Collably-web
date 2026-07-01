@@ -11,7 +11,9 @@ export default async function CreatorMessagesPage() {
   return (
     <DashboardContainer className="max-w-[820px]">
       <PageHeader title="Messages" subtitle="Chat with the brands you’re collaborating with." />
-      <ConversationList role="creator" meId={session!.user.id} />
+      <div className="rounded-2xl border border-hair bg-card p-4 shadow-card sm:p-5">
+        <ConversationList role="creator" meId={session!.user.id} />
+      </div>
     </DashboardContainer>
   );
 }

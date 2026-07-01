@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, KeyRound } from 'lucide-react';
+import { ArrowLeft, Check } from 'lucide-react';
 
 import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Field } from '@/components/auth/field';
+import { Field, authInputClass } from '@/components/auth/field';
 import { ErrorBanner } from '@/components/auth/auth-layout';
 import { resetPasswordSchema, fieldErrors } from '@/lib/auth/schemas';
 import { postAuthPath } from '@/lib/auth/user';
@@ -47,10 +47,12 @@ export function ResetPasswordForm({ token }: { token: string }) {
 
   return (
     <div>
-      <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-soft text-brand">
-        <KeyRound className="h-7 w-7" />
+      <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-success-soft text-success">
+        <Check className="h-7 w-7" strokeWidth={3} />
       </span>
-      <h1 className="text-[30px] font-semibold tracking-tight text-ink">Set a new password</h1>
+      <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
+        Set a new password
+      </h1>
       <p className="mt-2 text-[15px] leading-relaxed text-muted">
         Choose a new password for your account. You&apos;ll be logged in right after.
       </p>
@@ -72,6 +74,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             aria-invalid={Boolean(errors.password)}
+            className={authInputClass}
           />
         </Field>
 
@@ -84,11 +87,16 @@ export function ResetPasswordForm({ token }: { token: string }) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             aria-invalid={Boolean(errors.confirmPassword)}
+            className={authInputClass}
           />
         </Field>
 
-        <Button type="submit" size="lg" className="w-full" disabled={submitting}>
-          {submitting ? 'Saving…' : 'Reset password'}
+        <Button
+          type="submit"
+          className="h-auto w-full rounded-md py-[14px] text-[15px] shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
+          disabled={submitting}
+        >
+          {submitting ? 'Saving…' : 'Update & log in'}
         </Button>
       </form>
 

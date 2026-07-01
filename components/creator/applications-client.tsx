@@ -99,7 +99,7 @@ export function CreatorApplicationsClient() {
   return (
     <>
       {/* Tabs */}
-      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-hair">
+      <div className="mb-6 flex flex-wrap gap-2">
         {TABS.map((t) => (
           <button
             key={t}
@@ -107,15 +107,17 @@ export function CreatorApplicationsClient() {
             onClick={() => setTab(t)}
             aria-current={tab === t ? 'page' : undefined}
             className={cn(
-              '-mb-px inline-flex items-center whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors',
-              tab === t ? 'border-brand text-brand' : 'border-transparent text-muted hover:text-ink',
+              'inline-flex items-center whitespace-nowrap rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors',
+              tab === t
+                ? 'border-brand bg-brand text-white'
+                : 'border-hair bg-card text-muted hover:text-ink',
             )}
           >
             {t}
             <span
               className={cn(
                 'ml-2 rounded-full px-1.5 py-0.5 font-mono text-[11px] leading-none',
-                tab === t ? 'bg-brand-soft text-brand' : 'bg-secondary text-muted',
+                tab === t ? 'bg-white/20 text-white' : 'bg-secondary text-muted',
               )}
             >
               {counts[t]}
@@ -127,7 +129,7 @@ export function CreatorApplicationsClient() {
       {query.isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-[92px] w-full rounded-lg" />
+            <Skeleton key={i} className="h-[72px] w-full rounded-xl" />
           ))}
         </div>
       ) : query.isError ? (
@@ -155,10 +157,19 @@ export function CreatorApplicationsClient() {
       ) : rows.length === 0 ? (
         <EmptyState icon={<FileText />} title={`No ${tab.toLowerCase()} applications`} />
       ) : (
-        <div className="space-y-3">
-          {rows.map((a) => (
-            <CreatorApplicationRow key={a._id} application={a} actions={rowActions(a)} />
-          ))}
+        <div className="overflow-hidden rounded-2xl border border-hair bg-card shadow-card">
+          {/* Header row */}
+          <div className="flex items-center gap-4 border-b border-hair bg-[#F7F9FD] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
+            <span className="flex-[2]">Campaign</span>
+            <span className="hidden flex-1 sm:block">Reward</span>
+            <span className="hidden flex-1 md:block">Applied</span>
+            <span className="shrink-0">Status</span>
+          </div>
+          <div className="divide-y divide-hair">
+            {rows.map((a) => (
+              <CreatorApplicationRow key={a._id} application={a} actions={rowActions(a)} />
+            ))}
+          </div>
         </div>
       )}
 

@@ -82,7 +82,7 @@ function useActive(rootHref: string) {
     href === rootHref ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
 }
 
-const ACTIVE_BG = 'bg-[rgba(24,119,242,0.28)]';
+const ACTIVE_BG = 'bg-[linear-gradient(120deg,#0064E0,#7B61FF)]';
 
 function NavLink({
   item,
@@ -98,10 +98,10 @@ function NavLink({
       href={item.href}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group flex items-center gap-3 rounded-md border-l-[3px] px-3 py-2.5 text-sm font-medium transition-colors',
+        'group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors',
         active
-          ? cn('border-brand text-white', ACTIVE_BG)
-          : 'border-transparent text-white/65 hover:bg-dark-panel hover:text-white',
+          ? cn('text-white', ACTIVE_BG)
+          : 'text-white/65 hover:bg-white/[0.06] hover:text-white',
         collapsed && 'justify-center px-0',
       )}
     >
@@ -153,6 +153,10 @@ export function DashboardSidebar({
     <>
       {/* Desktop / tablet sidebar */}
       <aside
+        style={{
+          backgroundImage:
+            'radial-gradient(460px 200px at 24% 0%, rgba(123,97,255,.42), transparent 62%), radial-gradient(420px 240px at 92% 102%, rgba(0,100,224,.4), transparent 60%)',
+        }}
         className={cn(
           'sticky top-0 hidden h-screen shrink-0 flex-col bg-dark-sidebar text-white md:flex',
           collapsed ? 'w-16' : 'w-[244px]',

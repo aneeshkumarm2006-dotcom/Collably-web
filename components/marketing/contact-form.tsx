@@ -3,23 +3,23 @@
 import { useState } from 'react';
 import { CheckCircle2, Loader2, Send } from 'lucide-react';
 
-import { contactSchema, CONTACT_TOPICS, type ContactValues } from '@/lib/contact';
+import { contactSchema, type ContactValues } from '@/lib/contact';
 import { fieldErrors } from '@/lib/auth/schemas';
 import { track } from '@/lib/analytics';
 import { toast } from '@/lib/toast';
+import { cn } from '@/lib/utils';
 import { Field } from '@/components/auth/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 const EMPTY: ContactValues = { name: '', email: '', topic: 'General', message: '' };
+
+/** "I'm a…" role pills → mapped onto the schema's `topic` enum values. */
+const ROLE_OPTIONS: { label: string; topic: ContactValues['topic'] }[] = [
+  { label: 'Creator', topic: 'For creators' },
+  { label: 'Business', topic: 'For businesses' },
+  { label: 'Press', topic: 'Press' },
+];
 
 /** Public contact form → POST /api/contact, with inline validation + a sent state. */
 export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['topic'] }) {
@@ -63,11 +63,11 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
 
   if (sent) {
     return (
-      <div className="flex flex-col items-center rounded-lg border border-hair bg-card p-10 text-center shadow-card">
+      <div className="flex flex-col items-center rounded-2xl border border-hair bg-card p-10 text-center shadow-card">
         <span className="flex h-14 w-14 items-center justify-center rounded-full bg-success-soft text-success">
           <CheckCircle2 className="h-7 w-7" />
         </span>
-        <h3 className="mt-5 text-xl font-bold text-ink">Message sent</h3>
+        <h3 className="mt-5 font-display text-xl font-bold text-ink">Message sent</h3>
         <p className="mt-2 max-w-sm text-sm text-muted">
           Thanks for reaching out, {values.name.split(' ')[0] || 'there'}. We&apos;ll get back to you
           at {values.email} as soon as we can.
@@ -80,44 +80,56 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-lg border border-hair bg-card p-6 shadow-card sm:p-8"
+      className="rounded-2xl border border-hair bg-card p-6 shadow-card sm:p-8"
     >
       <div className="grid gap-5">
-        <Field label="Name" htmlFor="contact-name" error={errors.name}>
-          <Input
-            id="contact-name"
-            value={values.name}
-            onChange={(e) => set({ name: e.target.value })}
-            autoComplete="name"
-            aria-invalid={!!errors.name}
-          />
-        </Field>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <Field label="Name" htmlFor="contact-name" error={errors.name}>
+            <Input
+              id="contact-name"
+              value={values.name}
+              onChange={(e) => set({ name: e.target.value })}
+              autoComplete="name"
+              aria-invalid={!!errors.name}
+            />
+          </Field>
 
-        <Field label="Email" htmlFor="contact-email" error={errors.email}>
-          <Input
-            id="contact-email"
-            type="email"
-            value={values.email}
-            onChange={(e) => set({ email: e.target.value })}
-            autoComplete="email"
-            aria-invalid={!!errors.email}
-          />
-        </Field>
+          <Field label="Email" htmlFor="contact-email" error={errors.email}>
+            <Input
+              id="contact-email"
+              type="email"
+              value={values.email}
+              onChange={(e) => set({ email: e.target.value })}
+              autoComplete="email"
+              aria-invalid={!!errors.email}
+            />
+          </Field>
+        </div>
 
-        <Field label="Topic" htmlFor="contact-topic" error={errors.topic}>
-          <Select value={values.topic} onValueChange={(v) => set({ topic: v as ContactValues['topic'] })}>
-            <SelectTrigger id="contact-topic">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {CONTACT_TOPICS.map((t) => (
-                <SelectItem key={t} value={t}>
-                  {t}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
+        <fieldset>
+          <legend className="mb-2 text-sm font-medium text-ink">I&apos;m a…</legend>
+          <div className="flex flex-wrap gap-2">
+            {ROLE_OPTIONS.map((opt) => {
+              const selected = values.topic === opt.topic;
+              return (
+                <button
+                  key={opt.label}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => set({ topic: opt.topic })}
+                  className={cn(
+                    'rounded-full border-[1.5px] px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2',
+                    selected
+                      ? 'border-brand bg-brand text-white'
+                      : 'border-hair-strong bg-card text-muted hover:border-brand hover:text-ink',
+                  )}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
 
         <Field label="Message" htmlFor="contact-message" error={errors.message}>
           <Textarea
@@ -130,7 +142,11 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
           />
         </Field>
 
-        <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
+        <button
+          type="submit"
+          disabled={submitting}
+          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand text-[15px] font-semibold text-white shadow-[0_10px_22px_-8px_rgba(0,100,224,0.5)] transition-colors hover:bg-[#0052BD] disabled:pointer-events-none disabled:opacity-50"
+        >
           {submitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" /> Sending…
@@ -140,7 +156,7 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
               <Send className="h-4 w-4" /> Send message
             </>
           )}
-        </Button>
+        </button>
       </div>
     </form>
   );

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Calendar, ClipboardList, Handshake, MessageSquare, SearchX, Send } from 'lucide-react';
+import { ClipboardList, Handshake, MessageSquare, SearchX, Send } from 'lucide-react';
 
 import { useApplications, useRemindCreator } from '@/lib/api/queries';
 import { toast } from '@/lib/toast';
@@ -10,9 +10,9 @@ import { errorMessage } from '@/lib/api/errors';
 import type { PublicApplication } from '@/lib/api/types';
 import type { CampaignDeliverable } from '@/lib/shared';
 import { applicantView } from '@/lib/business/applicant';
-import { formatDate, isOverdue } from '@/lib/format';
+import { isOverdue, initials } from '@/lib/format';
+import { categoryGradient } from '@/lib/domain-meta';
 import { cn } from '@/lib/utils';
-import { Avatar } from '@/components/shared/avatar';
 import { CountdownChip } from '@/components/shared/collab-card';
 import { StatusBadge, type StatusTone } from '@/components/shared/status-badge';
 import { EmptyState } from '@/components/shared/empty-state';
@@ -83,26 +83,21 @@ export function BusinessCollabsClient() {
 
   return (
     <>
-      {/* Filter tabs */}
-      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-hair">
+      {/* Filter pills */}
+      <div className="mb-6 flex flex-wrap items-center gap-1.5">
         {FILTERS.map((f) => (
           <button
             key={f}
             type="button"
             onClick={() => setFilter(f)}
-            aria-current={filter === f ? 'page' : undefined}
+            aria-pressed={filter === f}
             className={cn(
-              '-mb-px inline-flex items-center whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors',
-              filter === f ? 'border-brand text-brand' : 'border-transparent text-muted hover:text-ink',
+              'inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-bold transition-colors',
+              filter === f ? 'bg-brand text-white' : 'bg-[#EEF1F8] text-muted hover:text-ink',
             )}
           >
             {FILTER_LABEL[f]}
-            <span
-              className={cn(
-                'ml-2 rounded-full px-1.5 py-0.5 font-mono text-[11px] leading-none',
-                filter === f ? 'bg-brand-soft text-brand' : 'bg-secondary text-muted',
-              )}
-            >
+            <span className={cn('text-[11px]', filter === f ? 'text-white/80' : 'text-faint')}>
               {counts[f]}
             </span>
           </button>
@@ -110,9 +105,9 @@ export function BusinessCollabsClient() {
       </div>
 
       {query.isLoading ? (
-        <div className="space-y-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 w-full rounded-lg" />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-[188px] w-full rounded-2xl" />
           ))}
         </div>
       ) : query.isError ? (
@@ -135,7 +130,7 @@ export function BusinessCollabsClient() {
       ) : rows.length === 0 ? (
         <EmptyState icon={<Handshake />} title={`No ${FILTER_LABEL[filter].toLowerCase()} collabs`} />
       ) : (
-        <div className="space-y-3">
+        <div className="grid gap-4 sm:grid-cols-2">
           {rows.map(([app, bucket]) => (
             <CollabRow
               key={app._id}
@@ -170,60 +165,61 @@ function CollabRow({
   return (
     <div
       className={cn(
-        'rounded-lg border border-hair bg-card p-5 shadow-sm transition-shadow hover:shadow-md',
+        'flex flex-col rounded-2xl border border-hair bg-card p-[18px] shadow-card',
         overdue && 'border-l-4 border-l-danger',
       )}
     >
-      <div className="flex flex-wrap items-start gap-3.5">
-        <Avatar name={view.name} src={view.avatar} size={48} />
+      <div className="flex items-start gap-3.5">
+        <span
+          className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl font-display text-[15px] font-extrabold text-white"
+          style={view.avatar ? undefined : { background: categoryGradient(view.niche[0]) }}
+        >
+          {view.avatar ? (
+            // eslint-disable-next-line @next/next/no-img-element -- creator avatar
+            <img src={view.avatar} alt="" className="h-full w-full object-cover" />
+          ) : (
+            initials(view.name)
+          )}
+        </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="font-bold text-ink">{view.name}</h3>
+              <h3 className="truncate font-display text-[16px] font-bold text-ink">{view.name}</h3>
               <p className="mt-0.5 truncate text-[13px] text-muted">
                 {campaign?.title ? `“${campaign.title}”` : 'Campaign'}
               </p>
             </div>
             <StatusBadge status={bucket} tone={BUCKET_TONE[bucket]} className="shrink-0" />
           </div>
-          <p className="mt-2 inline-flex items-center gap-1.5 text-[13px] text-muted">
-            <ClipboardList className="h-3.5 w-3.5" /> {deliverableSummary(campaign?.deliverables)}
-          </p>
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-hair pt-4">
-        {campaign?.deadline && (
-          <>
-            <span className="inline-flex items-center gap-1.5 text-[13px] text-muted">
-              <Calendar className="h-3.5 w-3.5" /> Deadline {formatDate(campaign.deadline)}
-            </span>
-            <CountdownChip deadline={campaign.deadline} />
-          </>
+      <p className="mt-3 inline-flex items-center gap-1.5 text-[13px] text-muted">
+        <ClipboardList className="h-3.5 w-3.5" /> {deliverableSummary(campaign?.deliverables)}
+      </p>
+      {campaign?.deadline && <CountdownChip deadline={campaign.deadline} className="mt-2 self-start" />}
+
+      <div className="mt-4 flex items-center gap-2">
+        {app.submittedAt ? (
+          <Button asChild size="sm" className="flex-1">
+            <Link href="/dashboard/business/submissions">Review content</Link>
+          </Button>
+        ) : canRemind ? (
+          <Button variant="outline" size="sm" className="flex-1" disabled={reminding} onClick={onRemind}>
+            <Send className="h-4 w-4" /> {reminding ? 'Sending…' : 'Send reminder'}
+          </Button>
+        ) : (
+          <Button variant="outline" size="sm" className="flex-1" disabled>
+            Awaiting content
+          </Button>
         )}
-        <div className="ml-auto flex items-center gap-2">
-          {app.conversationId && (
-            <Button asChild variant="outline" size="sm">
-              <Link href={`/dashboard/business/messages/${app.conversationId}`}>
-                <MessageSquare className="h-4 w-4" /> Message
-              </Link>
-            </Button>
-          )}
-          {canRemind && (
-            <Button variant="outline" size="sm" disabled={reminding} onClick={onRemind}>
-              <Send className="h-4 w-4" /> {reminding ? 'Sending…' : 'Send reminder'}
-            </Button>
-          )}
-          {app.submittedAt ? (
-            <Button asChild size="sm">
-              <Link href="/dashboard/business/submissions">Review submission →</Link>
-            </Button>
-          ) : (
-            <Button variant="outline" size="sm" disabled>
-              Awaiting content
-            </Button>
-          )}
-        </div>
+        {app.conversationId && (
+          <Button asChild variant="outline" size="sm" className="flex-1">
+            <Link href={`/dashboard/business/messages/${app.conversationId}`}>
+              <MessageSquare className="h-4 w-4" /> Message
+            </Link>
+          </Button>
+        )}
       </div>
     </div>
   );

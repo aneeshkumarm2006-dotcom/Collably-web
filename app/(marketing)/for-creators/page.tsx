@@ -14,17 +14,19 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const config: AudiencePageConfig = {
+  tone: 'creator',
   eyebrow: 'For Creators',
   title: (
     <>
-      Real rewards for the content you <span className="text-brand-secondary">already love making.</span>
+      Get paid in <span className="text-brand">real rewards.</span>
     </>
   ),
   subtitle:
-    'Collab with local brands in your niche, get rewarded with products, experiences and cash, and build a portfolio that grows with you. No follower minimums, ever.',
+    'Collab with local spots in your niche, get rewarded with real meals, services and products, and build a portfolio that grows with you. No follower minimums, ever.',
   primaryCta: { label: 'Join as a creator', href: '/signup' },
   secondaryCta: { label: 'Browse campaigns', href: '/explore' },
   highlights: ['Free to join', 'No follower minimums', 'UGC creators welcome'],
+  heroCard: { label: 'Reward unlocked', title: 'Brunch for 2', sub: 'Maple & Oat · $65 value' },
   benefitsLabel: 'Why creators choose Collably',
   benefitsTitle: 'Built for creators at every size',
   benefits: [

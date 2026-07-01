@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Field } from '@/components/auth/field';
+import { Field, authInputClass } from '@/components/auth/field';
 import { GoogleButton } from '@/components/auth/google-button';
 import { ErrorBanner, OrDivider } from '@/components/auth/auth-layout';
 import { loginSchema, fieldErrors } from '@/lib/auth/schemas';
@@ -64,7 +64,9 @@ export function LoginForm({ next }: { next?: string }) {
 
   return (
     <div>
-      <h1 className="text-[30px] font-semibold tracking-tight text-ink">Welcome back</h1>
+      <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
+        Welcome back
+      </h1>
       <p className="mt-1.5 text-[15px] text-muted">Log in to your Collably account.</p>
 
       <div className="mt-7">
@@ -84,6 +86,7 @@ export function LoginForm({ next }: { next?: string }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             aria-invalid={Boolean(errors.email)}
+            className={authInputClass}
           />
         </Field>
 
@@ -92,7 +95,7 @@ export function LoginForm({ next }: { next?: string }) {
           htmlFor="password"
           error={errors.password}
           action={
-            <Link href="/forgot-password" className="text-[13px] font-medium text-brand hover:underline">
+            <Link href="/forgot-password" className="text-[13px] font-bold text-brand hover:underline">
               Forgot password?
             </Link>
           }
@@ -105,10 +108,15 @@ export function LoginForm({ next }: { next?: string }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             aria-invalid={Boolean(errors.password)}
+            className={authInputClass}
           />
         </Field>
 
-        <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+        <Button
+          type="submit"
+          className="h-auto w-full rounded-md py-[14px] text-[15px] shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
+          disabled={submitting}
+        >
           {submitting ? 'Logging in…' : 'Log in'}
         </Button>
       </form>
@@ -117,7 +125,7 @@ export function LoginForm({ next }: { next?: string }) {
         New to Collably?{' '}
         <Link
           href={target ? `/signup?next=${encodeURIComponent(target)}` : '/signup'}
-          className="font-semibold text-brand hover:underline"
+          className="font-bold text-brand hover:underline"
         >
           Create an account
         </Link>

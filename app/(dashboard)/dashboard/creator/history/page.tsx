@@ -28,7 +28,7 @@ export default async function CreatorHistoryPage() {
       <PageHeader title="History" subtitle="Every collab you've completed." />
 
       {completed.length === 0 ? (
-        <div className="rounded-lg border border-hair bg-card">
+        <div className="rounded-2xl border border-hair bg-card shadow-card">
           <EmptyState
             icon={<History />}
             title="No completed collabs yet"
@@ -41,23 +41,31 @@ export default async function CreatorHistoryPage() {
           />
         </div>
       ) : (
-        <div className="space-y-3">
-          {completed.map((a) => (
-            <CreatorApplicationRow
-              key={a._id}
-              application={a}
-              dateLabel={a.verifiedAt ? `Completed ${formatDate(a.verifiedAt)}` : 'Completed'}
-              actions={
-                a.submissionLink ? (
-                  <Button asChild variant="outline" size="sm">
-                    <a href={a.submissionLink} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="h-4 w-4" /> View post
-                    </a>
-                  </Button>
-                ) : undefined
-              }
-            />
-          ))}
+        <div className="overflow-hidden rounded-2xl border border-hair bg-card shadow-card">
+          <div className="flex items-center gap-4 border-b border-hair bg-[#F7F9FD] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
+            <span className="flex-[2]">Collab</span>
+            <span className="hidden flex-1 sm:block">Reward</span>
+            <span className="hidden flex-1 md:block">Completed</span>
+            <span className="shrink-0">Status</span>
+          </div>
+          <div className="divide-y divide-hair">
+            {completed.map((a) => (
+              <CreatorApplicationRow
+                key={a._id}
+                application={a}
+                dateLabel={a.verifiedAt ? `Completed ${formatDate(a.verifiedAt)}` : 'Completed'}
+                actions={
+                  a.submissionLink ? (
+                    <Button asChild variant="outline" size="sm">
+                      <a href={a.submissionLink} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4" /> View post
+                      </a>
+                    </Button>
+                  ) : undefined
+                }
+              />
+            ))}
+          </div>
         </div>
       )}
     </DashboardContainer>

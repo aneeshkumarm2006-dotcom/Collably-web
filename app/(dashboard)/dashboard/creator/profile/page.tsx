@@ -59,7 +59,11 @@ export default async function CreatorProfilePage() {
         </div>
       )}
 
-      <CreatorProfileForm profile={profile} />
+      <CreatorProfileForm
+        profile={profile}
+        name={session?.user.name}
+        avatar={session?.user.avatar}
+      />
     </DashboardContainer>
   );
 }

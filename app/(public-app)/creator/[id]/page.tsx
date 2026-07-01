@@ -1,8 +1,18 @@
 import { cache } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { ExternalLink, Image as ImageIcon, Instagram, MapPin, Music2, Youtube } from 'lucide-react';
+import {
+  ArrowLeft,
+  BadgeCheck,
+  ExternalLink,
+  Image as ImageIcon,
+  Instagram,
+  MapPin,
+  Music2,
+  Youtube,
+} from 'lucide-react';
 
 import { publicApi } from '@/lib/api/public';
 import { isApiError } from '@/lib/api/errors';
@@ -64,6 +74,24 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
   const handles = profile.socialHandles ?? {};
   const platformCount = [handles.instagram, handles.youtube, handles.tiktok].filter(Boolean).length;
 
+  // Total reach across connected platforms (real data; 0 → hide the stat).
+  const totalFollowers =
+    (handles.instagram?.followerCount ?? 0) +
+    (handles.youtube?.subscriberCount ?? 0) +
+    (handles.tiktok?.followerCount ?? 0);
+
+  // Headline: primary niche + "creator" (falls back to a generic label).
+  const headline = profile.niche.length
+    ? `${profile.niche.slice(0, 2).join(' & ')} creator`
+    : 'Creator';
+
+  // Soft-tint palette cycled across the niche/verified pills.
+  const pillTints = [
+    'bg-brand-soft text-brand',
+    'bg-grape-soft text-grape',
+    'bg-mint-soft text-mint',
+  ];
+
   const socialRows = [
     handles.instagram && {
       icon: Instagram,
@@ -106,152 +134,175 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
         ]}
       />
 
-      <Container className="py-10">
-        <div className="grid gap-10 lg:grid-cols-[300px_1fr] lg:items-start">
-          {/* Sidebar */}
-          <aside className="lg:sticky lg:top-[84px]">
-            <Avatar name={name} src={user?.avatar} size={96} />
-            <h1 className="mt-4 text-2xl font-bold tracking-tight text-ink">{name}</h1>
+      <Container className="pt-6">
+        {/* Back to explore */}
+        <Link
+          href="/explore"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline"
+        >
+          <ArrowLeft className="h-4 w-4" /> Explore
+        </Link>
 
-            {profile.niche.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {profile.niche.map((n) => {
-                  const NicheIcon = nicheIcon(n);
-                  return (
-                    <span
-                      key={n}
-                      className="inline-flex items-center gap-1 rounded-full border border-hair bg-card px-2.5 py-1 text-[13px] text-ink"
-                    >
-                      <NicheIcon aria-hidden className="h-3.5 w-3.5" /> {n}
-                    </span>
-                  );
-                })}
-              </div>
-            )}
-
-            {loc && (
-              <div className="mt-3 flex items-center gap-1.5 text-sm text-muted">
-                <MapPin className="h-4 w-4" /> {loc}
-              </div>
-            )}
-
-            {profile.isUGCOnly && (
-              <span className="mt-3 inline-flex rounded-full bg-brand-soft px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wide text-brand">
-                UGC creator
-              </span>
-            )}
-
-            {profile.bio && (
-              <p className="mt-4 text-sm leading-relaxed text-muted">{profile.bio}</p>
-            )}
-
-            {/* Socials */}
-            {socialRows.length > 0 && (
-              <div className="mt-5 flex flex-col">
-                {socialRows.map((s) => (
-                  <a
-                    key={s.handle}
-                    href={s.link}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="flex items-center gap-3 border-b border-hair py-3 last:border-0 transition-colors hover:text-brand"
-                  >
-                    <span className="flex h-9 w-9 items-center justify-center rounded-md bg-secondary text-muted">
-                      <s.icon className="h-[18px] w-[18px]" />
-                    </span>
-                    <div>
-                      <div className="text-sm font-semibold text-ink">@{s.handle.replace(/^@/, '')}</div>
-                      {typeof s.count === 'number' && (
-                        <div className="text-xs text-muted">
-                          <span className="font-mono text-ink">{formatCompactNumber(s.count)}</span>{' '}
-                          {s.unit}
-                        </div>
-                      )}
-                    </div>
-                  </a>
-                ))}
-              </div>
-            )}
-
-            {/* Content types */}
-            {profile.contentTypes.length > 0 && (
-              <div className="mt-5 flex flex-wrap gap-1.5">
-                {profile.contentTypes.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full border border-hair bg-card px-2.5 py-1 text-[13px] text-muted"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Stats */}
-            <div className="mt-5 grid grid-cols-3 gap-2.5">
-              <StatTile value={String(profile.totalCollabsCompleted)} label="Collabs" />
-              <StatTile value={String(platformCount)} label="Platforms" />
-              <StatTile
-                value={
-                  profile.totalRewardsEarned > 0
-                    ? formatCurrency(profile.totalRewardsEarned)
-                    : '—'
-                }
-                label="Earned"
-              />
+        {/* Header */}
+        <div className="mt-6 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+          <Avatar name={name} src={user?.avatar} size={96} className="shrink-0 shadow-card" />
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <h1 className="font-display text-[26px] font-extrabold tracking-tight text-ink sm:text-[30px]">
+                {name}
+              </h1>
+              {profile.isVerified && (
+                <BadgeCheck className="h-6 w-6 shrink-0 text-brand" aria-label="Verified" />
+              )}
             </div>
-          </aside>
+            <div className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[15px] text-muted">
+              <span>{headline}</span>
+              {loc && (
+                <>
+                  <span aria-hidden>·</span>
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin className="h-4 w-4" /> {loc}
+                  </span>
+                </>
+              )}
+            </div>
 
-          {/* Portfolio */}
-          <div>
-            <h2 className="mb-5 text-xl font-bold text-ink">Portfolio</h2>
-            {profile.portfolio.length > 0 ? (
-              <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3">
-                {profile.portfolio.map((item, i) => (
-                  <a
-                    key={i}
-                    href={item.link || item.imageUrl}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="group relative aspect-[4/5] overflow-hidden rounded-lg bg-secondary"
+            {/* Niche / verified pills */}
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {profile.isUGCOnly && (
+                <span className="inline-flex items-center rounded-full bg-mint-soft px-2.5 py-1 text-[12px] font-bold text-mint">
+                  UGC creator
+                </span>
+              )}
+              {profile.niche.map((n, i) => {
+                const NicheIcon = nicheIcon(n);
+                return (
+                  <span
+                    key={n}
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-bold ${
+                      pillTints[i % pillTints.length]
+                    }`}
                   >
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.caption ?? ''}
-                      fill
-                      sizes="(max-width: 640px) 50vw, 240px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <span className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-ink opacity-0 transition-opacity group-hover:opacity-100">
-                      <ExternalLink className="h-3.5 w-3.5" />
-                    </span>
-                    {item.caption && (
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-3 pt-8 opacity-0 transition-opacity group-hover:opacity-100">
-                        <span className="text-[13px] font-medium text-white">{item.caption}</span>
-                      </div>
-                    )}
-                  </a>
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                icon={<ImageIcon />}
-                title="No portfolio yet"
-                description={`${name} hasn’t added portfolio work yet.`}
-              />
-            )}
+                    <NicheIcon aria-hidden className="h-3.5 w-3.5" /> {n}
+                  </span>
+                );
+              })}
+            </div>
           </div>
+        </div>
+
+        {/* Bio */}
+        {profile.bio && (
+          <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-muted">{profile.bio}</p>
+        )}
+
+        {/* Stat row */}
+        <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-y border-hair py-5">
+          {totalFollowers > 0 && (
+            <Stat value={formatCompactNumber(totalFollowers)} label="Followers" />
+          )}
+          <Stat value={String(profile.totalCollabsCompleted)} label="Collabs" />
+          <Stat value={String(platformCount)} label="Platforms" />
+          {profile.totalRewardsEarned > 0 && (
+            <Stat value={formatCurrency(profile.totalRewardsEarned)} label="Earned" />
+          )}
+        </div>
+
+        {/* Socials */}
+        {socialRows.length > 0 && (
+          <div className="mt-6 flex flex-wrap gap-3">
+            {socialRows.map((s) => (
+              <a
+                key={s.handle}
+                href={s.link}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="inline-flex items-center gap-3 rounded-2xl border border-hair bg-card px-4 py-3 transition-colors hover:border-brand"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-soft text-brand">
+                  <s.icon className="h-[18px] w-[18px]" />
+                </span>
+                <div>
+                  <div className="text-sm font-semibold text-ink">
+                    @{s.handle.replace(/^@/, '')}
+                  </div>
+                  {typeof s.count === 'number' && (
+                    <div className="text-xs text-muted">
+                      <span className="font-mono text-ink">{formatCompactNumber(s.count)}</span>{' '}
+                      {s.unit}
+                    </div>
+                  )}
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+
+        {/* Content types */}
+        {profile.contentTypes.length > 0 && (
+          <div className="mt-5 flex flex-wrap gap-1.5">
+            {profile.contentTypes.map((t) => (
+              <span
+                key={t}
+                className="rounded-full border border-hair bg-card px-2.5 py-1 text-[13px] text-muted"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Portfolio */}
+        <div className="mt-10">
+          <h2 className="mb-5 font-display text-[22px] font-bold text-ink">Portfolio</h2>
+          {profile.portfolio.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
+              {profile.portfolio.map((item, i) => (
+                <a
+                  key={i}
+                  href={item.link || item.imageUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="group relative aspect-square overflow-hidden rounded-2xl bg-secondary"
+                >
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.caption ?? ''}
+                    fill
+                    sizes="(max-width: 640px) 50vw, 280px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-ink opacity-0 transition-opacity group-hover:opacity-100">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </span>
+                  {item.caption && (
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-3 pt-8 opacity-0 transition-opacity group-hover:opacity-100">
+                      <span className="text-[13px] font-medium text-white">{item.caption}</span>
+                    </div>
+                  )}
+                </a>
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              icon={<ImageIcon />}
+              title="No portfolio yet"
+              description={`${name} hasn’t added portfolio work yet.`}
+            />
+          )}
         </div>
       </Container>
     </div>
   );
 }
 
-function StatTile({ value, label }: { value: string; label: string }) {
+function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-md bg-secondary p-3 text-center">
-      <div className="font-mono text-lg font-semibold text-ink">{value}</div>
-      <div className="mt-0.5 text-[11px] text-muted">{label}</div>
+    <div>
+      <div className="font-display text-[28px] font-extrabold leading-none tracking-tight text-ink">
+        {value}
+      </div>
+      <div className="mt-1.5 text-[13px] text-muted">{label}</div>
     </div>
   );
 }

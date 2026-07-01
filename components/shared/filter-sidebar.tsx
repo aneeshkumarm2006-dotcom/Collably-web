@@ -97,7 +97,7 @@ export function FilterSidebar({ value, onChange, categoryCounts, className }: Fi
   return (
     <div className={cn('text-ink', className)}>
       <div className="flex items-center justify-between py-3.5">
-        <h3 className="text-[15px] font-bold">Filters</h3>
+        <h3 className="font-display text-[15px] font-bold">Filters</h3>
         {hasFilters && (
           <button
             type="button"

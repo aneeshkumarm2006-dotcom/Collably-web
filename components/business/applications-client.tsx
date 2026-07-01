@@ -10,9 +10,10 @@ import { errorMessage } from '@/lib/api/errors';
 import type { ApplicationStatus } from '@/lib/shared';
 import type { PublicApplication } from '@/lib/api/types';
 import { applicantView } from '@/lib/business/applicant';
-import { formatDate } from '@/lib/format';
+import { formatCompactNumber, initials } from '@/lib/format';
+import { categoryGradient } from '@/lib/domain-meta';
 import { cn } from '@/lib/utils';
-import { ApplicationCard } from '@/components/shared/application-card';
+import { StatusBadge } from '@/components/shared/status-badge';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -52,60 +53,23 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
     }
   }
 
-  function rowActions(app: PublicApplication): React.ReactNode {
-    const view = applicantView(app);
-    const acting = actingId === app._id;
-    return (
-      <>
-        {view.profileHref && (
-          <Button asChild variant="ghost" size="sm">
-            <Link href={view.profileHref} target="_blank">
-              <ExternalLink className="h-4 w-4" /> Full profile
-            </Link>
-          </Button>
-        )}
-        {app.status === 'Pending' && (
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-danger hover:text-danger"
-              disabled={acting}
-              onClick={() => onDecide(app, 'Rejected')}
-            >
-              <X className="h-4 w-4" /> Reject
-            </Button>
-            <Button size="sm" disabled={acting} onClick={() => onDecide(app, 'Accepted')}>
-              <Check className="h-4 w-4" /> Accept
-            </Button>
-          </>
-        )}
-      </>
-    );
-  }
-
   return (
     <>
-      {/* Tabs */}
-      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-hair">
+      {/* Campaign / status filter pills */}
+      <div className="mb-6 flex flex-wrap items-center gap-1.5">
         {TABS.map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => setTab(t)}
-            aria-current={tab === t ? 'page' : undefined}
+            aria-pressed={tab === t}
             className={cn(
-              '-mb-px inline-flex items-center whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors',
-              tab === t ? 'border-brand text-brand' : 'border-transparent text-muted hover:text-ink',
+              'inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-bold transition-colors',
+              tab === t ? 'bg-brand text-white' : 'bg-[#EEF1F8] text-muted hover:text-ink',
             )}
           >
             {t}
-            <span
-              className={cn(
-                'ml-2 rounded-full px-1.5 py-0.5 font-mono text-[11px] leading-none',
-                tab === t ? 'bg-brand-soft text-brand' : 'bg-secondary text-muted',
-              )}
-            >
+            <span className={cn('text-[11px]', tab === t ? 'text-white/80' : 'text-faint')}>
               {counts[t]}
             </span>
           </button>
@@ -113,9 +77,9 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
       </div>
 
       {query.isLoading ? (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-44 w-full rounded-lg" />
+            <Skeleton key={i} className="h-[92px] w-full rounded-2xl" />
           ))}
         </div>
       ) : query.isError ? (
@@ -142,33 +106,97 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
       ) : rows.length === 0 ? (
         <EmptyState icon={<FileText />} title={`No ${tab.toLowerCase()} applications`} />
       ) : (
-        <div className="space-y-4">
-          {rows.map((app) => {
-            const view = applicantView(app);
-            const appliedAt = `Applied ${formatDate(app.createdAt)}`;
-            return (
-              <ApplicationCard
-                key={app._id}
-                creator={{
-                  name: view.name,
-                  avatar: view.avatar,
-                  handle: view.handle,
-                  followers: view.followers,
-                }}
-                status={app.status}
-                meta={
-                  campaignId
-                    ? appliedAt
-                    : `${appliedAt}${app.campaign?.title ? ` · ${app.campaign.title}` : ''}`
-                }
-                pitch={app.pitch}
-                portfolio={view.portfolio}
-                actions={rowActions(app)}
-              />
-            );
-          })}
+        <div className="space-y-3">
+          {rows.map((app) => (
+            <ApplicantRow
+              key={app._id}
+              app={app}
+              showCampaign={!campaignId}
+              acting={actingId === app._id}
+              onAccept={() => onDecide(app, 'Accepted')}
+              onReject={() => onDecide(app, 'Rejected')}
+            />
+          ))}
         </div>
       )}
     </>
+  );
+}
+
+function ApplicantRow({
+  app,
+  showCampaign,
+  acting,
+  onAccept,
+  onReject,
+}: {
+  app: PublicApplication;
+  showCampaign: boolean;
+  acting: boolean;
+  onAccept: () => void;
+  onReject: () => void;
+}) {
+  const view = applicantView(app);
+  const subline = [
+    view.niche[0],
+    typeof view.followers === 'number' ? `${formatCompactNumber(view.followers)} followers` : null,
+    view.city,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
+  return (
+    <div className="flex items-center gap-4 rounded-2xl border border-hair bg-card p-[18px] shadow-card">
+      <span
+        className="flex h-[52px] w-[52px] shrink-0 items-center justify-center overflow-hidden rounded-full font-display text-[16px] font-extrabold text-white"
+        style={view.avatar ? undefined : { background: categoryGradient(view.niche[0]) }}
+      >
+        {view.avatar ? (
+          // eslint-disable-next-line @next/next/no-img-element -- creator avatar
+          <img src={view.avatar} alt="" className="h-full w-full object-cover" />
+        ) : (
+          initials(view.name)
+        )}
+      </span>
+
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="text-[16px] font-bold text-ink">{view.name}</h3>
+          {app.status !== 'Pending' && <StatusBadge status={app.status} />}
+        </div>
+        {subline && <p className="mt-0.5 truncate text-[13px] text-muted">{subline}</p>}
+        {showCampaign && app.campaign?.title && (
+          <p className="mt-0.5 truncate text-[13px] text-muted">
+            Applied to <b className="text-ink">{app.campaign.title}</b>
+          </p>
+        )}
+      </div>
+
+      <div className="flex shrink-0 items-center gap-2">
+        {view.profileHref && (
+          <Button asChild variant="ghost" size="sm">
+            <Link href={view.profileHref} target="_blank">
+              <ExternalLink className="h-4 w-4" /> Profile
+            </Link>
+          </Button>
+        )}
+        {app.status === 'Pending' && (
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-danger hover:text-danger"
+              disabled={acting}
+              onClick={onReject}
+            >
+              <X className="h-4 w-4" /> Decline
+            </Button>
+            <Button size="sm" disabled={acting} onClick={onAccept}>
+              <Check className="h-4 w-4" /> Approve
+            </Button>
+          </>
+        )}
+      </div>
+    </div>
   );
 }

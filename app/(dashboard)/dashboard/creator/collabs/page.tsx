@@ -24,7 +24,7 @@ export default async function CreatorCollabsPage() {
       />
 
       {collabs.length === 0 ? (
-        <div className="rounded-lg border border-hair bg-card">
+        <div className="rounded-2xl border border-hair bg-card shadow-card">
           <EmptyState
             icon={<Handshake />}
             title="No active collabs"
@@ -37,7 +37,7 @@ export default async function CreatorCollabsPage() {
           />
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="grid gap-4 md:grid-cols-2">
           {collabs.map((a) => (
             <CreatorCollabCard key={a._id} application={a} />
           ))}

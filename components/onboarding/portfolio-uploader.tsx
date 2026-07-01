@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { ImagePlus, Link2, Loader2, Plus, X } from 'lucide-react';
+import { Link2, Loader2, Plus, X } from 'lucide-react';
 
 import type { PortfolioItem } from '@/lib/shared';
 import { uploadToCloudinary } from '@/lib/upload/cloudinary';
@@ -72,7 +72,7 @@ export function PortfolioUploader({
         {items.map((item, i) => (
           <li
             key={`${item.imageUrl}-${i}`}
-            className="group relative aspect-square overflow-hidden rounded-md border border-hair"
+            className="group relative aspect-square overflow-hidden rounded-[14px] border border-hair"
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- user-supplied portfolio thumbnail */}
             <img src={item.imageUrl} alt="" className="h-full w-full object-cover" />
@@ -95,15 +95,15 @@ export function PortfolioUploader({
                 onClick={() => inputRef.current?.click()}
                 disabled={disabled || uploading}
                 className={cn(
-                  'flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-md border-2 border-dashed border-hair-strong bg-secondary text-faint transition-colors hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-60',
+                  'flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-[14px] border-2 border-dashed border-hair-strong bg-secondary text-faint transition-colors hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-60',
                 )}
               >
                 {uploading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
                   <>
-                    <ImagePlus className="h-5 w-5" />
-                    <span className="text-[11px] font-medium">Add photo</span>
+                    <Plus className="h-5 w-5" />
+                    <span className="text-[11px] font-bold">Upload</span>
                   </>
                 )}
               </button>
@@ -117,10 +117,10 @@ export function PortfolioUploader({
                 }}
                 disabled={disabled}
                 aria-expanded={urlOpen}
-                className="flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-md border-2 border-dashed border-hair-strong bg-secondary text-faint transition-colors hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-[14px] border-2 border-dashed border-hair-strong bg-secondary text-faint transition-colors hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Link2 className="h-5 w-5" />
-                <span className="text-[11px] font-medium">Add URL</span>
+                <span className="text-[11px] font-bold">Add URL</span>
               </button>
             </li>
           </>

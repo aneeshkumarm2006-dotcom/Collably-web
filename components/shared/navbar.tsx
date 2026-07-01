@@ -60,7 +60,7 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
                 key={l.href}
                 href={l.href}
                 className={cn(
-                  'text-sm font-medium transition-colors',
+                  'text-[15px] font-semibold transition-colors',
                   isActive(pathname, l.href)
                     ? 'text-brand'
                     : onDark
@@ -83,12 +83,12 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
             </>
           ) : (
             <>
-              <Button asChild variant="ghost" className="hidden sm:inline-flex">
+              <Button asChild variant="ghost" size="pill-sm" className="hidden font-bold text-ink sm:inline-flex">
                 <Link href="/login" onClick={() => track('cta_login', { location: 'navbar' })}>
                   Log in
                 </Link>
               </Button>
-              <Button asChild>
+              <Button asChild size="pill-sm" className="font-bold">
                 <Link
                   href="/signup"
                   onClick={() => track('cta_get_started', { location: 'navbar' })}

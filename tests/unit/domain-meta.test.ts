@@ -89,20 +89,20 @@ describe('nicheIcon', () => {
 
 describe('categoryGradient', () => {
   it('returns a 135deg linear-gradient with the two stops of a known category', () => {
-    expect(categoryGradient('Restaurant')).toBe('linear-gradient(135deg, #1e2747, #33406b)');
-    expect(categoryGradient('Cafe')).toBe('linear-gradient(135deg, #3a2c1e, #5e4a32)');
-    expect(categoryGradient('Beauty')).toBe('linear-gradient(135deg, #3a2350, #5a3f7a)');
+    expect(categoryGradient('Restaurant')).toBe('linear-gradient(135deg, #FF6A3D, #FFB020)');
+    expect(categoryGradient('Cafe')).toBe('linear-gradient(135deg, #0064E0, #3E8BFF)');
+    expect(categoryGradient('Beauty')).toBe('linear-gradient(135deg, #FF6A3D, #FF9E6B)');
   });
 
   it('produces a valid linear-gradient string for every known category', () => {
     for (const category of CATEGORIES) {
       expect(categoryGradient(category)).toMatch(
-        /^linear-gradient\(135deg, #[0-9a-f]{6}, #[0-9a-f]{6}\)$/,
+        /^linear-gradient\(135deg, #[0-9a-fA-F]{6}, #[0-9a-fA-F]{6}\)$/,
       );
     }
   });
 
-  const DEFAULT = 'linear-gradient(135deg, #222a52, #3f4685)';
+  const DEFAULT = 'linear-gradient(135deg, #0064E0, #7B61FF)';
 
   it('returns the default gradient for an unknown category', () => {
     expect(categoryGradient('Aerospace' as Category)).toBe(DEFAULT);

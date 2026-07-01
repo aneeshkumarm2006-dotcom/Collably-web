@@ -11,7 +11,7 @@ export default async function CreatorSettingsPage() {
   const me = await serverApi.auth.me().catch(() => null);
 
   return (
-    <DashboardContainer className="max-w-[760px]">
+    <DashboardContainer className="max-w-[960px]">
       <PageHeader title="Settings" subtitle="Manage your account, notifications, and appearance." />
       {me?.user ? (
         <AccountSettings user={me.user} />

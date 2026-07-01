@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Instagram, Loader2, Music2, Youtube } from 'lucide-react';
+import { BadgeCheck, Instagram, Loader2, LogOut, Music2, Youtube } from 'lucide-react';
 
 import { clientApi } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
@@ -9,11 +9,13 @@ import { toast } from '@/lib/toast';
 import { CATEGORIES } from '@/lib/constants';
 import type { BusinessProfile, Category } from '@/lib/shared';
 import { categoryIcon } from '@/lib/domain-meta';
+import { initials } from '@/lib/format';
 import {
   type BusinessForm,
   businessFormFromProfile,
   toBusinessPayload,
 } from '@/lib/onboarding/business';
+import { useAuth } from '@/components/providers/auth-provider';
 import { SelectCard } from '@/components/onboarding/onboarding-ui';
 import { LocationFields } from '@/components/shared/location-fields';
 import { LogoUploader } from '@/components/onboarding/logo-uploader';
@@ -36,8 +38,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-hair bg-card p-5 shadow-sm sm:p-6">
-      <h2 className="text-base font-bold text-ink">{title}</h2>
+    <section className="rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
+      <h2 className="font-display text-base font-bold text-ink">{title}</h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
     </section>
@@ -51,6 +53,7 @@ function Section({
  * payload + validation stay identical to onboarding.
  */
 export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
+  const { logout } = useAuth();
   const [form, setForm] = useState<BusinessForm>(() => businessFormFromProfile(profile));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -84,6 +87,39 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
 
   return (
     <div className="space-y-5">
+      {/* Profile header */}
+      <div className="flex items-center gap-4 rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
+        <span
+          className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[22px] font-display text-[24px] font-extrabold text-white"
+          style={
+            form.logo
+              ? undefined
+              : { background: 'linear-gradient(135deg,#FF6A3D,#FFB020)' }
+          }
+        >
+          {form.logo ? (
+            // eslint-disable-next-line @next/next/no-img-element -- business logo preview
+            <img src={form.logo} alt="" className="h-full w-full object-cover" />
+          ) : (
+            initials(form.businessName || profile.businessName || 'Business')
+          )}
+        </span>
+        <div className="min-w-0">
+          <h2 className="truncate font-display text-[20px] font-extrabold text-ink">
+            {form.businessName || profile.businessName || 'Your business'}
+          </h2>
+          {profile.isVerified ? (
+            <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-[#E7F0FF] px-2.5 py-1 text-[12px] font-bold text-[#0052BD]">
+              <BadgeCheck className="h-3.5 w-3.5" /> Verified business
+            </span>
+          ) : (
+            <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-[#FFF3DA] px-2.5 py-1 text-[12px] font-bold text-[#B57F00]">
+              Under review
+            </span>
+          )}
+        </div>
+      </div>
+
       <Section title="Basics" description="Your name, category, and what creators see first.">
         <div className="space-y-1.5">
           <Label htmlFor="businessName">Business name</Label>
@@ -177,11 +213,21 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
         <LogoUploader value={form.logo} onChange={(logo) => patch({ logo })} />
       </Section>
 
+      <div className="flex justify-center">
+        <button
+          type="button"
+          onClick={() => void logout()}
+          className="inline-flex items-center gap-2 rounded-xl bg-danger-soft px-4 py-2.5 text-sm font-bold text-danger transition-opacity hover:opacity-80"
+        >
+          <LogOut className="h-4 w-4" /> Log out
+        </button>
+      </div>
+
       {error && <ErrorBanner message={error} />}
 
       {/* Sticky save bar */}
       <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-end gap-3 border-t border-hair bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
-        <Button size="lg" onClick={save} disabled={saving}>
+        <Button size="lg" className="flex-1" onClick={save} disabled={saving}>
           {saving ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" /> Saving…

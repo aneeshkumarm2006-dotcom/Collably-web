@@ -19,25 +19,32 @@ export interface StatCardProps {
 
 export function StatCard({ label, value, icon, delta, money, className }: StatCardProps) {
   return (
-    <div className={cn('rounded-lg border border-hair bg-card p-[22px] shadow-sm', className)}>
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-2xl border border-hair bg-card p-[18px] shadow-card',
+        className,
+      )}
+    >
+      {/* Soft tinted corner blob, matching the design's stat tiles. */}
+      <span className="pointer-events-none absolute -right-4 -top-4 h-16 w-16 rounded-full bg-brand-soft opacity-60" />
       {icon && (
-        <div className="mb-4 inline-flex h-[42px] w-[42px] items-center justify-center rounded-full bg-brand-soft text-brand [&_svg]:h-5 [&_svg]:w-5">
+        <div className="relative z-10 inline-flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-brand-soft text-brand [&_svg]:h-[18px] [&_svg]:w-[18px]">
           {icon}
         </div>
       )}
+      <div className="relative z-10 mt-3 text-[12.5px] font-semibold text-faint">{label}</div>
       <div
         className={cn(
-          'font-mono text-[32px] font-medium leading-none',
+          'relative z-10 mt-0.5 font-display text-[28px] font-extrabold leading-none tracking-tight',
           money ? 'text-money' : 'text-ink',
         )}
       >
         {value}
       </div>
-      <div className="mt-1 text-sm text-muted">{label}</div>
       {delta && (
         <div
           className={cn(
-            'mt-2.5 inline-flex items-center gap-1 text-xs font-semibold',
+            'relative z-10 mt-1.5 inline-flex items-center gap-1 text-xs font-bold',
             delta.direction === 'up' ? 'text-success' : 'text-danger',
           )}
         >

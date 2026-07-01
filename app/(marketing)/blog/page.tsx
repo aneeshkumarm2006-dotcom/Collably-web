@@ -4,8 +4,9 @@ import { Rss } from 'lucide-react';
 
 import { buildMetadata } from '@/lib/seo';
 import { getAllPostsMeta, getFeaturedPost } from '@/lib/blog';
-import { Container, Section, SectionLabel } from '@/components/marketing/section';
+import { Section, SectionLabel } from '@/components/marketing/section';
 import { PostCard } from '@/components/blog/post-card';
+import { BlogFilter } from './blog-filter';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Blog',
@@ -22,38 +23,31 @@ export default function BlogIndexPage() {
 
   return (
     <Section tone="page">
+      {/* Header */}
       <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-        <div>
+        <div className="max-w-2xl">
           <SectionLabel>The Collably Blog</SectionLabel>
-          <h1 className="mt-5 text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-            Ideas for creators &amp; brands
+          <h1 className="mt-5 text-balance font-display text-4xl font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-[48px]">
+            Playbooks for local collabs.
           </h1>
-          <p className="mt-4 max-w-xl text-pretty text-lg text-muted">
-            Playbooks and perspectives on running collabs that work, for both sides of the
-            marketplace.
+          <p className="mt-4 text-pretty text-lg leading-relaxed text-muted">
+            Guides, stories and data on creator marketing, local business growth and the creator
+            economy in Canada.
           </p>
         </div>
         <Link
           href="/feed.xml"
-          className="inline-flex items-center gap-2 rounded-md border border-hair bg-card px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:border-brand hover:text-brand"
+          className="inline-flex items-center gap-2 rounded-full border border-hair-strong bg-card px-4 py-2 text-sm font-semibold text-muted transition-colors hover:border-brand hover:text-brand"
         >
           <Rss className="h-4 w-4" /> RSS
         </Link>
       </div>
 
       {/* Featured */}
-      <PostCard post={featured.meta} variant="feature" className="mb-10" />
+      <PostCard post={featured.meta} variant="feature" className="mb-12" />
 
-      {/* Grid */}
-      {rest.length > 0 && (
-        <Container size="default" className="px-0">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.map((post) => (
-              <PostCard key={post.slug} post={post} />
-            ))}
-          </div>
-        </Container>
-      )}
+      {/* Filter + grid */}
+      {rest.length > 0 && <BlogFilter posts={rest} />}
     </Section>
   );
 }

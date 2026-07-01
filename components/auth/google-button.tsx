@@ -101,6 +101,7 @@ export function GoogleButton({ onCredential, text = 'continue_with', disabled }:
   const containerRef = useRef<HTMLDivElement>(null);
   const fallbackId = useId();
   const [ready, setReady] = useState(false);
+  const label = text === 'signup_with' ? 'Sign up with Google' : 'Continue with Google';
 
   // Keep the latest callback reachable from the GIS closure.
   const onCredentialRef = useRef(onCredential);
@@ -154,10 +155,10 @@ export function GoogleButton({ onCredential, text = 'continue_with', disabled }:
         onClick={() =>
           toast.info('Google sign-in isn’t configured in this environment. Use email instead.')
         }
-        className="flex w-full items-center justify-center gap-2.5 rounded-md border border-hair-strong bg-card px-4 py-3 text-[15px] font-semibold text-ink transition-colors hover:bg-secondary"
+        className="flex w-full items-center justify-center gap-2.5 rounded-md border-[1.5px] border-hair-strong bg-card px-4 py-[13px] text-[15px] font-semibold text-ink transition-colors hover:border-brand"
       >
         <GoogleGlyph />
-        Continue with Google
+        {label}
       </button>
     );
   }
@@ -173,9 +174,9 @@ export function GoogleButton({ onCredential, text = 'continue_with', disabled }:
       />
       {/* Placeholder overlay until GIS paints its button (avoids layout shift). */}
       {!ready && (
-        <div className="absolute inset-0 flex w-full items-center justify-center gap-2.5 rounded-md border border-hair-strong bg-card px-4 py-3 text-[15px] font-semibold text-faint">
+        <div className="absolute inset-0 flex w-full items-center justify-center gap-2.5 rounded-md border-[1.5px] border-hair-strong bg-card px-4 py-[13px] text-[15px] font-semibold text-faint">
           <GoogleGlyph />
-          Continue with Google
+          {label}
         </div>
       )}
     </div>

@@ -74,8 +74,17 @@ export function DashboardShell({
           notificationsHref={`/dashboard/${role}/notifications`}
           onLogout={onLogout}
         />
-        {/* Bottom padding on mobile clears the fixed bottom tab bar. */}
-        <main className="flex-1 pb-20 md:pb-0">{children}</main>
+        {/* Bottom padding on mobile clears the fixed bottom tab bar. Light content
+            area with a subtle brand/grape radial wash per the mockups. */}
+        <main
+          className="flex-1 bg-elev pb-20 md:pb-0"
+          style={{
+            backgroundImage:
+              'radial-gradient(1100px 560px at 100% -8%,#E9F1FF 0,transparent 55%), radial-gradient(820px 520px at -8% 18%,#F1ECFF 0,transparent 52%)',
+          }}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

@@ -2,16 +2,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { ChevronRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 import { buildMetadata, blogPostingJsonLd, breadcrumbJsonLd } from '@/lib/seo';
-import { formatDate } from '@/lib/format';
+import { formatDate, initials } from '@/lib/format';
 import { getAllPostsMeta, getPost, getRelatedPosts } from '@/lib/blog';
+import { categoryGradient } from '@/lib/domain-meta';
 import { Container } from '@/components/marketing/section';
 import { Prose } from '@/components/marketing/prose';
 import { CtaBand } from '@/components/marketing/cta-band';
 import { PostCard } from '@/components/blog/post-card';
-import { Avatar } from '@/components/shared/avatar';
 import { JsonLd } from '@/components/shared/json-ld';
 
 /** Pre-render every post at build time. */
@@ -45,6 +45,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const { meta, Body } = post;
   const related = getRelatedPosts(slug);
+  const gradient = categoryGradient(meta.category);
 
   return (
     <article className="bg-page pb-4">
@@ -66,75 +67,96 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         ]}
       />
 
-      <Container size="narrow" className="pt-12">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-[13px] text-muted" aria-label="Breadcrumb">
-          <Link href="/blog" className="hover:text-brand">
-            Blog
-          </Link>
-          <ChevronRight className="h-3.5 w-3.5 text-faint" />
-          <span className="text-brand">{meta.category}</span>
-        </nav>
+      <div className="mx-auto w-full max-w-[720px] px-6 pt-12">
+        {/* Back link */}
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-[#0052BD]"
+        >
+          <ArrowLeft className="h-4 w-4" /> All posts
+        </Link>
 
         {/* Header */}
-        <header className="mt-5">
-          <h1 className="text-balance text-3xl font-bold leading-[1.12] tracking-tight sm:text-4xl">
+        <header className="mt-6">
+          <span className="text-[13px] font-extrabold uppercase tracking-[0.1em] text-brand">
+            {meta.category}
+          </span>
+          <h1 className="mt-3 text-balance font-display text-3xl font-extrabold leading-[1.1] tracking-[-0.03em] sm:text-[42px]">
             {meta.title}
           </h1>
-          <p className="mt-4 text-pretty text-lg leading-relaxed text-muted">{meta.description}</p>
-          <div className="mt-6 flex items-center gap-3">
-            <Avatar name={meta.author.name} size={40} />
+
+          {/* Author row */}
+          <div className="mt-6 flex items-center gap-3 border-b border-hair pb-6">
+            <span
+              aria-hidden
+              className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full font-display text-sm font-bold text-white"
+              style={{ background: gradient }}
+            >
+              {initials(meta.author.name)}
+            </span>
             <div className="text-sm">
-              <div className="font-semibold text-ink">{meta.author.name}</div>
-              <div className="font-mono text-[12px] text-muted">
+              <div className="font-semibold text-ink">
+                {meta.author.name}
+                {meta.author.role && (
+                  <span className="font-normal text-muted"> · {meta.author.role}</span>
+                )}
+              </div>
+              <div className="text-[12px] text-muted">
                 {formatDate(meta.date)} · {meta.readingMinutes} min read
               </div>
             </div>
           </div>
         </header>
-      </Container>
 
-      {/* Cover */}
-      {meta.coverImage && (
-        <Container size="narrow" className="mt-8">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-secondary">
+        {/* Hero */}
+        <div
+          className="relative mt-8 h-[280px] overflow-hidden rounded-2xl"
+          style={{ background: gradient }}
+        >
+          {meta.coverImage && (
             <Image
               src={meta.coverImage}
               alt={meta.title}
               fill
               priority
-              sizes="(max-width: 768px) 100vw, 760px"
+              sizes="(max-width: 768px) 100vw, 720px"
               className="object-cover"
             />
-          </div>
-        </Container>
-      )}
+          )}
+        </div>
 
-      {/* Body */}
-      <Container size="narrow" className="mt-10">
-        <Prose>
+        {/* Body */}
+        <Prose className="mt-10">
           <Body />
         </Prose>
 
         {/* Tags */}
         {meta.tags.length > 0 && (
-          <div className="mt-10 flex flex-wrap gap-2 border-t border-hair pt-6">
+          <div className="mt-10 flex flex-wrap gap-2">
             {meta.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-hair bg-card px-3 py-1 font-mono text-[12px] text-muted"
+                className="rounded-full border border-hair bg-card px-3 py-1 text-[12px] font-medium text-muted"
               >
                 #{tag}
               </span>
             ))}
           </div>
         )}
-      </Container>
+
+        {/* Share */}
+        <div className="mt-8 flex items-center gap-3 border-t border-hair pt-6">
+          <span className="text-sm font-semibold text-ink">Share:</span>
+          <ShareTiles title={meta.title} slug={meta.slug} />
+        </div>
+      </div>
 
       {/* Related */}
       {related.length > 0 && (
         <Container size="default" className="mt-16">
-          <h2 className="mb-6 text-xl font-bold text-ink">Keep reading</h2>
+          <h2 className="mb-6 font-display text-2xl font-bold tracking-[-0.02em] text-ink">
+            Keep reading
+          </h2>
           <div className="grid gap-6 sm:grid-cols-2">
             {related.map((r) => (
               <PostCard key={r.meta.slug} post={r.meta} />
@@ -145,12 +167,52 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <div className="mt-16">
         <CtaBand
-          title="Ready to start a collab?"
+          title="Start your first collab free"
           subtitle="Join Collably free, as a creator or a business, and put these ideas to work."
           primary={{ label: 'Get started', href: '/signup' }}
           secondary={{ label: 'Browse campaigns', href: '/explore' }}
         />
       </div>
     </article>
+  );
+}
+
+/** Square social share tiles (LinkedIn / X / Facebook). Links open a share intent. */
+function ShareTiles({ title, slug }: { title: string; slug: string }) {
+  const url = `https://collably.app/blog/${slug}`;
+  const enc = encodeURIComponent(url);
+  const encTitle = encodeURIComponent(title);
+  const tiles = [
+    {
+      label: 'Share on LinkedIn',
+      href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc}`,
+      glyph: 'in',
+    },
+    {
+      label: 'Share on X',
+      href: `https://twitter.com/intent/tweet?url=${enc}&text=${encTitle}`,
+      glyph: 'X',
+    },
+    {
+      label: 'Share on Facebook',
+      href: `https://www.facebook.com/sharer/sharer.php?u=${enc}`,
+      glyph: 'f',
+    },
+  ];
+  return (
+    <div className="flex items-center gap-2">
+      {tiles.map((t) => (
+        <a
+          key={t.label}
+          href={t.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t.label}
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-hair-strong bg-card text-sm font-bold text-muted transition-colors hover:border-brand hover:text-brand"
+        >
+          {t.glyph}
+        </a>
+      ))}
+    </div>
   );
 }

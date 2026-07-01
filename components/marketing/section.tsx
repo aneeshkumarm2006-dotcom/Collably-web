@@ -69,13 +69,12 @@ export function SectionLabel({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-3 font-mono text-xs font-medium uppercase tracking-[0.16em]',
-        onDark ? 'text-white/60' : 'text-muted',
+        'inline-flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-[0.1em]',
+        onDark ? 'text-white/70' : 'text-brand',
         className,
       )}
     >
-      <span className={cn('h-px w-5', onDark ? 'bg-white/30' : 'bg-hair-strong')} />
-      {ordinal && <span className="text-brand">{ordinal}</span>}
+      {ordinal && <span className="opacity-70">{ordinal}</span>}
       {children}
     </span>
   );
@@ -120,7 +119,7 @@ export function SectionHeader({
         )}
         <h2
           className={cn(
-            'text-balance text-3xl font-bold tracking-tight sm:text-4xl',
+            'text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]',
             onDark ? 'text-white' : 'text-ink',
           )}
         >

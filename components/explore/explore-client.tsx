@@ -4,8 +4,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { LayoutGrid, Map as MapIcon, Search, SearchX, Sparkles } from 'lucide-react';
+import { LayoutGrid, Map as MapIcon, MapPin, Search, SearchX, Sparkles } from 'lucide-react';
 
+import { CATEGORIES } from '@/lib/shared';
 import { clientApi } from '@/lib/api/client';
 import { queryKeys } from '@/lib/api/query-keys';
 import type { CampaignListResponse } from '@/lib/api/types';
@@ -23,7 +24,6 @@ import {
 } from '@/components/shared/filter-sidebar';
 import { CampaignCard } from '@/components/shared/campaign-card';
 import { EmptyState } from '@/components/shared/empty-state';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -120,23 +120,61 @@ export function ExploreClient({
   // Guests don't get the personalized "Best match" sort.
   const sortOptions = CAMPAIGN_SORTS.filter((s) => !(isGuest && s === 'relevance'));
 
+  // Category quick-filter chips (single-select behavior on the top row): clicking
+  // a category sets it as the sole category filter; clicking the active one (or
+  // "All") clears the category filter. Keeps the real `filters.categories` wiring
+  // and stays in sync with the sidebar checkboxes.
+  const activeCategory =
+    filters.categories.length === 1 ? filters.categories[0] : undefined;
+  const selectCategory = (cat?: string) =>
+    setFilters({ ...filters, categories: cat ? [cat] : [] });
+  const locationLabel = filters.location.trim() || 'All of Canada';
+
   return (
     <>
-      {/* Search head */}
+      {/* Header */}
       <div className="border-b border-hair bg-card">
-        <div className="mx-auto max-w-[1320px] px-6 py-7">
-          <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-            Explore campaigns
+        <div className="mx-auto max-w-[1320px] px-6 pb-6 pt-9">
+          <h1 className="font-display text-[32px] font-extrabold leading-tight tracking-tight text-ink sm:text-[40px]">
+            Explore local collabs
           </h1>
-          <div className="relative mt-4 max-w-2xl">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-faint" />
-            <Input
-              value={searchDraft}
-              onChange={(e) => setSearchDraft(e.target.value)}
-              placeholder="Search campaigns, brands, or rewards…"
-              className="h-11 pl-11"
-              aria-label="Search campaigns"
+          <p className="mt-2 max-w-2xl text-[15px] text-muted">
+            Browse live campaigns from verified local businesses across Canada.
+          </p>
+
+          {/* Search + location row */}
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="relative min-w-[240px] flex-1">
+              <Search className="pointer-events-none absolute left-[15px] top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-faint" />
+              <input
+                value={searchDraft}
+                onChange={(e) => setSearchDraft(e.target.value)}
+                placeholder="Search campaigns, brands, or rewards…"
+                aria-label="Search campaigns"
+                className="w-full rounded-md border border-hair bg-card py-3 pl-11 pr-[15px] text-[15px] text-ink outline-none transition-colors placeholder:text-faint focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/20"
+              />
+            </div>
+            <span className="inline-flex items-center gap-2 rounded-md border border-hair bg-card px-[15px] py-3 text-[14px] font-semibold text-ink">
+              <MapPin className="h-[18px] w-[18px] text-brand" aria-hidden />
+              {locationLabel}
+            </span>
+          </div>
+
+          {/* Category filter pills */}
+          <div className="mt-4 flex flex-wrap gap-2">
+            <CategoryChip
+              label="All"
+              active={!activeCategory}
+              onClick={() => selectCategory(undefined)}
             />
+            {CATEGORIES.map((c) => (
+              <CategoryChip
+                key={c}
+                label={c}
+                active={activeCategory === c}
+                onClick={() => selectCategory(activeCategory === c ? undefined : c)}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -148,7 +186,7 @@ export function ExploreClient({
       <div className="mx-auto grid max-w-[1320px] gap-8 px-6 py-7 md:grid-cols-[260px_1fr]">
         {/* Desktop sidebar */}
         <aside className="hidden md:block">
-          <div className="sticky top-[84px] rounded-lg border border-hair bg-card px-4 pb-3 shadow-sm">
+          <div className="sticky top-[88px] rounded-2xl border border-hair bg-card px-4 pb-3 shadow-card">
             <FilterSidebar value={filters} onChange={setFilters} />
           </div>
         </aside>
@@ -174,13 +212,19 @@ export function ExploreClient({
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="inline-flex rounded-lg border border-hair p-0.5" role="group" aria-label="View mode">
+              <div
+                className="inline-flex rounded-[11px] bg-[#EEF1F8] p-[3px]"
+                role="group"
+                aria-label="View mode"
+              >
                 <button
                   type="button"
                   onClick={() => setView('list')}
                   aria-pressed={view === 'list'}
-                  className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${
-                    view === 'list' ? 'bg-brand text-white' : 'text-muted hover:text-ink'
+                  className={`inline-flex items-center gap-1.5 rounded-[9px] px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+                    view === 'list'
+                      ? 'bg-card text-ink shadow-sm'
+                      : 'text-muted hover:text-ink'
                   }`}
                 >
                   <LayoutGrid className="h-4 w-4" /> List
@@ -189,8 +233,10 @@ export function ExploreClient({
                   type="button"
                   onClick={() => setView('map')}
                   aria-pressed={view === 'map'}
-                  className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${
-                    view === 'map' ? 'bg-brand text-white' : 'text-muted hover:text-ink'
+                  className={`inline-flex items-center gap-1.5 rounded-[9px] px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+                    view === 'map'
+                      ? 'bg-card text-ink shadow-sm'
+                      : 'text-muted hover:text-ink'
                   }`}
                 >
                   <MapIcon className="h-4 w-4" /> Map
@@ -251,7 +297,7 @@ export function ExploreClient({
             <CampaignMap campaigns={campaigns} className="min-h-[520px]" />
           ) : (
             <>
-              <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {campaigns.map((c) => (
                   <CampaignCard
                     key={c._id}
@@ -265,7 +311,7 @@ export function ExploreClient({
               {/* Infinite-scroll sentinel + fetching state */}
               <div ref={sentinelRef} className="h-10" aria-hidden />
               {query.isFetchingNextPage && (
-                <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   <CampaignGridSkeleton count={3} />
                 </div>
               )}
@@ -280,9 +326,34 @@ export function ExploreClient({
   );
 }
 
+function CategoryChip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`rounded-full border-[1.5px] px-[15px] py-[9px] text-[13.5px] font-bold transition-colors ${
+        active
+          ? 'border-brand bg-brand text-white'
+          : 'border-hair bg-card text-muted hover:border-brand hover:text-brand'
+      }`}
+    >
+      {label}
+    </button>
+  );
+}
+
 function CampaignGridSkeleton({ count = 6 }: { count?: number }) {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="overflow-hidden rounded-lg border border-hair bg-card">
           <Skeleton className="aspect-video w-full rounded-none" />

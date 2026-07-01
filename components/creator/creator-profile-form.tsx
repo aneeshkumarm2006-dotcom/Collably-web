@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { LogOut, Loader2 } from 'lucide-react';
 
 import { clientApi } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
@@ -9,6 +9,7 @@ import { toast } from '@/lib/toast';
 import { NICHES, CONTENT_TYPES } from '@/lib/constants';
 import type { CreatorProfile, Niche, ContentType } from '@/lib/shared';
 import { nicheIcon } from '@/lib/domain-meta';
+import { useAuth } from '@/components/providers/auth-provider';
 import {
   type CreatorForm,
   creatorFormFromProfile,
@@ -42,8 +43,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-hair bg-card p-5 shadow-sm sm:p-6">
-      <h2 className="text-base font-bold text-ink">{title}</h2>
+    <section className="rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
+      <h2 className="font-display text-base font-bold text-ink">{title}</h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
     </section>
@@ -56,12 +57,22 @@ function Section({
  * onboarding form model (`creatorFormFromProfile` / `toCreatorPayload`) so the
  * payload + validation stay identical to onboarding.
  */
-export function CreatorProfileForm({ profile }: { profile: CreatorProfile }) {
+export function CreatorProfileForm({
+  profile,
+  name,
+  avatar,
+}: {
+  profile: CreatorProfile;
+  name?: string;
+  avatar?: string | null;
+}) {
+  const { logout } = useAuth();
   const [form, setForm] = useState<CreatorForm>(() => creatorFormFromProfile(profile));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const patch = (partial: Partial<CreatorForm>) => setForm((f) => ({ ...f, ...partial }));
+  const initial = (name ?? 'C').charAt(0).toUpperCase();
 
   async function save() {
     setError(null);
@@ -84,6 +95,41 @@ export function CreatorProfileForm({ profile }: { profile: CreatorProfile }) {
 
   return (
     <div className="space-y-5">
+      {/* Profile hero header */}
+      <section className="flex flex-wrap items-center gap-4 rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
+        {avatar ? (
+          // eslint-disable-next-line @next/next/no-img-element -- avatar preview
+          <img
+            src={avatar}
+            alt=""
+            className="h-20 w-20 shrink-0 rounded-[22px] object-cover"
+          />
+        ) : (
+          <span
+            className="flex h-20 w-20 shrink-0 items-center justify-center rounded-[22px] font-display text-3xl font-extrabold text-white"
+            style={{ background: 'linear-gradient(135deg,#0064E0,#7B61FF)' }}
+            aria-hidden
+          >
+            {initial}
+          </span>
+        )}
+        <div className="min-w-0 flex-1">
+          <h2 className="font-display text-xl font-extrabold text-ink">{name ?? 'Your profile'}</h2>
+          {form.niche.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {form.niche.slice(0, 5).map((n) => (
+                <span
+                  key={n}
+                  className="rounded-full bg-brand-soft px-2.5 py-1 text-[12px] font-bold text-brand"
+                >
+                  {n}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
       <Section title="About you" description="Your bio and niche help brands and our matching find you.">
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
@@ -166,6 +212,17 @@ export function CreatorProfileForm({ profile }: { profile: CreatorProfile }) {
             'Save changes'
           )}
         </Button>
+      </div>
+
+      {/* Log out */}
+      <div className="pt-1">
+        <button
+          type="button"
+          onClick={() => void logout()}
+          className="inline-flex items-center gap-2 rounded-xl bg-danger-soft px-4 py-2.5 text-sm font-semibold text-danger transition-colors hover:brightness-95"
+        >
+          <LogOut className="h-4 w-4" /> Log out
+        </button>
       </div>
     </div>
   );

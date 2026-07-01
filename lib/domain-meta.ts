@@ -95,23 +95,23 @@ export const nicheIcon = (niche: string): LucideIcon => NICHE_ICON[niche as Nich
  * image, or it fails to load). Neutral-ink tones tuned per category family.
  */
 const CATEGORY_GRADIENT: Record<Category, [string, string]> = {
-  Restaurant: ['#1e2747', '#33406b'],
-  Cafe: ['#3a2c1e', '#5e4a32'],
-  'Food & Beverage': ['#1b2c3a', '#33506b'],
-  Fashion: ['#262a52', '#444a85'],
-  Beauty: ['#3a2350', '#5a3f7a'],
-  'Salon & Spa': ['#2a2350', '#4a3f7a'],
-  'Health & Wellness': ['#16302a', '#274f47'],
-  Fitness: ['#172a3a', '#2d4f6b'],
-  Tech: ['#16233a', '#274a6b'],
-  Gaming: ['#241a3a', '#3f2d6b'],
-  Travel: ['#142a3a', '#2d556b'],
-  'Home & Lifestyle': ['#2a2620', '#4a4338'],
-  Education: ['#1e2747', '#33406b'],
-  Other: ['#222a52', '#3f4685'],
+  Restaurant: ['#FF6A3D', '#FFB020'],
+  Cafe: ['#0064E0', '#3E8BFF'],
+  'Food & Beverage': ['#FF6A3D', '#FF9E6B'],
+  Fashion: ['#7B61FF', '#A48CFF'],
+  Beauty: ['#FF6A3D', '#FF9E6B'],
+  'Salon & Spa': ['#7B61FF', '#A48CFF'],
+  'Health & Wellness': ['#16C79A', '#4FE0BC'],
+  Fitness: ['#16C79A', '#4FE0BC'],
+  Tech: ['#0064E0', '#3E8BFF'],
+  Gaming: ['#7B61FF', '#A48CFF'],
+  Travel: ['#0064E0', '#3E8BFF'],
+  'Home & Lifestyle': ['#FF6A3D', '#FFB020'],
+  Education: ['#0064E0', '#7B61FF'],
+  Other: ['#0064E0', '#7B61FF'],
 };
 
-const DEFAULT_GRADIENT: [string, string] = ['#222a52', '#3f4685'];
+const DEFAULT_GRADIENT: [string, string] = ['#0064E0', '#7B61FF'];
 
 /** Returns a CSS `linear-gradient(...)` string for a category cover fallback. */
 export function categoryGradient(category?: string): string {

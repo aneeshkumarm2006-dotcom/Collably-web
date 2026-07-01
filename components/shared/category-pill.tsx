@@ -18,9 +18,9 @@ export interface CategoryPillProps {
 
 export function CategoryPill({ category, count, active, onClick, className }: CategoryPillProps) {
   const classes = cn(
-    'inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors',
+    'inline-flex items-center gap-2 rounded-full border-[1.5px] px-[15px] py-[9px] text-[13.5px] font-bold transition-colors',
     active
-      ? 'border-brand bg-brand-soft text-brand'
+      ? 'border-brand bg-brand text-white'
       : 'border-hair bg-card text-muted hover:border-brand hover:text-brand',
     className,
   );
@@ -31,7 +31,9 @@ export function CategoryPill({ category, count, active, onClick, className }: Ca
       <Icon aria-hidden className="h-4 w-4 shrink-0" />
       <span>{category}</span>
       {typeof count === 'number' && (
-        <span className="font-mono text-xs text-money">{count}</span>
+        <span className={cn('font-mono text-xs', active ? 'text-white/80' : 'text-money')}>
+          {count}
+        </span>
       )}
     </>
   );

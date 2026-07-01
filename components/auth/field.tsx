@@ -17,11 +17,21 @@ export interface FieldProps {
   className?: string;
 }
 
+/**
+ * Shared input classes for the redesigned auth fields: taller, softer inputs with
+ * a 1.5px hairline that turns brand on focus. Spread onto each `<Input>` so the
+ * Field stays input-agnostic while matching the mockups.
+ */
+export const authInputClass =
+  'h-auto rounded-md border-[1.5px] border-hair-strong px-[15px] py-[13px] text-[15px]';
+
 export function Field({ label, htmlFor, error, hint, action, children, className }: FieldProps) {
   return (
     <div className={cn('space-y-1.5', className)}>
       <div className="flex items-center justify-between">
-        <Label htmlFor={htmlFor}>{label}</Label>
+        <Label htmlFor={htmlFor} className="text-[13px] font-bold text-muted">
+          {label}
+        </Label>
         {action}
       </div>
       {children}

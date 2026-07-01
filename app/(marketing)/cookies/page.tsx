@@ -10,6 +10,55 @@ export const metadata: Metadata = buildMetadata({
   ogEyebrow: 'Legal',
 });
 
+const COOKIE_CATEGORIES = [
+  {
+    name: 'Essential',
+    description:
+      'Keep you signed in (our session cookies) and operate core features. The site won’t work properly without these.',
+    tag: 'Always on',
+    tagClass: 'bg-[#E4F8F2] text-[#0FA57E]',
+  },
+  {
+    name: 'Analytics',
+    description:
+      'Help us understand how the site is used so we can improve it. Aggregated and non-identifying where possible.',
+    tag: 'Optional',
+    tagClass: 'bg-[#E7F0FF] text-[#0052BD]',
+  },
+  {
+    name: 'Marketing',
+    description:
+      'Measure the effectiveness of our campaigns and, where you opt in, show relevant content off-platform.',
+    tag: 'Optional',
+    tagClass: 'bg-[#FFF3DA] text-[#B57F00]',
+  },
+];
+
+function CookieTable() {
+  return (
+    <div className="my-8 overflow-hidden rounded-2xl border border-hair bg-card">
+      {COOKIE_CATEGORIES.map((cat, i) => (
+        <div
+          key={cat.name}
+          className={`flex items-start justify-between gap-4 p-5 ${
+            i > 0 ? 'border-t border-hair' : ''
+          }`}
+        >
+          <div className="min-w-0">
+            <div className="font-display text-[15px] font-bold text-ink">{cat.name}</div>
+            <p className="mt-1 text-sm leading-relaxed text-muted">{cat.description}</p>
+          </div>
+          <span
+            className={`shrink-0 rounded-full px-3 py-1 text-xs font-bold ${cat.tagClass}`}
+          >
+            {cat.tag}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function CookiesPage() {
   return (
     <LegalPage
@@ -23,20 +72,9 @@ export default function CookiesPage() {
         site remember your actions and preferences over time.
       </p>
 
-      <h2>2. How we use cookies</h2>
-      <ul>
-        <li>
-          <strong>Essential cookies:</strong> required to keep you signed in (our session cookies)
-          and to operate core features. The site won&apos;t work properly without these.
-        </li>
-        <li>
-          <strong>Preference cookies:</strong> remember choices such as your light/dark theme.
-        </li>
-        <li>
-          <strong>Analytics cookies:</strong> help us understand how the site is used so we can
-          improve it. These are aggregated and non-identifying where possible.
-        </li>
-      </ul>
+      <h2>2. Cookie categories</h2>
+      <p>We group the cookies and similar technologies we use into the following categories:</p>
+      <CookieTable />
 
       <h2>3. Managing cookies</h2>
       <p>
@@ -51,7 +89,7 @@ export default function CookiesPage() {
         maps) that may set their own cookies subject to their privacy policies.
       </p>
 
-      <h2>5. Changes & contact</h2>
+      <h2>5. Changes &amp; contact</h2>
       <p>
         We may update this policy as our use of cookies evolves. Questions? Email{' '}
         <a href="mailto:privacy@collably.app">privacy@collably.app</a> or see our{' '}

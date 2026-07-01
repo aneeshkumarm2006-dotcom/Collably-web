@@ -15,9 +15,21 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const CHANNELS = [
-  { icon: Mail, label: 'Email', value: 'hello@collably.app', href: 'mailto:hello@collably.app' },
-  { icon: MessageSquare, label: 'Support', value: 'support@collably.app', href: 'mailto:support@collably.app' },
-  { icon: MapPin, label: 'Based in', value: 'Toronto · Vancouver · Montreal' },
+  {
+    icon: Mail,
+    label: 'Email',
+    value: 'hello@collably.ca',
+    href: 'mailto:hello@collably.ca',
+    tone: 'bg-brand-soft text-brand',
+  },
+  {
+    icon: MessageSquare,
+    label: 'Support',
+    value: 'support@collably.ca',
+    href: 'mailto:support@collably.ca',
+    tone: 'bg-warm-soft text-warm',
+  },
+  { icon: MapPin, label: 'HQ', value: 'Toronto · Vancouver', tone: 'bg-grape-soft text-grape' },
 ];
 
 export default async function ContactPage({
@@ -32,39 +44,46 @@ export default async function ContactPage({
 
   return (
     <Section tone="page">
-      <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-        <div>
-          <SectionLabel>Contact</SectionLabel>
-          <h1 className="mt-5 text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-            Let&apos;s talk
-          </h1>
-          <p className="mt-5 max-w-md text-pretty text-lg text-muted">
-            Have a question about collabs, campaigns, or partnerships? Send us a note and we&apos;ll
-            get back to you, usually within one business day.
-          </p>
+      <div className="mb-12 text-center">
+        <SectionLabel className="justify-center">Contact</SectionLabel>
+        <h1 className="mt-5 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-5xl">
+          Let&apos;s talk.
+        </h1>
+        <p className="mx-auto mt-5 max-w-lg text-pretty text-lg text-muted">
+          Questions, press, or partnerships — we usually reply within a day.
+        </p>
+      </div>
 
-          <ul className="mt-9 flex flex-col gap-5">
-            {CHANNELS.map((c) => (
-              <li key={c.label} className="flex items-start gap-3.5">
-                <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-soft text-brand">
-                  <c.icon className="h-5 w-5" />
-                </span>
-                <div>
-                  <div className="font-mono text-[11px] uppercase tracking-wide text-muted">
-                    {c.label}
-                  </div>
-                  {c.href ? (
-                    <a href={c.href} className="text-[15px] font-medium text-ink hover:text-brand">
-                      {c.value}
-                    </a>
-                  ) : (
-                    <div className="text-[15px] font-medium text-ink">{c.value}</div>
-                  )}
+      <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+        <ul className="flex flex-col gap-4">
+          {CHANNELS.map((c) => (
+            <li
+              key={c.label}
+              className="flex items-start gap-4 rounded-2xl border border-hair bg-card p-5 shadow-card"
+            >
+              <span
+                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${c.tone}`}
+              >
+                <c.icon className="h-5 w-5" />
+              </span>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-[0.08em] text-faint">
+                  {c.label}
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+                {c.href ? (
+                  <a
+                    href={c.href}
+                    className="text-[15px] font-bold text-ink transition-colors hover:text-brand"
+                  >
+                    {c.value}
+                  </a>
+                ) : (
+                  <div className="text-[15px] font-bold text-ink">{c.value}</div>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
 
         <ContactForm defaultTopic={defaultTopic} />
       </div>

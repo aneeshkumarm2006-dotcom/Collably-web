@@ -65,7 +65,8 @@ describe('<CategoryPill> (interactive button)', () => {
     const btn = screen.getByRole('button');
     expect(btn).toHaveAttribute('aria-pressed', 'true');
     expect(btn).toHaveClass('border-brand');
-    expect(btn).toHaveClass('text-brand');
+    expect(btn).toHaveClass('bg-brand');
+    expect(btn).toHaveClass('text-white');
   });
 
   it('marks aria-pressed false and uses the muted styling when inactive', () => {

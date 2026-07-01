@@ -65,18 +65,23 @@ export function OnboardingCelebration({
         ))}
       </div>
 
-      <div className="relative z-10 rounded-2xl border border-hair bg-card p-8 text-center shadow-card">
-        <span className="mx-auto mb-6 flex h-[88px] w-[88px] animate-in zoom-in-50 items-center justify-center rounded-full bg-success text-white duration-500">
-          <Check className="h-11 w-11" strokeWidth={3} />
+      <div className="relative z-10 rounded-[22px] border border-hair bg-card p-8 text-center shadow-card">
+        <span
+          className="mx-auto mb-6 flex h-[92px] w-[92px] animate-in zoom-in-50 items-center justify-center rounded-full text-white duration-500"
+          style={{ background: 'linear-gradient(135deg,#0064E0,#7B61FF)' }}
+        >
+          <Check className="h-12 w-12" strokeWidth={3} />
         </span>
-        <h1 className="text-[28px] font-semibold tracking-tight text-ink">{title}</h1>
-        <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-muted">{message}</p>
+        <h1 className="font-display text-[44px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
+          {title} 🎉
+        </h1>
+        <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-muted">{message}</p>
         <Button
           type="button"
-          size="lg"
+          size="pill"
           onClick={onContinue}
           disabled={loading}
-          className="mt-7 w-full"
+          className="mt-7 w-full shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
         >
           {loading ? (
             'Taking you in…'

@@ -18,18 +18,13 @@ export function HeroCta() {
 
   if (isAuthenticated && user) {
     return (
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Button asChild size="lg" className="bg-white text-brand hover:bg-white/90">
+      <div className="mt-9 flex flex-wrap gap-3">
+        <Button asChild size="pill">
           <Link href={roleHome(user.role)}>
             Go to dashboard <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>
-        <Button
-          asChild
-          size="lg"
-          variant="outline"
-          className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"
-        >
+        <Button asChild size="pill" variant="outline">
           <Link href="/explore">Browse campaigns</Link>
         </Button>
       </div>
@@ -37,25 +32,23 @@ export function HeroCta() {
   }
 
   return (
-    <div className="mt-8 flex flex-wrap gap-3">
+    <div className="mt-9 flex flex-wrap gap-3">
       <Button
         asChild
-        size="lg"
-        className="bg-white text-brand hover:bg-white/90"
-        onClick={() => track('cta_get_started', { location: 'hero', audience: 'business' })}
+        size="pill"
+        onClick={() => track('cta_get_started', { location: 'hero', audience: 'creator' })}
       >
-        <Link href="/for-businesses">
-          I&apos;m a business <ArrowRight className="h-4 w-4" />
+        <Link href="/for-creators">
+          Join as a creator <ArrowRight className="h-4 w-4" />
         </Link>
       </Button>
       <Button
         asChild
-        size="lg"
+        size="pill"
         variant="outline"
-        className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"
-        onClick={() => track('cta_get_started', { location: 'hero', audience: 'creator' })}
+        onClick={() => track('cta_get_started', { location: 'hero', audience: 'business' })}
       >
-        <Link href="/for-creators">I&apos;m a creator</Link>
+        <Link href="/for-businesses">I&apos;m a business</Link>
       </Button>
     </div>
   );

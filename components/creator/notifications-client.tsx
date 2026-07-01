@@ -56,7 +56,7 @@ export function NotificationsClient({ role }: { role: 'creator' | 'business' }) 
         />
       ) : (
         <>
-          <ul className="overflow-hidden rounded-xl border border-hair bg-card shadow-sm">
+          <ul className="overflow-hidden rounded-2xl border border-hair bg-card shadow-card">
             {notifications.map((n) => {
               const { icon: Icon, dot } = notificationVisual(n.type);
               return (
@@ -64,13 +64,13 @@ export function NotificationsClient({ role }: { role: 'creator' | 'business' }) 
                   <Link
                     href={notificationHref(n.deepLinkPath, role)}
                     className={cn(
-                      'flex items-start gap-3.5 px-4 py-3.5 transition-colors hover:bg-brand-soft',
+                      'flex items-start gap-3.5 px-4 py-3.5 transition-colors hover:bg-[#F7F9FD]',
                       !n.isRead && 'bg-brand-soft/40',
                     )}
                   >
                     <span
                       className={cn(
-                        'mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full [&_svg]:h-[18px] [&_svg]:w-[18px]',
+                        'mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl [&_svg]:h-[18px] [&_svg]:w-[18px]',
                         NOTIF_CHIP_CLASS[dot],
                       )}
                     >

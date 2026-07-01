@@ -11,7 +11,8 @@ import { useApplyToCampaign } from '@/lib/api/queries/campaigns';
 import { useAuth } from '@/components/providers/auth-provider';
 import { track } from '@/lib/analytics';
 import { toast } from '@/lib/toast';
-import type { ApplicationStatus } from '@/lib/shared';
+import type { ApplicationStatus, CampaignReward } from '@/lib/shared';
+import { formatCurrency, formatCompactNumber } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { StatusBadge } from '@/components/shared/status-badge';
@@ -31,6 +32,12 @@ export interface ApplyPanelProps {
   campaignTitle: string;
   /** Campaign is Active and accepting applications. */
   isActive: boolean;
+  /** Reward shown in the panel hero (real campaign data). */
+  reward: CampaignReward;
+  /** Number of applicants so far (real campaign data). */
+  applicationsCount: number;
+  /** Minimum followers required, or 0 for no minimum (real campaign data). */
+  minFollowers: number;
 }
 
 /**
@@ -43,7 +50,14 @@ export interface ApplyPanelProps {
  * page itself is statically cached / ISR'd and reads no session), so this panel
  * shows a brief neutral "loading" state until the session probe resolves.
  */
-export function ApplyPanel({ campaignId, campaignTitle, isActive }: ApplyPanelProps) {
+export function ApplyPanel({
+  campaignId,
+  campaignTitle,
+  isActive,
+  reward,
+  applicationsCount,
+  minFollowers,
+}: ApplyPanelProps) {
   const { user, isLoading } = useAuth();
   const role: ApplyViewerRole = user ? (user.role as ApplyViewerRole) : 'guest';
   const approved = user?.approved ?? false;
@@ -74,6 +88,55 @@ export function ApplyPanel({ campaignId, campaignTitle, isActive }: ApplyPanelPr
     }
   }
 
+  const rewardValue =
+    typeof reward.estimatedValue === 'number' && reward.estimatedValue > 0
+      ? reward.estimatedValue
+      : undefined;
+  const rewardName = reward.description || reward.type;
+
+  // The sticky panel chrome: reward hero + live stat rows + a hairline, then the
+  // state-specific call-to-action passed in as children.
+  function PanelShell({ children }: { children: React.ReactNode }) {
+    return (
+      <div className="sticky top-[88px] rounded-2xl border border-hair bg-card p-6 shadow-card">
+        {/* Reward hero */}
+        <div className="rounded-[14px] bg-[linear-gradient(120deg,#E7F0FF,#EFEBFF)] p-4 text-center">
+          <div className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-brand">
+            Reward
+          </div>
+          <div className="mt-1.5 font-display text-[22px] font-extrabold leading-tight text-ink">
+            {rewardName}
+          </div>
+          {rewardValue !== undefined && (
+            <div className="mt-1 font-mono text-[13px] font-semibold text-money">
+              {formatCurrency(rewardValue)} value
+            </div>
+          )}
+        </div>
+
+        {/* Live stat rows */}
+        <dl className="mt-4 space-y-2.5">
+          <div className="flex items-center justify-between text-sm">
+            <dt className="text-muted">Applicants</dt>
+            <dd className="font-mono font-semibold text-ink">{applicationsCount}</dd>
+          </div>
+          {minFollowers > 0 && (
+            <div className="flex items-center justify-between text-sm">
+              <dt className="text-muted">Min. followers</dt>
+              <dd className="font-mono font-semibold text-ink">
+                {formatCompactNumber(minFollowers)}
+              </dd>
+            </div>
+          )}
+        </dl>
+
+        <div className="my-5 h-px bg-hair" />
+
+        {children}
+      </div>
+    );
+  }
+
   // --- Closed ---
   if (!isActive) {
     return (
@@ -101,12 +164,16 @@ export function ApplyPanel({ campaignId, campaignTitle, isActive }: ApplyPanelPr
   if (role === 'guest') {
     return (
       <PanelShell>
-        <Button asChild className="w-full" size="lg">
+        <h3 className="font-display text-[17px] font-bold text-ink">Apply as a guest</h3>
+        <p className="mt-1 text-[13px] text-muted">
+          Create a free account to send your name and handle to the brand.
+        </p>
+        <Button asChild className="mt-4 w-full" size="pill">
           <Link href={`/login?next=/campaign/${campaignId}`}>
-            <Lock className="h-4 w-4" /> Sign up to apply
+            <Lock className="h-4 w-4" /> Continue to apply
           </Link>
         </Button>
-        <Note>Free to apply · You’ll hear back within a few days</Note>
+        <Note>Free to apply · No follower minimum</Note>
       </PanelShell>
     );
   }
@@ -153,10 +220,14 @@ export function ApplyPanel({ campaignId, campaignTitle, isActive }: ApplyPanelPr
   // --- Creator: can apply ---
   return (
     <PanelShell>
-      <Button className="w-full" size="lg" onClick={() => setOpen(true)}>
-        Apply now
+      <h3 className="font-display text-[17px] font-bold text-ink">Apply to this collab</h3>
+      <p className="mt-1 text-[13px] text-muted">
+        Send your pitch — the brand reviews it with your profile.
+      </p>
+      <Button className="mt-4 w-full" size="pill" onClick={() => setOpen(true)}>
+        Continue to apply
       </Button>
-      <Note>Free to apply · You’ll hear back within a few days</Note>
+      <Note>Free to apply · No follower minimum</Note>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
@@ -192,10 +263,6 @@ export function ApplyPanel({ campaignId, campaignTitle, isActive }: ApplyPanelPr
       </Dialog>
     </PanelShell>
   );
-}
-
-function PanelShell({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
 }
 
 function Note({ children }: { children: React.ReactNode }) {

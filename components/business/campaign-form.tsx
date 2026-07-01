@@ -80,12 +80,12 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-hair bg-card p-5 shadow-sm sm:p-6">
+    <section className="rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
       <div className="flex items-baseline gap-2.5">
         <span className="font-mono text-[12px] font-semibold text-faint">
           {String(index).padStart(2, '0')}
         </span>
-        <h2 className="text-base font-bold text-ink">{title}</h2>
+        <h2 className="font-display text-base font-bold text-ink">{title}</h2>
       </div>
       {description && <p className="mt-0.5 pl-7 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
@@ -264,11 +264,13 @@ export function CampaignForm({
               <p className="mb-3 mt-0.5 text-[13px] text-muted">
                 Accepted creators see the precise address; everyone else sees an approximate area.
               </p>
-              <LocationPicker
-                value={form.locationPin}
-                onChange={(locationPin) => patch({ locationPin })}
-                cityHint={[form.location.city, form.location.state].filter(Boolean).join(', ')}
-              />
+              <div className="overflow-hidden rounded-[14px] border border-hair">
+                <LocationPicker
+                  value={form.locationPin}
+                  onChange={(locationPin) => patch({ locationPin })}
+                  cityHint={[form.location.city, form.location.state].filter(Boolean).join(', ')}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -383,35 +385,53 @@ export function CampaignForm({
       </Section>
 
       {/* Sticky action bar */}
-      <div className="sticky bottom-0 z-10 -mx-5 flex flex-wrap items-center justify-end gap-3 border-t border-hair bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="sticky bottom-0 z-10 -mx-5 border-t border-hair bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
         {mode === 'create' && !canPublish && (
-          <p className="mr-auto inline-flex items-center gap-1.5 text-[13px] text-muted">
+          <p className="mb-3 inline-flex items-center gap-1.5 text-[13px] text-muted">
             <Clock className="h-3.5 w-3.5 text-warn" /> Publishing unlocks once an admin verifies your
             business.
           </p>
         )}
-        <Button variant="outline" disabled={submitting} onClick={() => router.push(CAMPAIGNS_HREF)}>
-          Cancel
-        </Button>
         {mode === 'create' ? (
-          <>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="outline"
+              disabled={submitting}
+              onClick={() => router.push(CAMPAIGNS_HREF)}
+            >
+              Cancel
+            </Button>
             <Button variant="secondary" disabled={submitting} onClick={() => handleSubmit(false)}>
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save as draft'}
             </Button>
-            <Button disabled={submitting || !canPublish} onClick={() => handleSubmit(true)}>
+            <Button
+              size="lg"
+              className="flex-1"
+              disabled={submitting || !canPublish}
+              onClick={() => handleSubmit(true)}
+            >
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Publish campaign'}
             </Button>
-          </>
+          </div>
         ) : (
-          <Button size="lg" disabled={submitting} onClick={() => handleSubmit(false)}>
-            {submitting ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Saving…
-              </>
-            ) : (
-              'Save changes'
-            )}
-          </Button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="outline"
+              disabled={submitting}
+              onClick={() => router.push(CAMPAIGNS_HREF)}
+            >
+              Cancel
+            </Button>
+            <Button size="lg" className="flex-1" disabled={submitting} onClick={() => handleSubmit(false)}>
+              {submitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Saving…
+                </>
+              ) : (
+                'Save changes'
+              )}
+            </Button>
+          </div>
         )}
       </div>
     </div>

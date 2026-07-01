@@ -14,17 +14,19 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const config: AudiencePageConfig = {
+  tone: 'business',
   eyebrow: 'For Businesses',
   title: (
     <>
-      Authentic creator content, <span className="text-brand-secondary">without the agency bill.</span>
+      Content that <span className="text-warm">converts.</span>
     </>
   ),
   subtitle:
-    'Post a campaign, review pitches from creators who genuinely want to work with you, and pay in rewards you already have. Real UGC, verified end-to-end, with no monthly retainers.',
-  primaryCta: { label: 'Post a campaign', href: '/signup' },
+    'Post a collab, review pitches from creators who genuinely want to work with you, and pay in rewards you already have. Real UGC, verified end-to-end, with no monthly retainers.',
+  primaryCta: { label: 'List your business', href: '/signup' },
   secondaryCta: { label: 'See pricing', href: '/pricing' },
   highlights: ['Free to post', 'No agency retainers', 'Verified submissions'],
+  heroCard: { label: 'Verified content', title: '32 new applicants', sub: 'Ready to collab this week' },
   benefitsLabel: 'Why brands choose Collably',
   benefitsTitle: 'Marketing that pays for itself',
   benefits: [

@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { ArrowLeft } from 'lucide-react';
 
 import { serverApi } from '@/lib/api/server';
 import { getSession } from '@/lib/auth/session';
@@ -23,6 +25,12 @@ export default async function EditCampaignPage({ params }: { params: Promise<{ i
 
   return (
     <DashboardContainer className="max-w-[820px]">
+      <Link
+        href="/dashboard/business/campaigns"
+        className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-bold text-muted transition-colors hover:text-ink"
+      >
+        <ArrowLeft className="h-4 w-4" /> Back to campaigns
+      </Link>
       <PageHeader title="Edit campaign" subtitle="Update your campaign’s details." />
       <CampaignForm
         mode="edit"

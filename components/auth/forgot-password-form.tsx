@@ -6,7 +6,7 @@ import { ArrowLeft, CheckCircle2, Mail } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Field } from '@/components/auth/field';
+import { Field, authInputClass } from '@/components/auth/field';
 import { ErrorBanner } from '@/components/auth/auth-layout';
 import { forgotPasswordSchema, fieldErrors } from '@/lib/auth/schemas';
 import { toApiError, errorMessage } from '@/lib/api/errors';
@@ -58,7 +58,9 @@ export function ForgotPasswordForm() {
         <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-success-soft text-success">
           <CheckCircle2 className="h-7 w-7" />
         </span>
-        <h1 className="text-[30px] font-semibold tracking-tight text-ink">Check your inbox</h1>
+        <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
+          Check your inbox
+        </h1>
         <p className="mt-2 text-[15px] leading-relaxed text-muted">
           We&apos;ve sent a reset link to <b className="text-ink">{sent.email}</b>. It expires in 30
           minutes. Check your spam folder if you don&apos;t see it.
@@ -92,7 +94,9 @@ export function ForgotPasswordForm() {
       <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-soft text-brand">
         <Mail className="h-7 w-7" />
       </span>
-      <h1 className="text-[30px] font-semibold tracking-tight text-ink">Forgot your password?</h1>
+      <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
+        Reset password
+      </h1>
       <p className="mt-2 text-[15px] leading-relaxed text-muted">
         Enter the email tied to your account and we&apos;ll send you a link to reset your password.
       </p>
@@ -109,10 +113,15 @@ export function ForgotPasswordForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             aria-invalid={Boolean(errors.email)}
+            className={authInputClass}
           />
         </Field>
 
-        <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+        <Button
+          type="submit"
+          className="h-auto w-full rounded-md py-[14px] text-[15px] shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
+          disabled={submitting}
+        >
           {submitting ? 'Sending…' : 'Send reset link'}
         </Button>
       </form>

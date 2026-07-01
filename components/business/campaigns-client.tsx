@@ -4,9 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  Calendar,
   CheckCircle2,
-  MapPin,
   Megaphone,
   MoreHorizontal,
   Pause,
@@ -29,8 +27,7 @@ import { canTransitionCampaign } from '@/lib/shared';
 import type { PublicCampaign } from '@/lib/api/types';
 import { cn } from '@/lib/utils';
 import { categoryIcon, categoryGradient } from '@/lib/domain-meta';
-import { formatDate } from '@/lib/format';
-import { StatusBadge } from '@/components/shared/status-badge';
+import { formatCompactCurrency } from '@/lib/format';
 import { EmptyState } from '@/components/shared/empty-state';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
 import { Button } from '@/components/ui/button';
@@ -70,6 +67,7 @@ export function BusinessCampaignsClient() {
   const [tab, setTab] = useState<Tab>('All');
   const [q, setQ] = useState('');
   const [sort, setSort] = useState<Sort>('newest');
+  const [view, setView] = useState<'list' | 'map'>('list');
   const [pending, setPending] = useState<PendingAction | null>(null);
 
   const campaigns = useMemo(() => query.data?.data ?? [], [query.data]);
@@ -135,30 +133,46 @@ export function BusinessCampaignsClient() {
 
   return (
     <>
-      {/* Tabs */}
-      <div className="mb-5 flex gap-1 overflow-x-auto border-b border-hair">
-        {CAMPAIGN_STATUS_TABS.map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTab(t)}
-            aria-current={tab === t ? 'page' : undefined}
-            className={cn(
-              '-mb-px inline-flex items-center whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors',
-              tab === t ? 'border-brand text-brand' : 'border-transparent text-muted hover:text-ink',
-            )}
-          >
-            {t}
-            <span
+      {/* View toggle + status pills */}
+      <div className="mb-5 flex flex-wrap items-center gap-3">
+        <div className="inline-flex rounded-[11px] bg-[#EEF1F8] p-[3px]">
+          {(['list', 'map'] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setView(v)}
+              aria-pressed={view === v}
               className={cn(
-                'ml-2 rounded-full px-1.5 py-0.5 font-mono text-[11px] leading-none',
-                tab === t ? 'bg-brand-soft text-brand' : 'bg-secondary text-muted',
+                'rounded-lg px-4 py-1.5 text-[13px] font-bold capitalize transition-colors',
+                view === v ? 'bg-card text-ink shadow-xs' : 'text-muted hover:text-ink',
               )}
             >
-              {counts[t]}
-            </span>
-          </button>
-        ))}
+              {v}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          {CAMPAIGN_STATUS_TABS.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTab(t)}
+              aria-pressed={tab === t}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-bold transition-colors',
+                tab === t
+                  ? 'bg-brand text-white'
+                  : 'bg-[#EEF1F8] text-muted hover:text-ink',
+              )}
+            >
+              {t}
+              <span className={cn('text-[11px]', tab === t ? 'text-white/80' : 'text-faint')}>
+                {counts[t]}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Toolbar */}
@@ -184,9 +198,9 @@ export function BusinessCampaignsClient() {
       </div>
 
       {query.isLoading ? (
-        <div className="space-y-3">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-[108px] w-full rounded-lg" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-[260px] w-full rounded-2xl" />
           ))}
         </div>
       ) : query.isError ? (
@@ -216,7 +230,7 @@ export function BusinessCampaignsClient() {
       ) : rows.length === 0 ? (
         <EmptyState icon={<SearchX />} title="No campaigns match" description="Try a different tab or search." />
       ) : (
-        <div className="space-y-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {rows.map((c) => (
             <CampaignRow
               key={c._id}
@@ -261,6 +275,15 @@ export function BusinessCampaignsClient() {
   );
 }
 
+/** Domain status → design pill (label + soft tint colors). */
+const STATUS_PILL: Record<CampaignStatus, { label: string; className: string }> = {
+  Active: { label: 'Live', className: 'bg-mint-soft text-[#0FA57E]' },
+  Paused: { label: 'Paused', className: 'bg-[#FFF3DA] text-[#B57F00]' },
+  Draft: { label: 'Draft', className: 'bg-[#EEF1F8] text-muted' },
+  Closed: { label: 'Closed', className: 'bg-[#EEF1F8] text-muted' },
+  Completed: { label: 'Completed', className: 'bg-[#E7F0FF] text-[#0052BD]' },
+};
+
 function CampaignRow({
   campaign: c,
   busy,
@@ -280,77 +303,84 @@ function CampaignRow({
   onComplete: () => void;
   onDelete: () => void;
 }) {
-  const city = c.isRemote ? 'Remote' : c.location?.city;
   const canEdit = c.status !== 'Completed';
   const canClose = c.status === 'Active' || c.status === 'Paused';
   const canComplete = canTransitionCampaign(c.status, 'Completed');
   const appsHref = `/dashboard/business/campaigns/${c._id}/applications`;
   const CategoryIcon = categoryIcon(c.category);
+  const pill = STATUS_PILL[c.status];
+  const rewardValue =
+    typeof c.reward?.estimatedValue === 'number' && c.reward.estimatedValue > 0
+      ? formatCompactCurrency(c.reward.estimatedValue)
+      : null;
+  // The domain has no "spots" model, so we surface deliverable quantity as the
+  // spots target when available, and the real applicant count.
+  const spots = c.deliverables?.reduce((sum, d) => sum + (d.quantity ?? 0), 0) || null;
 
   return (
-    <div className="flex flex-wrap items-center gap-4 rounded-lg border border-hair bg-card p-4 shadow-sm transition-shadow hover:shadow-md">
-      <Link
-        href={appsHref}
-        className="relative h-[64px] w-[92px] shrink-0 overflow-hidden rounded-md bg-secondary"
-        style={{ background: categoryGradient(c.category) }}
-      >
+    <div className="group flex flex-col overflow-hidden rounded-2xl border border-hair bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
+      {/* Gradient header */}
+      <Link href={appsHref} className="relative block h-24" style={{ background: categoryGradient(c.category) }}>
         {c.coverImage ? (
-          <Image src={c.coverImage} alt="" fill sizes="92px" className="object-cover" />
+          <Image src={c.coverImage} alt="" fill sizes="360px" className="object-cover" />
         ) : (
-          <span className="absolute inset-0 flex items-center justify-center opacity-90">
-            <CategoryIcon className="h-6 w-6 text-white/85" />
+          <span className="absolute inset-0 flex items-center justify-center opacity-80">
+            <CategoryIcon className="h-8 w-8 text-white/85" />
           </span>
         )}
+        <span
+          className={cn(
+            'absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold',
+            pill.className,
+          )}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-current" />
+          {pill.label}
+        </span>
       </Link>
 
-      <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <StatusBadge status={c.status} />
-          <Link href={appsHref} className="truncate font-semibold text-ink hover:text-brand">
-            {c.title}
-          </Link>
-        </div>
-        <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[12px] text-muted">
-          <span className="inline-flex items-center gap-1">
-            <CategoryIcon className="h-3.5 w-3.5" /> {c.category}
-          </span>
-          {city && (
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="h-3 w-3" /> {city}
-            </span>
-          )}
-          <span className="inline-flex items-center gap-1">
-            <Users className="h-3 w-3" />
-            <b className="text-ink">{c.applicationsCount}</b> applied
-          </span>
-          {c.deadline && (
-            <span className="inline-flex items-center gap-1">
-              <Calendar className="h-3 w-3" /> {formatDate(c.deadline)}
-            </span>
-          )}
-        </div>
-      </div>
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-[18px]">
+        <Link href={appsHref} className="line-clamp-2 font-display text-[17px] font-bold leading-snug text-ink hover:text-brand">
+          {c.title}
+        </Link>
+        <p className="mt-1.5 text-[13px] font-bold text-brand">
+          {rewardValue ? `${c.reward.description || c.reward.type} · ${rewardValue}` : c.reward?.description || c.reward?.type}
+        </p>
 
-      <div className="flex shrink-0 items-center gap-2">
-        <Button asChild variant="outline" size="sm">
-          <Link href={appsHref}>
-            <Users className="h-4 w-4" /> Applications ({c.applicationsCount})
-          </Link>
-        </Button>
-        {canEdit && (
-          <Button asChild variant="outline" size="sm">
-            <Link href={`/dashboard/business/campaigns/${c._id}/edit`}>
-              <Pencil className="h-4 w-4" /> Edit
+        <div className="mt-3 flex items-center justify-between border-t border-hair pt-3 text-[12.5px] text-muted">
+          <span>
+            <b className="text-ink">{c.applicationsCount}</b> applicant{c.applicationsCount === 1 ? '' : 's'}
+          </span>
+          {spots != null && (
+            <span>
+              <b className="text-ink">{spots}</b> spot{spots === 1 ? '' : 's'}
+            </span>
+          )}
+        </div>
+
+        <div className="mt-4 flex items-center gap-2">
+          {canEdit ? (
+            <Button asChild variant="outline" size="sm" className="flex-1">
+              <Link href={`/dashboard/business/campaigns/${c._id}/edit`}>
+                <Pencil className="h-4 w-4" /> Edit
+              </Link>
+            </Button>
+          ) : (
+            <span className="flex-1" />
+          )}
+          <Button asChild size="sm" className="flex-1">
+            <Link href={appsHref}>
+              <Users className="h-4 w-4" /> Applicants
             </Link>
           </Button>
-        )}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="More actions" disabled={busy}>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="More actions" disabled={busy}>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
             {c.status === 'Draft' && (
               <DropdownMenuItem onClick={onPublish}>
                 <Send className="h-4 w-4" /> Publish
@@ -380,8 +410,9 @@ function CampaignRow({
             <DropdownMenuItem onClick={onDelete} className="text-danger focus:text-danger">
               <Trash2 className="h-4 w-4" /> Delete
             </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </div>
   );

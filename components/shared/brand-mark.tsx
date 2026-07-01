@@ -1,22 +1,18 @@
 import { cn } from '@/lib/utils';
 
 /**
- * Brand wordmark + mark. The mark is two interlocking rounded "links" (a collab
- * glyph), re-skinned to brand-blue. Use `withWordmark={false}` for the icon only.
+ * Brand wordmark + mark. The mark is the Collably "drop" glyph filled with
+ * currentColor. Use `withWordmark={false}` for the icon only.
  */
 export function BrandGlyph({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2.2}
-      strokeLinecap="round"
+      fill="currentColor"
       className={cn('h-[18px] w-[18px]', className)}
       aria-hidden
     >
-      <rect x="2.4" y="8" width="11.6" height="8" rx="4" />
-      <rect x="10" y="8" width="11.6" height="8" rx="4" />
+      <path d="M12 2C7.5 6 5.5 9.8 5.5 13.6a6.5 6.5 0 0013 0C18.5 9.8 16.5 6 12 2z" />
     </svg>
   );
 }
@@ -33,8 +29,8 @@ export function BrandMark({ withWordmark = true, onDark, className }: BrandMarkP
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <span
         className={cn(
-          'inline-flex h-[34px] w-[34px] items-center justify-center rounded-sm',
-          onDark ? 'bg-card text-ink' : 'bg-brand text-white',
+          'inline-flex h-[34px] w-[34px] items-center justify-center rounded-md',
+          onDark ? 'bg-white/[0.18] text-white' : 'bg-brand text-white shadow-[0_6px_16px_-4px_rgba(0,100,224,0.5)]',
         )}
       >
         <BrandGlyph />
@@ -42,7 +38,7 @@ export function BrandMark({ withWordmark = true, onDark, className }: BrandMarkP
       {withWordmark && (
         <span
           className={cn(
-            'text-[22px] font-bold tracking-tight',
+            'font-display text-[22px] font-extrabold tracking-[-0.03em]',
             onDark ? 'text-white' : 'text-ink',
           )}
         >

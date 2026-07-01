@@ -25,13 +25,13 @@ export function CreatorNicheRail({
     niches.length > 0 ? niches.slice(0, 3).join(' & ') : 'your niche';
 
   return (
-    <section className="rounded-xl border border-brand/20 bg-brand-soft p-5">
+    <section className="rounded-2xl border border-brand/20 bg-brand-soft p-5 shadow-card">
       <div className="mb-4 flex items-center gap-2.5">
-        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand/15 text-brand">
+        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand/15 text-brand">
           <Sparkles className="h-[18px] w-[18px]" />
         </span>
         <div>
-          <h2 className="font-bold text-ink">
+          <h2 className="font-display font-bold text-ink">
             Matching your niche{' '}
             <span className="text-brand">
               {niches.length > 0 ? `: ${nicheText}` : ''}

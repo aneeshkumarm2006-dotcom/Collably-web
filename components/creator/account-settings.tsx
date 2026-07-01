@@ -38,11 +38,13 @@ function SettingsSection({
   return (
     <section
       className={cn(
-        'rounded-xl border bg-card p-5 shadow-sm sm:p-6',
+        'rounded-2xl border bg-card p-5 shadow-card sm:p-6',
         danger ? 'border-danger/30' : 'border-hair',
       )}
     >
-      <h2 className={cn('text-base font-bold', danger ? 'text-danger' : 'text-ink')}>{title}</h2>
+      <h2 className={cn('font-display text-base font-bold', danger ? 'text-danger' : 'text-ink')}>
+        {title}
+      </h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
     </section>
@@ -179,9 +181,36 @@ export function AccountSettings({ user }: { user: PublicUser }) {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="grid gap-5 lg:grid-cols-2">
       <SettingsSection title="Appearance" description="Choose how Collably looks on this device.">
         <AppearanceSetting />
+      </SettingsSection>
+
+      <SettingsSection
+        title="Notifications"
+        description="The in-app feed is always on. Control off-channel alerts here."
+      >
+        <div className="divide-y divide-hair">
+          <label className="flex cursor-pointer items-center justify-between gap-4 py-3.5">
+            <span>
+              <span className="block text-sm font-semibold text-ink">Email notifications</span>
+              <span className="text-[13px] text-muted">Application updates, accepted collabs, and more.</span>
+            </span>
+            <Switch
+              checked={prefs.email}
+              onCheckedChange={(c) => updatePrefs({ ...prefs, email: c })}
+            />
+          </label>
+          <label className="flex cursor-pointer items-center justify-between gap-4 py-3.5">
+            <span>
+              <span className="block text-sm font-semibold text-ink">
+                Push notifications <span className="font-normal text-faint">(mobile app)</span>
+              </span>
+              <span className="text-[13px] text-muted">Real-time alerts on the Collably mobile app.</span>
+            </span>
+            <Switch checked={prefs.push} onCheckedChange={(c) => updatePrefs({ ...prefs, push: c })} />
+          </label>
+        </div>
       </SettingsSection>
 
       <SettingsSection title="Email address" description="Used for sign-in and important updates.">
@@ -259,33 +288,6 @@ export function AccountSettings({ user }: { user: PublicUser }) {
               {savingPassword ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Change password'}
             </Button>
           </div>
-        </div>
-      </SettingsSection>
-
-      <SettingsSection
-        title="Notifications"
-        description="The in-app feed is always on. Control off-channel alerts here."
-      >
-        <div className="divide-y divide-hair">
-          <label className="flex cursor-pointer items-center justify-between gap-4 py-3.5">
-            <span>
-              <span className="block text-sm font-semibold text-ink">Email notifications</span>
-              <span className="text-[13px] text-muted">Application updates, accepted collabs, and more.</span>
-            </span>
-            <Switch
-              checked={prefs.email}
-              onCheckedChange={(c) => updatePrefs({ ...prefs, email: c })}
-            />
-          </label>
-          <label className="flex cursor-pointer items-center justify-between gap-4 py-3.5">
-            <span>
-              <span className="block text-sm font-semibold text-ink">
-                Push notifications <span className="font-normal text-faint">(mobile app)</span>
-              </span>
-              <span className="text-[13px] text-muted">Real-time alerts on the Collably mobile app.</span>
-            </span>
-            <Switch checked={prefs.push} onCheckedChange={(c) => updatePrefs({ ...prefs, push: c })} />
-          </label>
         </div>
       </SettingsSection>
 

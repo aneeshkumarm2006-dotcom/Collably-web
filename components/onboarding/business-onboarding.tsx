@@ -128,7 +128,7 @@ export function BusinessOnboarding({ businessName }: { businessName: string }) {
           </div>
           <div className="mt-5">
             <Label>Category</Label>
-            <div className="mt-2 grid grid-cols-2 gap-2.5">
+            <div className="mt-2 flex flex-wrap gap-2.5">
               {CATEGORIES.map((c: Category) => (
                 <SelectCard
                   key={c}
@@ -136,6 +136,7 @@ export function BusinessOnboarding({ businessName }: { businessName: string }) {
                   icon={categoryIcon(c)}
                   selected={form.category === c}
                   onClick={() => patch({ category: c })}
+                  tone="warm"
                 />
               ))}
             </div>

@@ -1,19 +1,16 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { cn } from '@/lib/utils';
+'use client';
 
-export interface FaqItem {
-  q: string;
-  a: string;
-}
+import { useId, useState } from 'react';
+
+import { cn } from '@/lib/utils';
+import type { FaqItem } from '@/lib/faq';
+
+export type { FaqItem } from '@/lib/faq';
 
 /**
- * A FAQ accordion (built on the shadcn Accordion). `defaultOpenFirst` opens the
- * first item on mount. Render alongside `faqPageJsonLd(items)` for rich results.
+ * A FAQ accordion of rounded white cards with +/− circle toggles. Keeps single-open
+ * (collapsible) accordion behavior. `defaultOpenFirst` opens the first item on mount.
+ * Render alongside `faqPageJsonLd(items)` for rich results.
  */
 export function Faq({
   items,
@@ -24,34 +21,53 @@ export function Faq({
   defaultOpenFirst?: boolean;
   className?: string;
 }) {
-  return (
-    <Accordion
-      type="single"
-      collapsible
-      defaultValue={defaultOpenFirst ? 'faq-0' : undefined}
-      className={cn('w-full', className)}
-    >
-      {items.map((item, i) => (
-        <AccordionItem key={i} value={`faq-${i}`}>
-          <AccordionTrigger className="py-5 text-left text-base">{item.q}</AccordionTrigger>
-          <AccordionContent className="max-w-2xl text-[15px] leading-relaxed text-muted">
-            {item.a}
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
-  );
-}
+  const [open, setOpen] = useState<number | null>(defaultOpenFirst ? 0 : null);
+  const baseId = useId();
 
-/** FAQPage JSON-LD for a set of Q&As (pairs with the `Faq` component). */
-export function faqPageJsonLd(items: FaqItem[]) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: items.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: { '@type': 'Answer', text: item.a },
-    })),
-  };
+  return (
+    <div className={cn('flex w-full flex-col gap-3', className)}>
+      {items.map((item, i) => {
+        const isOpen = open === i;
+        const btnId = `${baseId}-btn-${i}`;
+        const panelId = `${baseId}-panel-${i}`;
+        return (
+          <div
+            key={i}
+            className="rounded-2xl border border-hair bg-card shadow-card transition"
+          >
+            <h3 className="m-0">
+              <button
+                type="button"
+                id={btnId}
+                aria-expanded={isOpen}
+                aria-controls={panelId}
+                onClick={() => setOpen(isOpen ? null : i)}
+                className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-[17px] font-bold text-ink transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+              >
+                <span className="font-display">{item.q}</span>
+                <span
+                  aria-hidden
+                  className={cn(
+                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xl font-medium leading-none transition-colors',
+                    isOpen ? 'bg-brand text-white' : 'bg-brand-soft text-brand',
+                  )}
+                >
+                  {isOpen ? '−' : '+'}
+                </span>
+              </button>
+            </h3>
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={btnId}
+              hidden={!isOpen}
+              className="px-6 pb-5 text-[15px] leading-relaxed text-muted"
+            >
+              {item.a}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }

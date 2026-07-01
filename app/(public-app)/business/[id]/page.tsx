@@ -2,13 +2,12 @@ import { cache } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { BadgeCheck, Globe, Instagram, MapPin, Megaphone } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, Globe, Instagram, MapPin, Megaphone } from 'lucide-react';
 
 import { publicApi } from '@/lib/api/public';
 import { isApiError } from '@/lib/api/errors';
 import type { PublicBusinessProfileResponse, PublicCampaign } from '@/lib/api/types';
 import { toCampaignCardData } from '@/lib/campaign-card';
-import { categoryIcon } from '@/lib/domain-meta';
 import { buildMetadata, businessJsonLd, breadcrumbJsonLd } from '@/lib/seo';
 import { Container } from '@/components/marketing/section';
 import { Avatar } from '@/components/shared/avatar';
@@ -63,7 +62,6 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
   const { profile } = res;
   const loc = [profile.location?.city, profile.location?.state].filter(Boolean).join(', ');
   const igHandle = profile.socialLinks?.instagram;
-  const CategoryIcon = categoryIcon(profile.category);
 
   let active: PublicCampaign[] = [];
   try {
@@ -93,57 +91,66 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
         ]}
       />
 
-      {/* Header band */}
-      <header className="relative overflow-hidden bg-dark-sidebar text-white">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(700px 360px at 82% 10%, rgba(24,119,242,0.30), transparent 60%)',
-          }}
-        />
-        <Container className="relative py-10">
-          <div className="flex flex-wrap items-center gap-5">
-            <Avatar name={profile.businessName} src={profile.logo} size={76} shape="square" />
+      <Container className="pt-6">
+        {/* Cover banner */}
+        <div className="relative">
+          <div
+            className="h-[180px] w-full overflow-hidden rounded-[22px]"
+            style={{ background: 'linear-gradient(135deg,#0064E0,#3E8BFF)' }}
+          />
+          <Link
+            href="/explore"
+            className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-[13px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/30"
+          >
+            <ArrowLeft className="h-4 w-4" /> Explore
+          </Link>
+        </div>
+
+        {/* Identity */}
+        <div className="px-2 sm:px-4">
+          <div className="-mt-[44px] flex h-[104px] w-[104px] items-center justify-center overflow-hidden rounded-[26px] border-4 border-card bg-card shadow-card">
+            <Avatar
+              name={profile.businessName}
+              src={profile.logo}
+              size={96}
+              shape="square"
+              className="rounded-[20px]"
+            />
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
-              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{profile.businessName}</h1>
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/70">
+              <div className="flex items-center gap-2">
+                <h1 className="font-display text-[26px] font-extrabold tracking-tight text-ink sm:text-[30px]">
+                  {profile.businessName}
+                </h1>
                 {profile.isVerified && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-success-soft px-2 py-0.5 text-xs font-medium text-success">
-                    <BadgeCheck className="h-3.5 w-3.5" /> Verified
-                  </span>
+                  <BadgeCheck className="h-6 w-6 shrink-0 text-brand" aria-label="Verified" />
                 )}
-                <span className="inline-flex items-center gap-1">
-                  <CategoryIcon className="h-3.5 w-3.5" /> {profile.category}
-                </span>
+              </div>
+              <div className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[15px] text-muted">
+                <span>{profile.category}</span>
                 {loc && (
-                  <span className="inline-flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5" /> {loc}
-                  </span>
+                  <>
+                    <span aria-hidden>·</span>
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin className="h-4 w-4" /> {loc}
+                    </span>
+                  </>
                 )}
               </div>
             </div>
-            <div className="ml-auto flex gap-2">
+
+            <div className="flex gap-2">
               {profile.website && (
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:text-white"
-                >
+                <Button asChild variant="outline" size="pill-sm">
                   <a href={profile.website} target="_blank" rel="noopener noreferrer nofollow">
                     <Globe className="h-4 w-4" /> Website
                   </a>
                 </Button>
               )}
               {igHandle && (
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:text-white"
-                >
+                <Button asChild variant="outline" size="pill-sm">
                   <a
                     href={`https://instagram.com/${igHandle.replace(/^@/, '')}`}
                     target="_blank"
@@ -157,104 +164,60 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
             </div>
           </div>
 
-          {/* Stat pills */}
-          <div className="mt-7 flex flex-wrap gap-2.5">
-            <StatPill label="Campaigns" value={profile.totalCampaigns} icon={<Megaphone className="h-4 w-4" />} />
-            <StatPill label="Collabs completed" value={profile.totalCollabsCompleted} icon={<BadgeCheck className="h-4 w-4" />} />
-            <StatPill label="Active now" value={active.length} dot />
+          {/* Bio */}
+          {profile.description && (
+            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-muted">
+              {profile.description}
+            </p>
+          )}
+
+          {/* Stat row */}
+          <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-y border-hair py-5">
+            <Stat value={String(profile.totalCampaigns)} label="Collabs run" />
+            <Stat value={String(profile.totalCollabsCompleted)} label="Collabs completed" />
+            <Stat value={String(active.length)} label="Live now" />
           </div>
-        </Container>
-      </header>
+        </div>
 
-      {/* Body */}
-      <Container className="py-10">
-        <div className="grid gap-9 lg:grid-cols-[340px_1fr] lg:items-start">
-          {/* About */}
-          <aside className="rounded-xl border border-hair bg-card p-6">
-            <h2 className="text-lg font-bold text-ink">About</h2>
-            {profile.description ? (
-              <p className="mt-3 text-[15px] leading-relaxed text-muted">{profile.description}</p>
-            ) : (
-              <p className="mt-3 text-sm text-faint">No description yet.</p>
+        {/* Live campaigns */}
+        <div className="mt-10 px-2 sm:px-4">
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="font-display text-[22px] font-bold text-ink">Live campaigns</h2>
+            {active.length > 0 && (
+              <Link
+                href={`/explore?location=${encodeURIComponent(profile.location?.city ?? '')}`}
+                className="text-sm font-semibold text-brand hover:underline"
+              >
+                Explore more →
+              </Link>
             )}
-            <dl className="mt-5 flex flex-col gap-3 border-t border-hair pt-5 text-sm">
-              {loc && (
-                <div className="flex items-center gap-2.5 text-muted">
-                  <MapPin className="h-4 w-4 text-faint" /> {loc}
-                </div>
-              )}
-              {profile.website && (
-                <a
-                  href={profile.website}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="flex items-center gap-2.5 text-brand hover:underline"
-                >
-                  <Globe className="h-4 w-4 text-faint" />
-                  {profile.website.replace(/^https?:\/\//, '')}
-                </a>
-              )}
-              {igHandle && (
-                <a
-                  href={`https://instagram.com/${igHandle.replace(/^@/, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="flex items-center gap-2.5 text-brand hover:underline"
-                >
-                  <Instagram className="h-4 w-4 text-faint" />@{igHandle.replace(/^@/, '')}
-                </a>
-              )}
-            </dl>
-          </aside>
-
-          {/* Active campaigns */}
-          <div>
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-ink">Active campaigns</h2>
-              {active.length > 0 && (
-                <Link
-                  href={`/explore?location=${encodeURIComponent(profile.location?.city ?? '')}`}
-                  className="text-sm font-semibold text-brand hover:underline"
-                >
-                  Explore more →
-                </Link>
-              )}
+          </div>
+          {active.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {active.map((c) => (
+                <CampaignCard key={c._id} campaign={toCampaignCardData(c)} />
+              ))}
             </div>
-            {active.length > 0 ? (
-              <div className="grid gap-6 sm:grid-cols-2">
-                {active.map((c) => (
-                  <CampaignCard key={c._id} campaign={toCampaignCardData(c)} />
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                icon={<Megaphone />}
-                title="No active campaigns"
-                description={`${profile.businessName} doesn’t have any open campaigns right now. Check back soon.`}
-              />
-            )}
-          </div>
+          ) : (
+            <EmptyState
+              icon={<Megaphone />}
+              title="No live campaigns"
+              description={`${profile.businessName} doesn’t have any open campaigns right now. Check back soon.`}
+            />
+          )}
         </div>
       </Container>
     </div>
   );
 }
 
-function StatPill({
-  label,
-  value,
-  icon,
-  dot,
-}: {
-  label: string;
-  value: number;
-  icon?: React.ReactNode;
-  dot?: boolean;
-}) {
+function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.08] px-3.5 py-1.5 text-sm text-white/80">
-      {dot ? <span className="h-2 w-2 rounded-full bg-money" /> : icon}
-      <b className="font-mono font-semibold text-white">{value}</b> {label}
-    </span>
+    <div>
+      <div className="font-display text-[28px] font-extrabold leading-none tracking-tight text-ink">
+        {value}
+      </div>
+      <div className="mt-1.5 text-[13px] text-muted">{label}</div>
+    </div>
   );
 }

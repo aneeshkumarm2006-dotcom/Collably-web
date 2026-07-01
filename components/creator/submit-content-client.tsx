@@ -7,9 +7,9 @@ import {
   ArrowLeft,
   CheckCircle2,
   ExternalLink,
-  ImagePlus,
   Link2,
   Loader2,
+  UploadCloud,
   X,
 } from 'lucide-react';
 
@@ -160,25 +160,33 @@ export function SubmitContentClient({ application }: { application: PublicApplic
 
   return (
     <div className="space-y-6">
+      <Button asChild variant="ghost" size="sm" className="-ml-2 self-start">
+        <Link href={BACK_HREF}>
+          <ArrowLeft className="h-4 w-4" /> Back to collabs
+        </Link>
+      </Button>
+
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-ink">Submit your content</h1>
+        <h1 className="font-display text-[26px] font-extrabold tracking-tight text-ink">
+          Submit your content
+        </h1>
         <p className="mt-1 text-sm text-muted">Add proof of your work, then submit for review.</p>
       </div>
 
       {/* Context panel */}
-      <div className="rounded-xl border border-hair bg-card p-5 shadow-sm">
-        <h2 className="font-bold text-ink">{campaign?.title ?? 'Campaign'}</h2>
+      <div className="rounded-2xl border border-hair bg-card p-5 shadow-card">
+        <h2 className="font-display font-bold text-ink">{campaign?.title ?? 'Campaign'}</h2>
         <p className="text-[13px] text-muted">{campaign?.business?.businessName}</p>
 
         {deliverables.length > 0 && (
-          <div className="mt-4">
-            <p className="mb-2 font-mono text-[11px] font-bold uppercase tracking-wider text-faint">
-              Deliverables to submit
+          <div className="mt-4 rounded-xl bg-brand-soft p-4">
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.08em] text-brand">
+              The brief · deliverables to submit
             </p>
             <ul className="space-y-1.5">
               {deliverables.map((d, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-muted">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-faint" />
+                <li key={i} className="flex items-start gap-2 text-sm text-ink">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                   <span>{deliverableLabel(d)}</span>
                 </li>
               ))}
@@ -204,7 +212,7 @@ export function SubmitContentClient({ application }: { application: PublicApplic
       </div>
 
       {/* Form */}
-      <div className="rounded-xl border border-hair bg-card p-5 shadow-sm">
+      <div className="rounded-2xl border border-hair bg-card p-5 shadow-card">
         <div className="space-y-1.5">
           <Label htmlFor="submission-link">Live post link</Label>
           <div className="relative">
@@ -248,17 +256,22 @@ export function SubmitContentClient({ application }: { application: PublicApplic
           ) : (
             <label
               className={cn(
-                'flex cursor-pointer flex-col items-center rounded-lg border-2 border-dashed border-hair-strong bg-secondary px-6 py-6 text-center transition-colors hover:border-brand',
+                'flex cursor-pointer flex-col items-center rounded-2xl border-2 border-dashed border-hair-strong bg-[#F7F9FD] p-8 text-center transition-colors hover:border-brand',
                 proofUploading && 'pointer-events-none opacity-60',
               )}
             >
-              {proofUploading ? (
-                <Loader2 className="h-5 w-5 animate-spin text-brand" />
-              ) : (
-                <ImagePlus className="h-5 w-5 text-brand" />
-              )}
-              <span className="mt-1.5 text-[13px] font-medium text-ink">
-                {proofUploading ? 'Uploading…' : 'Upload a screenshot'}
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                {proofUploading ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <UploadCloud className="h-5 w-5" />
+                )}
+              </span>
+              <span className="mt-3 text-sm font-semibold text-ink">
+                {proofUploading ? 'Uploading…' : 'Drop files or click to upload'}
+              </span>
+              <span className="mt-1 text-[12.5px] text-faint">
+                MP4, MOV, JPG or PNG · up to 200MB
               </span>
               <input
                 type="file"
@@ -308,16 +321,8 @@ export function SubmitContentClient({ application }: { application: PublicApplic
               <Loader2 className="h-4 w-4 animate-spin" /> Submitting…
             </>
           ) : (
-            'Submit proof →'
+            'Submit for review →'
           )}
-        </Button>
-      </div>
-
-      <div>
-        <Button asChild variant="ghost">
-          <Link href={BACK_HREF}>
-            <ArrowLeft className="h-4 w-4" /> Back to collabs
-          </Link>
         </Button>
       </div>
     </div>
