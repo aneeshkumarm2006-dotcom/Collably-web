@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Instagram, Linkedin, Twitter } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { SOCIAL_LINKS } from '@/lib/seo';
 import { BrandMark } from '@/components/shared/brand-mark';
 
 const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] = [
@@ -33,9 +34,9 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
 ];
 
 const SOCIALS = [
-  { label: 'Instagram', href: '#', icon: Instagram },
-  { label: 'Twitter', href: '#', icon: Twitter },
-  { label: 'LinkedIn', href: '#', icon: Linkedin },
+  { label: 'Instagram', href: SOCIAL_LINKS.instagram, icon: Instagram },
+  { label: 'Twitter', href: SOCIAL_LINKS.twitter, icon: Twitter },
+  { label: 'LinkedIn', href: SOCIAL_LINKS.linkedin, icon: Linkedin },
 ];
 
 /** Footer: always-dark, 4-column. Brand + tagline + socials, then link columns. */
@@ -54,6 +55,8 @@ export function Footer({ className }: { className?: string }) {
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/[0.06] text-white/70 transition-colors hover:bg-brand hover:text-white"
                 >

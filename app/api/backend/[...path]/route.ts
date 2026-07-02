@@ -74,6 +74,24 @@ async function handle(req: NextRequest, ctx: { params: Promise<{ path: string[] 
 
   // Read the body once so it can be replayed on the post-refresh retry.
   const hasBody = req.method !== 'GET' && req.method !== 'HEAD';
+
+  // CSRF defense-in-depth: for state-changing methods, require the Origin header
+  // (when the browser sends one) to match this app's own origin. SameSite=Lax
+  // already stops cross-site cookie attachment; this also rejects a same-site,
+  // cross-origin caller before the authenticated request reaches the backend.
+  if (hasBody) {
+    const origin = req.headers.get('origin');
+    if (origin) {
+      let ok = false;
+      try {
+        ok = new URL(origin).host === req.nextUrl.host;
+      } catch {
+        ok = false;
+      }
+      if (!ok) return NextResponse.json({ message: 'Bad origin' }, { status: 403 });
+    }
+  }
+
   const body = hasBody ? await req.text() : undefined;
 
   let upstream: Response;

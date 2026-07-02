@@ -25,9 +25,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const { name, email, topic } = parsed.data;
+  const { topic } = parsed.data;
   // TODO(Phase 7+/email): forward to Resend or a backend /contact route.
-  console.info(`[contact] ${topic} message from ${name} <${email}>`);
+  // Do NOT log the submitter's name/email — that writes PII (and CRLF-injectable
+  // user input) into server logs. Log only the non-identifying topic.
+  console.info(`[contact] received a "${topic}" submission`);
 
   return NextResponse.json({ ok: true });
 }

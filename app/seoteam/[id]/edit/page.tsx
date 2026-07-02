@@ -2,21 +2,32 @@
  * Edit an existing post. Loads the full document server-side (behind the layout's
  * session gate) and hands it to the shared editor in edit mode.
  */
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { isValidObjectId } from 'mongoose';
 import { connectMongo } from '@/lib/db/mongoose';
 import { Post } from '@/lib/db/models/post';
+import { hasSeoSession } from '@/lib/seoteam/guard';
 import { PostEditor, type EditorInitial } from '@/components/seoteam/post-editor';
 import type { PostTemplateId } from '@/lib/db/models/post';
 
 export const dynamic = 'force-dynamic';
 
 export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
+  // Authoritative gate (don't rely on the layout alone).
+  if (!(await hasSeoSession())) redirect('/seoteam');
+
   const { id } = await params;
   if (!isValidObjectId(id)) notFound();
 
-  await connectMongo();
-  const post = await Post.findById(id).lean();
+  // Degrade gracefully if the DB is briefly unreachable instead of 500-ing.
+  const post = await (async () => {
+    try {
+      await connectMongo();
+      return await Post.findById(id).lean();
+    } catch {
+      redirect('/seoteam'); // throws NEXT_REDIRECT
+    }
+  })();
   if (!post) notFound();
 
   const initial: EditorInitial = {

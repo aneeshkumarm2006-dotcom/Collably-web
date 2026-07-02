@@ -14,7 +14,9 @@ import { requireSeoApi } from '@/lib/seoteam/guard';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const schema = z.object({ folder: z.string().trim().default('blog') });
+// Only sign uploads into the blog's own folders — never let a caller target
+// another part of the Cloudinary account (e.g. user avatars).
+const schema = z.object({ folder: z.enum(['blog', 'blog/covers']).default('blog') });
 
 export async function POST(req: Request) {
   const unauth = await requireSeoApi();

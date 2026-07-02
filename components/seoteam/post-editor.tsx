@@ -5,7 +5,7 @@
  * char-count hints), cover + inline image upload, the Tiptap body, the keyword
  * backlink manager, and the live SEO check panel. Saves via /api/seoteam/posts.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NextImage from 'next/image';
 import { ImagePlus, Loader2 } from 'lucide-react';
@@ -87,14 +87,30 @@ export function PostEditor({ initial }: { initial?: EditorInitial }) {
   const [loadHtml, setLoadHtml] = useState<{ html: string; token: number } | undefined>(undefined);
   const [saving, setSaving] = useState<false | 'draft' | 'published'>(false);
   const [coverBusy, setCoverBusy] = useState(false);
+  const [dirty, setDirty] = useState(false);
 
   const isEdit = Boolean(initial?.id);
 
+  // Warn before losing unsaved edits on reload / tab close / hard navigation.
+  // (SPA route changes aren't covered by beforeunload; this catches the common
+  // accidental-close/refresh case.)
+  useEffect(() => {
+    if (!dirty || saving) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [dirty, saving]);
+
   function set<K extends keyof EditorInitial>(key: K, value: EditorInitial[K]) {
+    setDirty(true);
     setState((s) => ({ ...s, [key]: value }));
   }
 
   function onTitleChange(title: string) {
+    setDirty(true);
     setState((s) => ({
       ...s,
       title,
@@ -173,6 +189,7 @@ export function PostEditor({ initial }: { initial?: EditorInitial }) {
         throw new Error(data.message || 'Save failed');
       }
       toast.success(status === 'published' ? 'Published — live on /blog' : 'Draft saved');
+      setDirty(false); // saved — drop the unsaved-changes guard before navigating
       router.push('/seoteam');
       router.refresh();
     } catch (err) {

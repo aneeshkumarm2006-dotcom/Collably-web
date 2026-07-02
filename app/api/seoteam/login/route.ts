@@ -5,6 +5,7 @@
  */
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { config } from '@/lib/config';
 import { checkPassword, setSeoSessionCookie } from '@/lib/seoteam/session';
 import { clientIp, isLocked, registerFailure, clearAttempts } from '@/lib/seoteam/rate-limit';
 
@@ -14,6 +15,15 @@ export const dynamic = 'force-dynamic';
 const schema = z.object({ password: z.string().min(1, 'Password is required') });
 
 export async function POST(req: Request) {
+  // Fail loudly (not a silent login-loop) if the signing secret is unconfigured:
+  // without it, we'd set a cookie that verifySession can never accept.
+  if (!config.seo.sessionSecret) {
+    return NextResponse.json(
+      { message: 'Dashboard is not configured (missing session secret).' },
+      { status: 500 },
+    );
+  }
+
   const ip = clientIp(req);
   if (isLocked(ip)) {
     return NextResponse.json(

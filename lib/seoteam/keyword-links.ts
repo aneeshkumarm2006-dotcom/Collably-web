@@ -63,7 +63,14 @@ export function applyKeywordLinks(
   keywords: KeywordEntry[],
   opts: { linkAll?: boolean } = {},
 ): string {
-  const valid = keywords.filter((k) => k.keyword.trim() && k.url.trim());
+  const valid = keywords.filter(
+    (k) =>
+      k.keyword.trim() &&
+      k.url.trim() &&
+      // Defense in depth: only ever emit http(s)/mailto links, even if a bad
+      // URL slipped past input validation.
+      (/^https?:\/\//i.test(k.url.trim()) || /^mailto:/i.test(k.url.trim())),
+  );
   if (!valid.length) return html;
 
   const ordered = [...valid].sort((a, b) => b.keyword.length - a.keyword.length);

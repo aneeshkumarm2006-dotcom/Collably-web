@@ -90,8 +90,12 @@ export const config = {
     mongodbUri: process.env.MONGODB_URI ?? '',
     /** Single shared password the SEO team logs in with. */
     dashboardPassword: process.env.SEO_DASHBOARD_PASSWORD ?? '',
-    /** HMAC secret for the SEO session cookie. Reuses the existing session secret. */
-    sessionSecret: process.env.SESSION_COOKIE_SECRET ?? '',
+    /**
+     * HMAC secret for the SEO session cookie. Prefers a DEDICATED secret so the
+     * SEO gate and the app's user-auth cookies don't share one trust domain;
+     * falls back to `SESSION_COOKIE_SECRET` so existing deploys keep working.
+     */
+    sessionSecret: process.env.SEO_SESSION_SECRET ?? process.env.SESSION_COOKIE_SECRET ?? '',
     /** Cloudinary server credentials for the SEO-session-gated upload signer. */
     cloudinaryApiKey: process.env.CLOUDINARY_API_KEY ?? '',
     cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET ?? '',

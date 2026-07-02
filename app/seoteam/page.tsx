@@ -3,8 +3,10 @@
  * component (already behind the layout's session gate) and hands plain rows to
  * the client table for search/filter/actions.
  */
+import { redirect } from 'next/navigation';
 import { connectMongo } from '@/lib/db/mongoose';
 import { Post } from '@/lib/db/models/post';
+import { hasSeoSession } from '@/lib/seoteam/guard';
 import { PostsTable, type PostRow } from '@/components/seoteam/posts-table';
 
 export const dynamic = 'force-dynamic';
@@ -32,6 +34,9 @@ async function loadPosts(): Promise<PostRow[]> {
 }
 
 export default async function SeoPostsPage() {
+  // Authoritative gate: never rely on the layout alone (a layout can be skipped
+  // on partial RSC renders), so re-verify the session before touching the DB.
+  if (!(await hasSeoSession())) redirect('/seoteam');
   const posts = await loadPosts();
   return <PostsTable initialPosts={posts} />;
 }

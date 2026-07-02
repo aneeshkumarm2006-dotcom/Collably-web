@@ -8,7 +8,14 @@ import { KEYWORD_REL_VALUES, POST_TEMPLATE_IDS, POST_STATUSES } from '@/lib/db/m
 
 export const keywordSchema = z.object({
   keyword: z.string().trim().min(1, 'Keyword is required'),
-  url: z.string().trim().url('Enter a valid URL'),
+  url: z
+    .string()
+    .trim()
+    .url('Enter a valid URL')
+    // Block javascript:/data: and other unsafe schemes — z.string().url() alone allows them.
+    .refine((u) => /^https?:\/\//i.test(u) || /^mailto:/i.test(u), {
+      message: 'URL must start with http://, https://, or mailto:',
+    }),
   rel: z.enum(KEYWORD_REL_VALUES).default('dofollow'),
 });
 

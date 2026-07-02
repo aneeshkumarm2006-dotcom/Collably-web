@@ -47,9 +47,18 @@ export function clearAttempts(ip: string): void {
   attempts.delete(ip);
 }
 
-/** Best-effort client IP from proxy headers, for keying the limiter. */
+/**
+ * Client IP for keying the limiter. Prefer platform-set headers that the edge
+ * controls (Vercel's `x-vercel-forwarded-for`, then `x-real-ip`) over the raw
+ * client-supplied `x-forwarded-for`, which an attacker can rotate per request to
+ * dodge the lockout.
+ */
 export function clientIp(req: Request): string {
+  const vercel = req.headers.get('x-vercel-forwarded-for');
+  if (vercel) return vercel.split(',')[0]!.trim();
+  const real = req.headers.get('x-real-ip');
+  if (real) return real.trim();
   const fwd = req.headers.get('x-forwarded-for');
   if (fwd) return fwd.split(',')[0]!.trim();
-  return req.headers.get('x-real-ip') ?? 'unknown';
+  return 'unknown';
 }

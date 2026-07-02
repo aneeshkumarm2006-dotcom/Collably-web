@@ -12,7 +12,7 @@ import { GoogleButton } from '@/components/auth/google-button';
 import { ErrorBanner, OrDivider } from '@/components/auth/auth-layout';
 import { loginSchema, fieldErrors } from '@/lib/auth/schemas';
 import { postAuthPath } from '@/lib/auth/user';
-import { errorMessage } from '@/lib/api/errors';
+import { errorMessage, isApiError } from '@/lib/api/errors';
 import { sanitizeNext } from '@/lib/auth/redirect';
 import { track } from '@/lib/analytics';
 
@@ -57,6 +57,14 @@ export function LoginForm({ next }: { next?: string }) {
       track('login_completed', { method: 'google' });
       router.push(target ?? postAuthPath(user));
     } catch (err) {
+      // A Google sign-in failing on /login is almost always a brand-new account
+      // that still needs to choose a role (Business vs Creator). The backend
+      // requires a role only for new Google accounts, so send them to signup —
+      // which has the role picker + Google button — rather than dead-ending here.
+      if (isApiError(err) && err.status >= 400 && err.status < 500) {
+        router.push(target ? `/signup?next=${encodeURIComponent(target)}` : '/signup');
+        return;
+      }
       setBanner(errorMessage(err));
       setSubmitting(false);
     }
