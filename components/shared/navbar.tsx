@@ -24,10 +24,10 @@ import { ThemeToggle } from '@/components/shared/theme-toggle';
 import { UserMenu } from '@/components/shared/user-menu';
 
 const LINKS = [
-  { label: 'Explore', href: '/explore' },
   { label: 'For Creators', href: '/for-creators' },
   { label: 'For Businesses', href: '/for-businesses' },
   { label: 'Pricing', href: '/pricing' },
+  { label: 'Blog', href: '/blog' },
 ];
 
 function isActive(pathname: string, href: string) {
