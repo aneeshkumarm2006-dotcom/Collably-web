@@ -16,9 +16,13 @@ export const metadata: Metadata = buildMetadata({
   ogEyebrow: 'Blog',
 });
 
-export default function BlogIndexPage() {
-  const featured = getFeaturedPost();
-  const posts = getAllPostsMeta();
+// Published posts come from the DB and must appear instantly (no redeploy), so
+// render on demand; the DB read itself is cached + tag-invalidated on publish.
+export const dynamic = 'force-dynamic';
+
+export default async function BlogIndexPage() {
+  const featured = await getFeaturedPost();
+  const posts = await getAllPostsMeta();
   const rest = posts.filter((p) => p.slug !== featured.meta.slug);
 
   return (

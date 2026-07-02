@@ -30,3 +30,25 @@ export interface BlogPost {
   meta: BlogPostMeta;
   Body: ComponentType;
 }
+
+/** rel intent for a keyword backlink, carried through to the public renderer. */
+export interface BlogKeyword {
+  keyword: string;
+  url: string;
+  rel?: 'dofollow' | 'nofollow' | 'sponsored';
+}
+
+/**
+ * A post normalized across both sources so `/blog` can render either through one
+ * path: the two code-based static posts (a React `Body` component) and the
+ * DB-backed posts authored in `/seoteam` (sanitized HTML + keyword backlinks).
+ */
+export type NormalizedPost =
+  | { meta: BlogPostMeta; source: 'static'; Body: ComponentType }
+  | {
+      meta: BlogPostMeta;
+      source: 'db';
+      html: string;
+      keywords: BlogKeyword[];
+      linkAllOccurrences: boolean;
+    };

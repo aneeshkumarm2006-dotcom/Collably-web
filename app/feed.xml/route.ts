@@ -14,7 +14,7 @@ function escapeXml(value: string): string {
 }
 
 export async function GET() {
-  const posts = getAllPostsMeta();
+  const posts = await getAllPostsMeta();
   const updated = posts[0]?.date ?? new Date(0).toISOString();
 
   const items = posts

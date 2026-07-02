@@ -78,6 +78,24 @@ export const config = {
     /** GA4 measurement ID, e.g. `G-XXXXXXXXXX`. */
     ga4Id: process.env.NEXT_PUBLIC_GA4_ID ?? '',
   },
+
+  /**
+   * Private SEO publishing dashboard (`/seoteam`). Server-only. This subsystem
+   * owns its OWN MongoDB connection (posts live in this app's DB, not the
+   * external backend) and its OWN password gate, fully independent of the app's
+   * user JWT auth. All values are server-only (never `NEXT_PUBLIC_`).
+   */
+  seo: {
+    /** MongoDB connection string for the blog `Post` collection (can point at the same Atlas cluster). */
+    mongodbUri: process.env.MONGODB_URI ?? '',
+    /** Single shared password the SEO team logs in with. */
+    dashboardPassword: process.env.SEO_DASHBOARD_PASSWORD ?? '',
+    /** HMAC secret for the SEO session cookie. Reuses the existing session secret. */
+    sessionSecret: process.env.SESSION_COOKIE_SECRET ?? '',
+    /** Cloudinary server credentials for the SEO-session-gated upload signer. */
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY ?? '',
+    cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET ?? '',
+  },
 } as const;
 
 /**
@@ -87,3 +105,10 @@ export const config = {
  */
 export const ACCESS_COOKIE = 'collably_access';
 export const REFRESH_COOKIE = 'collably_refresh';
+
+/**
+ * Signed session cookie for the private SEO dashboard (`/seoteam`). Separate
+ * from the app's user-auth cookies above: presence gates the dashboard, and the
+ * HMAC signature is verified server-side in the Node route handlers/layout.
+ */
+export const SEO_SESSION_COOKIE = 'collably_seo_session';

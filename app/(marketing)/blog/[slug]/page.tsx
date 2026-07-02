@@ -6,7 +6,9 @@ import { ArrowLeft } from 'lucide-react';
 
 import { buildMetadata, blogPostingJsonLd, breadcrumbJsonLd } from '@/lib/seo';
 import { formatDate, initials } from '@/lib/format';
-import { getAllPostsMeta, getPost, getRelatedPosts } from '@/lib/blog';
+import { getPost, getRelatedPosts } from '@/lib/blog';
+import { sanitizePostHtml } from '@/lib/seoteam/sanitize';
+import { applyKeywordLinks } from '@/lib/seoteam/keyword-links';
 import { categoryGradient } from '@/lib/domain-meta';
 import { Container } from '@/components/marketing/section';
 import { Prose } from '@/components/marketing/prose';
@@ -14,10 +16,9 @@ import { CtaBand } from '@/components/marketing/cta-band';
 import { PostCard } from '@/components/blog/post-card';
 import { JsonLd } from '@/components/shared/json-ld';
 
-/** Pre-render every post at build time. */
-export function generateStaticParams() {
-  return getAllPostsMeta().map((p) => ({ slug: p.slug }));
-}
+// Slugs are open-ended (new DB posts appear without a rebuild), so resolve at
+// request time. The DB read is cached and tag-invalidated on publish.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -25,7 +26,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) return buildMetadata({ title: 'Post not found', description: '', path: `/blog/${slug}`, noIndex: true });
   return buildMetadata({
     title: post.meta.title,
@@ -40,12 +41,35 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) notFound();
 
-  const { meta, Body } = post;
-  const related = getRelatedPosts(slug);
+  const { meta } = post;
+  const related = await getRelatedPosts(slug);
   const gradient = categoryGradient(meta.category);
+
+  // Static posts render their React `Body`; DB posts render sanitized HTML with
+  // keyword backlinks applied (sanitized again here as defense in depth).
+  const dbHtml =
+    post.source === 'db'
+      ? sanitizePostHtml(
+          applyKeywordLinks(post.html, post.keywords, { linkAll: post.linkAllOccurrences }),
+        )
+      : null;
+
+  // Best-effort view count for DB posts (fire-and-forget; never blocks render).
+  if (post.source === 'db') {
+    void (async () => {
+      try {
+        const { connectMongo } = await import('@/lib/db/mongoose');
+        const { Post } = await import('@/lib/db/models/post');
+        await connectMongo();
+        await Post.updateOne({ slug: meta.slug }, { $inc: { views: 1 } });
+      } catch {
+        /* monitoring only — ignore failures */
+      }
+    })();
+  }
 
   return (
     <article className="bg-page pb-4">
@@ -127,7 +151,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Body */}
         <Prose className="mt-10">
-          <Body />
+          {post.source === 'db' ? (
+            <div dangerouslySetInnerHTML={{ __html: dbHtml ?? '' }} />
+          ) : (
+            <post.Body />
+          )}
         </Prose>
 
         {/* Tags */}
