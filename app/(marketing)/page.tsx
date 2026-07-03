@@ -121,7 +121,6 @@ export default async function LandingPage() {
                 className="inline-flex items-center gap-2 rounded-full border border-hair bg-card px-3 py-1 text-[13px] font-bold text-brand shadow-card animate-cb-rise"
                 style={{ animationDelay: '0ms' }}
               >
-                <span className="text-warm">🍁</span>
                 Canada-first · Local collabs, easy ahead
               </span>
               <h1 className="mt-6 text-balance font-display text-[44px] font-extrabold leading-[0.96] tracking-[-0.04em] sm:text-6xl lg:text-[74px]">

@@ -82,7 +82,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         </div>
 
         <p className="relative z-10 text-[13px] text-[#DCEAFF]">
-          © 2026 Collably · Proudly Canadian 🍁
+          © 2026 Collably · Proudly Canadian
         </p>
       </aside>
 

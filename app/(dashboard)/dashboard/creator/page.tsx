@@ -111,7 +111,7 @@ export default async function CreatorHomePage() {
         <div className="relative flex flex-wrap items-center justify-between gap-5">
           <div className="min-w-0">
             <h1 className="font-display text-[28px] font-extrabold leading-tight">
-              Welcome back, {firstName} 👋
+              Welcome back, {firstName}
             </h1>
             <p className="mt-1.5 max-w-lg text-[15px] text-white/85">{heroSub}</p>
           </div>

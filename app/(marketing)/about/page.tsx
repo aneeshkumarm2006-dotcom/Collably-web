@@ -115,7 +115,7 @@ export default function AboutPage() {
         </div>
         <div className="mt-12 flex justify-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft px-4 py-2 text-sm font-bold text-brand">
-            Proudly built in Canada 🍁
+            Proudly built in Canada
           </span>
         </div>
       </Section>

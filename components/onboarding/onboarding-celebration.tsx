@@ -73,7 +73,7 @@ export function OnboardingCelebration({
           <Check className="h-12 w-12" strokeWidth={3} />
         </span>
         <h1 className="font-display text-[44px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
-          {title} 🎉
+          {title}
         </h1>
         <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-muted">{message}</p>
         <Button
