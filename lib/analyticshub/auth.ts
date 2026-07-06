@@ -43,7 +43,9 @@ export function sessionCookie(value: string, maxAge = SESSION_TTL) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax' as const,
-    path: '/analyticshub',
+    // Must be '/' so the cookie is sent to BOTH the UI (/analyticshub/*) AND the
+    // API (/api/analyticshub/*) — a narrower path never reaches the API routes.
+    path: '/',
     maxAge,
   };
 }
