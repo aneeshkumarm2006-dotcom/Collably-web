@@ -21,6 +21,8 @@ export default function robots(): MetadataRoute.Robots {
         '/styleguide',
         '/seoteam',
         '/seoteam/',
+        '/analyticshub',
+        '/analyticshub/',
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
