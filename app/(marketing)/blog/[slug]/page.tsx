@@ -196,7 +196,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <div className="mt-16">
         <CtaBand
           title="Start your first collab free"
-          subtitle="Join Collably free, as a creator or a business, and put these ideas to work."
+          subtitle="Join LocalShout free, as a creator or a business, and put these ideas to work."
           primary={{ label: 'Get started', href: '/signup' }}
           secondary={{ label: 'Browse campaigns', href: '/explore' }}
         />
@@ -207,7 +207,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
 /** Square social share tiles (LinkedIn / X / Facebook). Links open a share intent. */
 function ShareTiles({ title, slug }: { title: string; slug: string }) {
-  const url = `https://collably.app/blog/${slug}`;
+  const url = `https://localshout.app/blog/${slug}`;
   const enc = encodeURIComponent(url);
   const encTitle = encodeURIComponent(title);
   const tiles = [

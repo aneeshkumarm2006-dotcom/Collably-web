@@ -7,7 +7,7 @@ export const meta: BlogPostMeta = {
     'Follower counts are a vanity metric that hides your best creators. Here is what actually predicts great collab content, and how to find it.',
   category: 'Creators',
   tags: ['creators', 'ugc', 'strategy'],
-  author: { name: 'The Collably Team', role: 'Collably' },
+  author: { name: 'The LocalShout Team', role: 'LocalShout' },
   date: '2026-05-20',
   readingMinutes: 5,
   coverImage:
@@ -48,7 +48,7 @@ export default function Post() {
 
       <h2>What to look at instead</h2>
       <p>
-        When you evaluate a creator on Collably, skim past the headline number and look at the work.
+        When you evaluate a creator on LocalShout, skim past the headline number and look at the work.
         A creator&apos;s portfolio, their niche, the content types they specialise in, and the pitch
         they write for your campaign tell you far more than a follower count ever could.
       </p>
@@ -57,7 +57,7 @@ export default function Post() {
         biggest audience.
       </blockquote>
       <p>
-        This is exactly why we built Collably without follower gatekeeping. Campaigns can set a
+        This is exactly why we built LocalShout without follower gatekeeping. Campaigns can set a
         minimum if they truly need reach, but many are open to all, including UGC-only creators who
         shoot clean, scroll-stopping product content without any public following at all.
       </p>

@@ -113,7 +113,7 @@ export const handlers = [
 
   http.post(u('/auth/google'), async () => {
     // Deterministic demo Google account (creator).
-    const id = getDb().credentials['maya@collably.app'];
+    const id = getDb().credentials['maya@localshout.app'];
     return ok({ ...authEnvelope(id), isNewUser: false });
   }),
 
@@ -125,7 +125,7 @@ export const handlers = [
   ),
 
   http.post(u('/auth/reset-password'), async () => {
-    const id = getDb().credentials['maya@collably.app'];
+    const id = getDb().credentials['maya@localshout.app'];
     return ok(authEnvelope(id));
   }),
 

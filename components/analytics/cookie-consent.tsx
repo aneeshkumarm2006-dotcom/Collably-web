@@ -27,7 +27,7 @@ export function CookieConsent() {
     >
       <div className="mx-auto flex max-w-3xl flex-col gap-3 rounded-xl border border-hair bg-card p-4 shadow-card sm:flex-row sm:items-center sm:gap-4">
         <p className="text-sm leading-relaxed text-muted">
-          We use cookies for anonymous analytics to improve Collably. See our{' '}
+          We use cookies for anonymous analytics to improve LocalShout. See our{' '}
           <Link href="/cookies" className="text-brand underline-offset-2 hover:underline">
             Cookie Policy
           </Link>{' '}

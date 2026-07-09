@@ -15,7 +15,7 @@ export const metadata = {
 export default function NotFound() {
   return (
     <main className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
-      <Link href="/" className="mb-8" aria-label="Collably home">
+      <Link href="/" className="mb-8" aria-label="LocalShout home">
         <BrandMark />
       </Link>
       <p className="font-mono text-sm font-semibold text-brand">404</p>

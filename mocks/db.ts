@@ -83,9 +83,9 @@ function mockCampaignLocation(c: { city?: string; state?: string; key: string })
 // --- seed source (mirrors backend/src/scripts/seed.ts) ------------------------
 
 const USERS_SRC = [
-  { key: 'u-creator-me', name: 'Maya Bennett', email: 'maya@collably.app', role: 'creator', avatar: img('1494790108377-be9c29b29330') },
+  { key: 'u-creator-me', name: 'Maya Bennett', email: 'maya@localshout.app', role: 'creator', avatar: img('1494790108377-be9c29b29330') },
   { key: 'u-biz-me', name: 'Maple & Oak', email: 'hello@mapleandoak.ca', role: 'business', avatar: img('1517248135467-4c7edcad34c4') },
-  { key: 'u-admin', name: 'Admin', email: 'admin@collably.app', role: 'admin', avatar: null },
+  { key: 'u-admin', name: 'Admin', email: 'admin@localshout.app', role: 'admin', avatar: null },
   { key: 'u-creator-1', name: 'Liam Carter', email: 'liam@example.ca', role: 'creator', avatar: img('1500648767791-00dcc994a43e') },
   { key: 'u-creator-2', name: 'Chloe Tremblay', email: 'chloe@example.ca', role: 'creator', avatar: img('1534528741775-53994a69daeb') },
   { key: 'u-creator-3', name: 'Noah Bouchard', email: 'noah@example.ca', role: 'creator', avatar: img('1507003211169-0a1dd7228f2d') },

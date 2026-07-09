@@ -144,5 +144,5 @@ declare namespace google.maps {
 }
 
 interface Window {
-  __collablyOnMapsReady?: () => void;
+  __localshoutOnMapsReady?: () => void;
 }

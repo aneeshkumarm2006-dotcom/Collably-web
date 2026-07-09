@@ -47,7 +47,7 @@ export function loadGoogleMaps(): Promise<typeof google.maps> {
   if (!key) return Promise.reject(new MapsUnconfiguredError());
 
   loadPromise = new Promise((resolve, reject) => {
-    const CALLBACK = '__collablyOnMapsReady';
+    const CALLBACK = '__localshoutOnMapsReady';
     window[CALLBACK] = () => {
       if (typeof google !== 'undefined' && google.maps) resolve(google.maps);
       else reject(new Error('Google Maps loaded without the maps namespace.'));

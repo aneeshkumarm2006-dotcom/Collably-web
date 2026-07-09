@@ -24,7 +24,7 @@ export function OnboardingFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-page">
       <header className="flex items-center justify-between px-5 py-5 sm:px-8">
-        <Link href="/" aria-label="Collably home">
+        <Link href="/" aria-label="LocalShout home">
           <BrandMark />
         </Link>
         <button

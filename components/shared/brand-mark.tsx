@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 
 /**
- * Brand wordmark + mark. The mark is the Collably "drop" glyph filled with
+ * Brand wordmark + mark. The mark is the LocalShout "drop" glyph filled with
  * currentColor. Use `withWordmark={false}` for the icon only.
  */
 export function BrandGlyph({ className }: { className?: string }) {
@@ -42,7 +42,7 @@ export function BrandMark({ withWordmark = true, onDark, className }: BrandMarkP
             onDark ? 'text-white' : 'text-ink',
           )}
         >
-          Collably
+          LocalShout
         </span>
       )}
     </span>

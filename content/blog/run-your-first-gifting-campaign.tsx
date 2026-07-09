@@ -7,7 +7,7 @@ export const meta: BlogPostMeta = {
     'A practical playbook for businesses: how to structure a gifting campaign that attracts the right creators and gets you authentic content worth sharing.',
   category: 'Businesses',
   tags: ['businesses', 'campaigns', 'guide'],
-  author: { name: 'The Collably Team', role: 'Collably' },
+  author: { name: 'The LocalShout Team', role: 'LocalShout' },
   date: '2026-06-04',
   readingMinutes: 6,
   coverImage:

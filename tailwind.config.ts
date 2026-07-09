@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
 
 /**
- * Collably website theme: the "blend" (Phase 1).
+ * LocalShout website theme: the "blend" (Phase 1).
  *
  * Colors are driven by CSS variables defined in `app/globals.css` so every
  * utility is theme-aware (flips under `.dark`):

@@ -9,7 +9,7 @@ import { PricingTiers, type CreatorBanner, type BusinessTier } from './pricing-t
 export const metadata: Metadata = buildMetadata({
   title: 'Pricing',
   description:
-    'Collably is free for creators and fair for businesses. Post collabs and pay only in the rewards you offer, with no agency retainers. Upgrade for advanced reach and analytics.',
+    'LocalShout is free for creators and fair for businesses. Post collabs and pay only in the rewards you offer, with no agency retainers. Upgrade for advanced reach and analytics.',
   path: '/pricing',
   ogEyebrow: 'Pricing',
 });
@@ -69,7 +69,7 @@ const BUSINESS_TIERS: BusinessTier[] = [
 
 const PRICING_FAQS = [
   {
-    q: 'Is Collably really free for creators?',
+    q: 'Is LocalShout really free for creators?',
     a: 'Yes. Creating an account, building a profile, browsing, applying, and unlocking rewards are all free for creators, forever.',
   },
   {

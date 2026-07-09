@@ -6,7 +6,7 @@ import { SignupForm } from '@/components/auth/signup-form';
 export const metadata: Metadata = {
   title: 'Sign up',
   description:
-    'Join Collably to connect local businesses with creators for gifting campaigns and collabs.',
+    'Join LocalShout to connect local businesses with creators for gifting campaigns and collabs.',
 };
 
 export default async function SignupPage({

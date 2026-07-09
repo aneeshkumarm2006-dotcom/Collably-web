@@ -182,7 +182,7 @@ export function AccountSettings({ user }: { user: PublicUser }) {
 
   return (
     <div className="grid gap-5 lg:grid-cols-2">
-      <SettingsSection title="Appearance" description="Choose how Collably looks on this device.">
+      <SettingsSection title="Appearance" description="Choose how LocalShout looks on this device.">
         <AppearanceSetting />
       </SettingsSection>
 
@@ -206,7 +206,7 @@ export function AccountSettings({ user }: { user: PublicUser }) {
               <span className="block text-sm font-semibold text-ink">
                 Push notifications <span className="font-normal text-faint">(mobile app)</span>
               </span>
-              <span className="text-[13px] text-muted">Real-time alerts on the Collably mobile app.</span>
+              <span className="text-[13px] text-muted">Real-time alerts on the LocalShout mobile app.</span>
             </span>
             <Switch checked={prefs.push} onCheckedChange={(c) => updatePrefs({ ...prefs, push: c })} />
           </label>

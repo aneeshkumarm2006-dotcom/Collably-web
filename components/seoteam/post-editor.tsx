@@ -66,7 +66,7 @@ const EMPTY: EditorInitial = {
   coverImage: '',
   keywords: [],
   linkAllOccurrences: false,
-  authorName: 'Collably Team',
+  authorName: 'LocalShout Team',
   authorRole: '',
   status: 'draft',
 };
@@ -261,7 +261,7 @@ export function PostEditor({ initial }: { initial?: EditorInitial }) {
                   id="author"
                   value={state.authorName}
                   onChange={(e) => set('authorName', e.target.value)}
-                  placeholder="Collably Team"
+                  placeholder="LocalShout Team"
                 />
               </div>
             </div>

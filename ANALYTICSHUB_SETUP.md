@@ -1,12 +1,12 @@
 # Analytics Hub — Setup
 
 A self-configuring, password-gated analytics dashboard at **`/analyticshub`** inside
-the Collably web app. It pulls **GA4 (Analytics)**, **Search Console**, **Meta Ads**,
+the LocalShout web app. It pulls **GA4 (Analytics)**, **Search Console**, **Meta Ads**,
 and **Google Ads** into one glanceable overview + per-source deep dives. Single user
 (the owner). All API credentials are entered **in the dashboard's own Settings page** and
 stored **AES-256-GCM encrypted** in MongoDB — never in code or env.
 
-> **Users source:** intentionally **skipped** in this deployment — Collably's signed-up
+> **Users source:** intentionally **skipped** in this deployment — LocalShout's signed-up
 > creators/businesses live in the separate backend (Render + Atlas), not in this app's
 > database, so there's no local users table to read. The Users page shows a note.
 
@@ -24,7 +24,7 @@ service-account path is offered — that still works.)
    ```
    https://<your-domain>/api/analyticshub/oauth/google/callback
    ```
-   (e.g. `https://collably-web.vercel.app/api/analyticshub/oauth/google/callback`)
+   (e.g. `https://localshout-web.vercel.app/api/analyticshub/oauth/google/callback`)
 5. Copy the **Client ID** and **Client secret** → the two `GOOGLE_OAUTH_*` env vars below.
 
 ## 2. Per-project env vars (in Vercel → Settings → Environment Variables)

@@ -9,7 +9,7 @@ import { ContactForm } from '@/components/marketing/contact-form';
 export const metadata: Metadata = buildMetadata({
   title: 'Contact',
   description:
-    'Get in touch with the Collably team about creator collabs, running campaigns, press, or support. We usually reply within one business day.',
+    'Get in touch with the LocalShout team about creator collabs, running campaigns, press, or support. We usually reply within one business day.',
   path: '/contact',
   ogEyebrow: 'Contact',
 });
@@ -18,15 +18,15 @@ const CHANNELS = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'hello@collably.ca',
-    href: 'mailto:hello@collably.ca',
+    value: 'hello@localshout.ca',
+    href: 'mailto:hello@localshout.ca',
     tone: 'bg-brand-soft text-brand',
   },
   {
     icon: MessageSquare,
     label: 'Support',
-    value: 'support@collably.ca',
-    href: 'mailto:support@collably.ca',
+    value: 'support@localshout.ca',
+    href: 'mailto:support@localshout.ca',
     tone: 'bg-warm-soft text-warm',
   },
   { icon: MapPin, label: 'HQ', value: 'Toronto · Vancouver', tone: 'bg-grape-soft text-grape' },

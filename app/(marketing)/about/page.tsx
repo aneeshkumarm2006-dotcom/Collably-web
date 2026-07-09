@@ -9,7 +9,7 @@ import { CtaBand } from '@/components/marketing/cta-band';
 export const metadata: Metadata = buildMetadata({
   title: 'About',
   description:
-    'Collably is the local collab marketplace built to make creator and business partnerships fair, transparent, and effortless — for creators of every size and the local spots around them.',
+    'LocalShout is the local collab marketplace built to make creator and business partnerships fair, transparent, and effortless — for creators of every size and the local spots around them.',
   path: '/about',
   ogEyebrow: 'About',
 });
@@ -48,13 +48,13 @@ export default function AboutPage() {
         </div>
         <div className="mx-auto mt-8 max-w-2xl space-y-5 text-pretty text-lg leading-relaxed text-muted">
           <p>
-            Collably started in a Toronto café in 2024. A brilliant local creator was turned away by
+            LocalShout started in a Toronto café in 2024. A brilliant local creator was turned away by
             an agency for not having &quot;enough&quot; followers — while the café down the street was
             being quoted thousands a month for content that never felt real. Both wanted the same
             thing: a genuine collab. There was just no fair, transparent place to make it happen.
           </p>
           <p>
-            So we built one. On Collably, a local spot posts a collab with a clear reward and exactly
+            So we built one. On LocalShout, a local spot posts a collab with a clear reward and exactly
             what they need. Creators browse opportunities in their niche and city, apply with a quick
             pitch, and get rewarded in real meals, services and products for verified work. No
             middlemen. No follower minimums. No &quot;we&apos;ll pay you in exposure.&quot;
@@ -122,7 +122,7 @@ export default function AboutPage() {
 
       <CtaBand
         title="Come build with us."
-        subtitle="Whether you create or run a local business, there's a place for you on Collably."
+        subtitle="Whether you create or run a local business, there's a place for you on LocalShout."
         primary={{ label: 'Join as a creator', href: '/for-creators' }}
         secondary={{ label: "I'm a business", href: '/for-businesses' }}
       />

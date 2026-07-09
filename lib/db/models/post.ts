@@ -50,7 +50,7 @@ const postSchema = new Schema(
     linkAllOccurrences: { type: Boolean, default: false },
     status: { type: String, enum: POST_STATUSES, default: 'draft', index: true },
     author: {
-      name: { type: String, default: 'Collably Team', trim: true },
+      name: { type: String, default: 'LocalShout Team', trim: true },
       role: { type: String, default: '', trim: true },
     },
     // Incremented on each public read (best-effort, for monitoring).

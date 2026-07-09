@@ -1,7 +1,7 @@
 'use client';
 /**
  * Users page. Signups/user analytics are not part of this dashboard — they live
- * in the Collably backend — so this is an intentional, friendly explainer.
+ * in the LocalShout backend — so this is an intentional, friendly explainer.
  */
 import Link from 'next/link';
 import { Users, ArrowRight } from 'lucide-react';
@@ -21,7 +21,7 @@ export default function UsersPage() {
         </span>
         <h2 className="font-display text-lg font-bold text-ink">Not available in this dashboard</h2>
         <p className="mt-1.5 max-w-md text-sm text-muted">
-          User and signup analytics live in the Collably backend, not the Analytics Hub. This hub
+          User and signup analytics live in the LocalShout backend, not the Analytics Hub. This hub
           focuses on marketing sources — Analytics, Search Console, and ads.
         </p>
         <Button asChild variant="outline" className="mt-5">

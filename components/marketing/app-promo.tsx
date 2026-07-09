@@ -31,7 +31,7 @@ export function AppPromo() {
               <span className="h-1.5 w-1.5 rounded-full bg-mint" /> Coming soon
             </span>
             <h2 className="mt-5 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
-              Collably in your pocket.
+              LocalShout in your pocket.
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-pretty text-base leading-relaxed text-white/65">
               Apply to collabs in a tap, chat with brands, and get push alerts for new local

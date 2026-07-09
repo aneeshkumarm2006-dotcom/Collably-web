@@ -5,7 +5,7 @@ import { ResetPasswordForm } from '@/components/auth/reset-password-form';
 
 export const metadata: Metadata = {
   title: 'Reset password',
-  description: 'Set a new password for your Collably account.',
+  description: 'Set a new password for your LocalShout account.',
 };
 
 export default async function ResetPasswordPage({

@@ -1,7 +1,7 @@
-# Collably Website (`@collably/web`)
+# LocalShout Website (`@localshout/web`)
 
 One **Next.js 15 (App Router)** app that serves **both** the marketing site **and** the full
-web version of the Collably app (creator + business), over the **same backend** (`../backend`)
+web version of the LocalShout app (creator + business), over the **same backend** (`../backend`)
 and the **same domain layer** (`../shared`) as the Expo app (`../mobile`).
 
 > Admin moderation stays in `../admin`. This app is **Public + Creator + Business** only.
@@ -93,8 +93,8 @@ dev:mock`.
   browser reads. `mocks/browser.ts` is an optional scaffold, unused by default.
 - Mock login issues a `Bearer mock.<userId>` token; once Phase 3 stores it in the access
   cookie, the whole authed surface works against mocks with no extra wiring. Seed logins
-  (any password): `maya@collably.app` (creator), `hello@mapleandoak.ca` (business),
-  `admin@collably.app` (admin).
+  (any password): `maya@localshout.app` (creator), `hello@mapleandoak.ca` (business),
+  `admin@localshout.app` (admin).
 
 ## Shared types (the `@shared` alias)
 

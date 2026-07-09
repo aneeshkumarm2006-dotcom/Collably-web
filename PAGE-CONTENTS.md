@@ -1,4 +1,4 @@
-# Collably Web — Page-by-Page Contents (Redesign Reference)
+# LocalShout Web — Page-by-Page Contents (Redesign Reference)
 
 > This is the **detailed contents** of every screen — every section, field, button, card, filter,
 > state, and piece of copy — so a redesign can rebuild each page 1:1. Companion to `FEATURES.md`
@@ -28,12 +28,12 @@ Server component, `revalidate = 300`. Emits Organization + WebSite + FAQPage JSO
 - **How it works** (`#how`): H2 "Two sides. One easy flow." Two cards, each numbered 3-step:
   - For creators (blue, Users): Browse your niche → Apply with a pitch → Show up & earn
   - For businesses (warm, Gift): Post a collab → Review pitches → Accept & verify
-- **Features** ("Why Collably", H2 "Built for real, local collabs."): 3 cards — Real rewards, never "exposure" (gift); No follower minimums (users); Local-first matching (map-pin)
-- **Product showcase** (H2 "One dashboard for every collab."): browser-window `DashboardMockup` — URL "app.collably.ca/dashboard", sidebar (Dashboard/Collabs/Applicants/Rewards/Messages), "Welcome back, Maple & Oat", 3 stat tiles (Active collabs 8, Rewards unlocked $1,240, New applicants 32), 7-bar "Applications this week" chart, floating "New reward · Tasting menu · $140"
+- **Features** ("Why LocalShout", H2 "Built for real, local collabs."): 3 cards — Real rewards, never "exposure" (gift); No follower minimums (users); Local-first matching (map-pin)
+- **Product showcase** (H2 "One dashboard for every collab."): browser-window `DashboardMockup` — URL "app.localshout.ca/dashboard", sidebar (Dashboard/Collabs/Applicants/Rewards/Messages), "Welcome back, Maple & Oat", 3 stat tiles (Active collabs 8, Rewards unlocked $1,240, New applicants 32), 7-bar "Applications this week" chart, floating "New reward · Tasting menu · $140"
 - **Live campaigns** (if any): "Live right now" (pulse) + H2 "Fresh local campaigns." + "Explore all" → `/explore`; up to 4 real `CampaignCard`s each with `GuestApplyButton` ("Sign up to apply", guests only)
 - **Real rewards** (2-col): H2 "Rewards you can actually spend." + CTA "Start earning" → `/explore`; right list of 5 sample rewards (name · business · city + green $ value): Brunch for two $65, Full skincare set $95, 3-month studio pass $270, Tasting menu for two $140, Signature cut & colour $180
 - **Testimonials** (H2 "From creators & businesses."): 3 cards (5 stars + quote + avatar + name/role): Aanya Patel, Daniel Roy, Marcus Lee
-- **App promo** (`AppPromo`, dark): "Coming soon" pill, H2 "Collably in your pocket.", non-submitting notify-me email form + two disabled store badges
+- **App promo** (`AppPromo`, dark): "Coming soon" pill, H2 "LocalShout in your pocket.", non-submitting notify-me email form + two disabled store badges
 - **FAQ** (H2 "Questions, answered."): accordion of 5 general FAQs
 - **Final CTA** (`CtaBand`): "Ready to start collabbing?" + "Join as a creator" / "I'm a business"
 
@@ -69,7 +69,7 @@ Server component, `revalidate = 300`. Emits Organization + WebSite + FAQPage JSO
 
 ## Blog index `/blog`
 Posts merge 2 static `content/blog/*.tsx` + published Mongo posts (newest-first, static wins on slug clash).
-- Header: label "The Collably Blog", H1 "Playbooks for local collabs." + "RSS" → `/feed.xml`
+- Header: label "The LocalShout Blog", H1 "Playbooks for local collabs." + "RSS" → `/feed.xml`
 - **Featured post** card (gradient, "Featured · {category}", title, 3-line desc, author row)
 - **BlogFilter** (client): category filter pills ("All" + categories) + grid of `PostCard`s (gradient header, category badge, title, 2-line desc, author row). Empty: "No posts in this category yet."
 
@@ -85,27 +85,27 @@ Per-post metadata; 404 → noindex. Static = React Body; DB = sanitized HTML + k
 ## Contact `/contact`
 Reads `?topic=` to preselect. Topics: General, For businesses, For creators, Press, Support.
 - Header: H1 "Let's talk." + "we usually reply within a day"
-- Channels (3 cards): Email hello@collably.ca; Support support@collably.ca; HQ "Toronto · Vancouver"
+- Channels (3 cards): Email hello@localshout.ca; Support support@localshout.ca; HQ "Toronto · Vancouver"
 - **ContactForm** (`POST /api/contact`, zod): **Name** (text, req 1–120); **Email** (req, valid); **"I'm a…" role pills** (Creator/Business/Press → topic); **Message** (textarea rows 5, 10–4000). Inline validation. Submit "Send message" → "Sending…". Success: check + "Message sent" + "Thanks, {firstName}…"
 
 ## Legal (`LegalPage` template) — all stamped **28 June 2026**
 Sticky left side-nav between Privacy/Terms/Cookies; right = "Last updated", H1, body in `Prose`.
-- **Privacy** `/privacy`: 10 sections (collection, use, sharing/no-selling, cookies, retention, rights → privacy@collably.app, security, children <16, changes, contact)
-- **Terms** `/terms`: 10 sections (service, accounts 16+, campaigns/rewards, acceptable use, content/licence, moderation, disclaimers, liability, termination, contact → legal@collably.app)
+- **Privacy** `/privacy`: 10 sections (collection, use, sharing/no-selling, cookies, retention, rights → privacy@localshout.app, security, children <16, changes, contact)
+- **Terms** `/terms`: 10 sections (service, accounts 16+, campaigns/rewards, acceptable use, content/licence, moderation, disclaimers, liability, termination, contact → legal@localshout.app)
 - **Cookies** `/cookies`: 5 sections incl. **CookieTable** (Essential "Always on", Analytics "Optional", Marketing "Optional")
 
 ---
 
 # B. Auth — `app/(auth)/`
 
-Shared **split-screen** (`auth-layout.tsx`): left blue→purple gradient brand panel (blobs, logo → `/`, headline "Local collabs. Real rewards.", subtext about 3,200+ creators / 640+ businesses, testimonial from Maya K., "© 2026 Collably · Proudly Canadian 🍁"); right form (max-w 400px). Password rule for new passwords: **8–128 chars**.
+Shared **split-screen** (`auth-layout.tsx`): left blue→purple gradient brand panel (blobs, logo → `/`, headline "Local collabs. Real rewards.", subtext about 3,200+ creators / 640+ businesses, testimonial from Maya K., "© 2026 LocalShout · Proudly Canadian 🍁"); right form (max-w 400px). Password rule for new passwords: **8–128 chars**.
 
 ## Login `/login`
-- Heading "Welcome back" + "Log in to your Collably account."
+- Heading "Welcome back" + "Log in to your LocalShout account."
 - **Google button** ("Continue with Google"); degrades to placeholder toast if no client ID
 - "or" divider + `ErrorBanner`
 - Form: **Email** (type=email, req+valid, "you@email.com"); **Password** (type=password, current-password, "••••••••") with inline **"Forgot password?"** → `/forgot-password`
-- Submit "Log in" / "Logging in…"; footer "New to Collably?" → "Create an account" (`/signup`, preserves `next`)
+- Submit "Log in" / "Logging in…"; footer "New to LocalShout?" → "Create an account" (`/signup`, preserves `next`)
 
 ## Signup `/signup` (two-step, no route change)
 - **Step 1 — Role**: heading "Create your account" / "First, tell us who you are." Two cards: **I'm a Business** (Store, "Post campaigns & find creators", warm) / **I'm a Creator** (Sparkles, "Find collabs & earn rewards", blue). Footer "Already have an account?" → `/login`
@@ -340,7 +340,7 @@ Loads from Mongo (title, slug, status, views, category, publishedAt, updatedAt; 
 
 ## Post Editor `/seoteam/new` & `/seoteam/[id]/edit`
 Two-col (main + 340px sidebar). Header "New/Edit post" + **Save draft** (outline) / **Publish** (primary, "Published — live on /blog"). Both require a title. No delete in editor.
-- **Main**: **Template picker**; **Details card** (Title [auto-slugs until slug edited], Slug [`/blog/` prefix, ≤80], Category [default "Guides"], Author name [default "Collably Team"]); **Content** (Tiptap); **Keyword backlinks** (KeywordManager)
+- **Main**: **Template picker**; **Details card** (Title [auto-slugs until slug edited], Slug [`/blog/` prefix, ≤80], Category [default "Guides"], Author name [default "LocalShout Team"]); **Content** (Tiptap); **Keyword backlinks** (KeywordManager)
 - **Sidebar**: **Cover image** (16:9 preview / dashed placeholder, Upload/Replace → Cloudinary `blog/covers`, Remove); **Search appearance** (Meta title [live count 30–60, green in range], Meta description [textarea, count 70–160]); **SEO checks** panel
 - Saved payload: title, slug, template, body, excerpt, metaTitle, category, tags, coverImage, keywords, linkAllOccurrences, author{name,role}, status. *(tags + author role are saved but have no UI input)*
 

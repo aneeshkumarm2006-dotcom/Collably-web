@@ -5,7 +5,7 @@ import { LegalPage } from '@/components/marketing/legal-page';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Cookie Policy',
-  description: 'How and why Collably uses cookies and similar technologies.',
+  description: 'How and why LocalShout uses cookies and similar technologies.',
   path: '/cookies',
   ogEyebrow: 'Legal',
 });
@@ -64,7 +64,7 @@ export default function CookiesPage() {
     <LegalPage
       title="Cookie Policy"
       lastUpdated="28 June 2026"
-      intro="This Cookie Policy explains how Collably uses cookies and similar technologies to recognise you and improve your experience."
+      intro="This Cookie Policy explains how LocalShout uses cookies and similar technologies to recognise you and improve your experience."
     >
       <h2>1. What are cookies?</h2>
       <p>
@@ -92,7 +92,7 @@ export default function CookiesPage() {
       <h2>5. Changes &amp; contact</h2>
       <p>
         We may update this policy as our use of cookies evolves. Questions? Email{' '}
-        <a href="mailto:privacy@collably.app">privacy@collably.app</a> or see our{' '}
+        <a href="mailto:privacy@localshout.app">privacy@localshout.app</a> or see our{' '}
         <a href="/privacy">Privacy Policy</a>.
       </p>
     </LegalPage>

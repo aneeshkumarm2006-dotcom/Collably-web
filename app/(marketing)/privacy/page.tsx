@@ -5,7 +5,7 @@ import { LegalPage } from '@/components/marketing/legal-page';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Privacy Policy',
-  description: 'How Collably collects, uses, and protects your personal information.',
+  description: 'How LocalShout collects, uses, and protects your personal information.',
   path: '/privacy',
   ogEyebrow: 'Legal',
 });
@@ -15,7 +15,7 @@ export default function PrivacyPage() {
     <LegalPage
       title="Privacy Policy"
       lastUpdated="28 June 2026"
-      intro="This Privacy Policy explains what information Collably collects, how we use it, and the choices you have. By using Collably you agree to the practices described here."
+      intro="This Privacy Policy explains what information LocalShout collects, how we use it, and the choices you have. By using LocalShout you agree to the practices described here."
     >
       <h2>1. Information we collect</h2>
       <p>
@@ -59,7 +59,7 @@ export default function PrivacyPage() {
       <p>
         Depending on your location, you may have the right to access, correct, export, or delete your
         personal information, and to object to or restrict certain processing. To exercise these
-        rights, contact us at <a href="mailto:privacy@collably.app">privacy@collably.app</a>.
+        rights, contact us at <a href="mailto:privacy@localshout.app">privacy@localshout.app</a>.
       </p>
 
       <h2>7. Security</h2>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
       </p>
 
       <h2>8. Children</h2>
-      <p>Collably is not directed to children under 16, and we do not knowingly collect their data.</p>
+      <p>LocalShout is not directed to children under 16, and we do not knowingly collect their data.</p>
 
       <h2>9. Changes</h2>
       <p>
@@ -80,7 +80,7 @@ export default function PrivacyPage() {
 
       <h2>10. Contact</h2>
       <p>
-        Questions about privacy? Email <a href="mailto:privacy@collably.app">privacy@collably.app</a>{' '}
+        Questions about privacy? Email <a href="mailto:privacy@localshout.app">privacy@localshout.app</a>{' '}
         or use our <a href="/contact">contact form</a>.
       </p>
     </LegalPage>

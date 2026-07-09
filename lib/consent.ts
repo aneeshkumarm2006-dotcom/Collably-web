@@ -9,8 +9,8 @@ import { config } from '@/lib/config';
 
 export type ConsentState = 'granted' | 'denied' | 'unset';
 
-const STORAGE_KEY = 'collably_cookie_consent';
-export const CONSENT_EVENT = 'collably:consent-change';
+const STORAGE_KEY = 'localshout_cookie_consent';
+export const CONSENT_EVENT = 'localshout:consent-change';
 
 /** Does the configured provider set cookies (and therefore need consent)? */
 export function providerRequiresConsent(): boolean {

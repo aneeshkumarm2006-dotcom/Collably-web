@@ -8,9 +8,9 @@ import { test, expect } from '@playwright/test';
 
 test('landing page renders the marketing hero', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle(/Collably/i);
+  await expect(page).toHaveTitle(/LocalShout/i);
   // The brand wordmark links home from the navbar on every breakpoint.
-  await expect(page.getByRole('link', { name: 'Collably home' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'LocalShout home' }).first()).toBeVisible();
   // A primary CTA into the product.
   await expect(page.getByRole('link', { name: /Get started|Explore/i }).first()).toBeVisible();
 });
@@ -38,7 +38,7 @@ test('auth pages render', async ({ page }) => {
   await expect(page.getByLabel('Email')).toBeVisible();
 
   await page.goto('/signup');
-  await expect(page.getByRole('heading', { name: 'Join Collably' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Join LocalShout' })).toBeVisible();
   await expect(page.getByRole('button', { name: /I'm a Creator/ })).toBeVisible();
 });
 

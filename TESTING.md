@@ -53,7 +53,7 @@ npx playwright test e2e/flows/creator.spec.ts          # one flow
   Mutating flows run on Chromium; a read-only `smoke.spec.ts` also runs on
   Firefox, WebKit, and a Pixel-5 mobile viewport.
 - Seeded mock accounts (any password works) live in `e2e/helpers.ts`:
-  `maya@collably.app` (approved creator), `hello@mapleandoak.ca` (approved
+  `maya@localshout.app` (approved creator), `hello@mapleandoak.ca` (approved
   business), `hi@peakfitness.ca` (the business sharing a collab thread with Maya).
 
 ## Note: tests are excluded from the app build

@@ -11,17 +11,17 @@
 import type { Metadata } from 'next';
 import { config } from '@/lib/config';
 
-export const SITE_NAME = 'Collably';
+export const SITE_NAME = 'LocalShout';
 export const SITE_URL = config.siteUrl;
 export const SITE_TAGLINE = 'The local collab marketplace';
 export const SITE_DESCRIPTION =
-  'Collably is the marketplace where local businesses run gifting campaigns and creators earn real rewards. No agencies, no follower gatekeeping.';
+  'LocalShout is the marketplace where local businesses run gifting campaigns and creators earn real rewards. No agencies, no follower gatekeeping.';
 
 /** Public social handles (used in footer + Organization `sameAs`). */
 export const SOCIAL_LINKS = {
-  instagram: 'https://instagram.com/collably',
-  twitter: 'https://twitter.com/collably',
-  linkedin: 'https://linkedin.com/company/collably',
+  instagram: 'https://instagram.com/localshout',
+  twitter: 'https://twitter.com/localshout',
+  linkedin: 'https://linkedin.com/company/localshout',
 } as const;
 
 /** Resolve a path (or pass through an absolute URL) to a fully-qualified URL. */
@@ -41,7 +41,7 @@ export function ogImageUrl(opts?: { title?: string; subtitle?: string; eyebrow?:
 }
 
 export interface PageMetaInput {
-  /** Page title: the root template appends "· Collably". Omit on the homepage. */
+  /** Page title: the root template appends "· LocalShout". Omit on the homepage. */
   title?: string;
   description: string;
   /** Canonical path, e.g. "/pricing". */

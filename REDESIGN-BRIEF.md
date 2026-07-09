@@ -1,4 +1,4 @@
-# Collably — Redesign Brief
+# LocalShout — Redesign Brief
 
 > **How to use this brief:** This is a *requirements* document, not a spec of the current design.
 > It tells you **what each page must accomplish and contain** — its purpose, the information it must
@@ -10,7 +10,7 @@
 > and states*. Redesign freely — but don't drop functionality. Placeholder copy is fine; write fresh,
 > on-intent text (final copy will be supplied later).
 
-## What Collably is
+## What LocalShout is
 
 A two-sided **local collaboration marketplace** (Canada-first). **Creators** find local businesses
 offering real rewards (meals, services, products) in exchange for content; **businesses** post
@@ -43,7 +43,7 @@ Must convey/contain:
 - A visual demonstration that the product is real and active (e.g. a preview of live campaigns and/or
   the app experience) — pulling in **real live campaign data** when available.
 - **How it works** — the flow for creators and the flow for businesses (each a short ordered sequence).
-- **Why Collably** — the core differentiators (real rewards not "exposure", no follower minimums, local matching).
+- **Why LocalShout** — the core differentiators (real rewards not "exposure", no follower minimums, local matching).
 - **Rewards** — make tangible what creators actually earn, with dollar values.
 - **Social proof** — testimonials from both creators and businesses; headline platform stats.
 - An **app-coming-soon** moment with an email capture.

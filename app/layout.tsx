@@ -22,12 +22,12 @@ const fontSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Collably: Influencer ↔ Brand Collabs & Gifting',
-    template: '%s · Collably',
+    default: 'LocalShout: Influencer ↔ Brand Collabs & Gifting',
+    template: '%s · LocalShout',
   },
   description:
-    'Collably connects local businesses with creators for gifting campaigns and collabs. Post a campaign, get matched with creators, and grow.',
-  metadataBase: new URL('https://collably.app'),
+    'LocalShout connects local businesses with creators for gifting campaigns and collabs. Post a campaign, get matched with creators, and grow.',
+  metadataBase: new URL('https://localshout.app'),
 };
 
 export const viewport: Viewport = {

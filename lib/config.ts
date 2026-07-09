@@ -58,7 +58,7 @@ export const config = {
    * canonical URLs, Open Graph/Twitter tags, `sitemap.ts`, `robots.ts`, JSON-LD,
    * and the blog RSS feed. Defaults to the production domain.
    */
-  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://collably.app').replace(/\/$/, ''),
+  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://localshout.app').replace(/\/$/, ''),
 
   /**
    * Web analytics. Provider is one of `plausible` | `ga4` | `none` (default
@@ -71,7 +71,7 @@ export const config = {
       | 'plausible'
       | 'ga4'
       | 'none',
-    /** Plausible site domain (the `data-domain`), e.g. `collably.app`. */
+    /** Plausible site domain (the `data-domain`), e.g. `localshout.app`. */
     plausibleDomain: process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? '',
     /** Plausible script src (self-hosted instances override this). */
     plausibleSrc: process.env.NEXT_PUBLIC_PLAUSIBLE_SRC ?? 'https://plausible.io/js/script.tagged-events.js',
@@ -107,12 +107,12 @@ export const config = {
  * Defined here (not in Phase 3) so the proxy + server client can read the access
  * token without a circular dependency on the auth module.
  */
-export const ACCESS_COOKIE = 'collably_access';
-export const REFRESH_COOKIE = 'collably_refresh';
+export const ACCESS_COOKIE = 'localshout_access';
+export const REFRESH_COOKIE = 'localshout_refresh';
 
 /**
  * Signed session cookie for the private SEO dashboard (`/seoteam`). Separate
  * from the app's user-auth cookies above: presence gates the dashboard, and the
  * HMAC signature is verified server-side in the Node route handlers/layout.
  */
-export const SEO_SESSION_COOKIE = 'collably_seo_session';
+export const SEO_SESSION_COOKIE = 'localshout_seo_session';

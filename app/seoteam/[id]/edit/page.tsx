@@ -43,7 +43,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
     coverImage: post.coverImage ?? '',
     keywords: (post.keywords ?? []).map((k) => ({ keyword: k.keyword, url: k.url, rel: k.rel })),
     linkAllOccurrences: Boolean(post.linkAllOccurrences),
-    authorName: post.author?.name ?? 'Collably Team',
+    authorName: post.author?.name ?? 'LocalShout Team',
     authorRole: post.author?.role ?? '',
     status: post.status as 'draft' | 'published',
   };

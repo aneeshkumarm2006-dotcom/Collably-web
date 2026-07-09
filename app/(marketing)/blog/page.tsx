@@ -11,7 +11,7 @@ import { BlogFilter } from './blog-filter';
 export const metadata: Metadata = buildMetadata({
   title: 'Blog',
   description:
-    'Guides, playbooks, and ideas on creator collabs, gifting campaigns, and building a brand with local creators, from the Collably team.',
+    'Guides, playbooks, and ideas on creator collabs, gifting campaigns, and building a brand with local creators, from the LocalShout team.',
   path: '/blog',
   ogEyebrow: 'Blog',
 });
@@ -30,7 +30,7 @@ export default async function BlogIndexPage() {
       {/* Header */}
       <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-2xl">
-          <SectionLabel>The Collably Blog</SectionLabel>
+          <SectionLabel>The LocalShout Blog</SectionLabel>
           <h1 className="mt-5 text-balance font-display text-4xl font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-[48px]">
             Playbooks for local collabs.
           </h1>

@@ -138,7 +138,7 @@ export default async function LandingPage() {
                 className="mt-6 max-w-[500px] text-pretty text-[19px] leading-relaxed text-muted animate-cb-rise"
                 style={{ animationDelay: '380ms' }}
               >
-                Collably matches Canadian creators with local spots for collabs that pay in real
+                LocalShout matches Canadian creators with local spots for collabs that pay in real
                 meals, services and products. No agencies. No follower minimums. Just show up and
                 create.
               </p>
@@ -341,7 +341,7 @@ export default async function LandingPage() {
       {/* ===== How it works ===== */}
       <Section tone="page" id="how">
         <div className="mb-12 text-center">
-          <SectionLabel className="justify-center">How Collably works</SectionLabel>
+          <SectionLabel className="justify-center">How LocalShout works</SectionLabel>
           <h2 className="mt-4 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
             Two sides. One easy flow.
           </h2>
@@ -355,7 +355,7 @@ export default async function LandingPage() {
       {/* ===== Features ===== */}
       <Section tone="card">
         <div className="mb-12 text-center">
-          <SectionLabel className="justify-center">Why Collably</SectionLabel>
+          <SectionLabel className="justify-center">Why LocalShout</SectionLabel>
           <h2 className="mt-4 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
             Built for real, local collabs.
           </h2>
@@ -528,7 +528,7 @@ export default async function LandingPage() {
       {/* ===== Final CTA ===== */}
       <CtaBand
         title="Ready to start collabbing?"
-        subtitle="Join thousands of Canadian creators and local spots already making collabs happen on Collably."
+        subtitle="Join thousands of Canadian creators and local spots already making collabs happen on LocalShout."
         primary={{ label: 'Join as a creator', href: '/for-creators' }}
         secondary={{ label: "I'm a business", href: '/for-businesses' }}
       />
@@ -594,14 +594,14 @@ function DashboardMockup() {
             <span className="h-3 w-3 rounded-full bg-[#28C840]" />
           </div>
           <div className="ml-2 flex-1 rounded-full bg-card px-4 py-1 text-xs text-faint">
-            app.collably.ca / dashboard
+            app.localshout.ca / dashboard
           </div>
         </div>
 
         <div className="grid grid-cols-[180px_1fr] sm:grid-cols-[220px_1fr]">
           {/* Sidebar */}
           <div className="hidden bg-dark-sidebar p-5 text-white sm:block">
-            <div className="mb-8 font-display text-lg font-bold">Collably</div>
+            <div className="mb-8 font-display text-lg font-bold">LocalShout</div>
             <ul className="flex flex-col gap-1.5 text-sm">
               {['Dashboard', 'Collabs', 'Applicants', 'Rewards', 'Messages'].map((item, i) => (
                 <li

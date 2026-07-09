@@ -174,7 +174,7 @@ export default function StyleguidePage() {
     <main className="mx-auto max-w-6xl px-6 py-12">
       <header className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-ink">Collably Style Guide</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-ink">LocalShout Style Guide</h1>
           <p className="mt-1 text-sm text-muted">
             Phase 1 design system (the &ldquo;blend&rdquo;). App palette · reference anatomy ·
             shadcn/ui.

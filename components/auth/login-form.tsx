@@ -75,7 +75,7 @@ export function LoginForm({ next }: { next?: string }) {
       <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
         Welcome back
       </h1>
-      <p className="mt-1.5 text-[15px] text-muted">Log in to your Collably account.</p>
+      <p className="mt-1.5 text-[15px] text-muted">Log in to your LocalShout account.</p>
 
       <div className="mt-7">
         <GoogleButton onCredential={handleGoogle} text="signin_with" disabled={submitting} />
@@ -130,7 +130,7 @@ export function LoginForm({ next }: { next?: string }) {
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
-        New to Collably?{' '}
+        New to LocalShout?{' '}
         <Link
           href={target ? `/signup?next=${encodeURIComponent(target)}` : '/signup'}
           className="font-bold text-brand hover:underline"

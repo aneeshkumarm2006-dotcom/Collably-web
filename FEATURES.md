@@ -1,7 +1,7 @@
-# Collably Web — Full Feature Inventory
+# LocalShout Web — Full Feature Inventory
 
 > One **Next.js 15 (App Router)** app that serves **both** the marketing site **and** the full
-> web version of the Collably app (creator + business), over the **same backend** and **same
+> web version of the LocalShout app (creator + business), over the **same backend** and **same
 > shared domain layer** as the mobile app. Plus a private SEO blog CMS backed by its own MongoDB.
 >
 > **Stack:** Next.js 15 · React 19 · TypeScript ~5.7 · Tailwind CSS 3.4 · shadcn/ui · Lucide ·

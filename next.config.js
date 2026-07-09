@@ -6,7 +6,7 @@ const nextConfig = {
   // Allow an isolated build output dir (e.g. CI / a side-by-side prod build that
   // must not clobber a running `next dev`'s `.next`). Defaults to `.next`.
   distDir: process.env.NEXT_DIST_DIR || '.next',
-  // This app lives inside the Collably monorepo (which has sibling lockfiles);
+  // This app lives inside the LocalShout monorepo (which has sibling lockfiles);
   // pin the file-tracing root to this directory so Next doesn't infer the wrong one.
   // (Mirrors `admin/next.config.js`.)
   outputFileTracingRoot: path.join(__dirname),

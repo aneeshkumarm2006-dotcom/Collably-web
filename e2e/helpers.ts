@@ -9,7 +9,7 @@ import { expect, type Page } from '@playwright/test';
  */
 export const ACCOUNTS = {
   /** Maya Bennett: onboarded + approved creator (cp-me) with applications + collabs. */
-  creator: 'maya@collably.app',
+  creator: 'maya@localshout.app',
   /** Maple & Oak: onboarded + approved business (bp-me) with campaigns + applicants. */
   business: 'hello@mapleandoak.ca',
   /** Peak Fitness Studio: the business sharing the "30-Day Fitness Challenge" collab thread with Maya. */

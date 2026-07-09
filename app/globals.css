@@ -4,7 +4,7 @@
 
 /*
  * ============================================================
- * Collably — Design System tokens (Phase 1, the "blend")
+ * LocalShout — Design System tokens (Phase 1, the "blend")
  * ============================================================
  * Two coordinated token layers, both themed for light + dark:
  *
@@ -32,7 +32,7 @@
     --card-foreground: 216 58% 9%;
     --popover: 0 0% 100%;
     --popover-foreground: 216 58% 9%;
-    --primary: 213 100% 44%; /* brand Collably-blue #0064E0 */
+    --primary: 213 100% 44%; /* brand LocalShout-blue #0064E0 */
     --primary-foreground: 0 0% 100%;
     --secondary: 222 33% 95%; /* surface-muted #EEF1F8 */
     --secondary-foreground: 216 58% 9%;
@@ -47,7 +47,7 @@
     --ring: 213 100% 44%; /* brand focus ring */
     --radius: 0.75rem; /* 12px — app "md" radius */
 
-    /* --- Blend tokens (design-reference names → Collably palette) — LIGHT --- */
+    /* --- Blend tokens (design-reference names → LocalShout palette) — LIGHT --- */
     --brand-primary: #0064e0;
     --brand-secondary: #7b61ff;
     --brand-soft: #e7f0ff;
