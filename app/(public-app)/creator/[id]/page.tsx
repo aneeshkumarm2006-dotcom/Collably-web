@@ -23,6 +23,7 @@ import { buildMetadata, creatorJsonLd, breadcrumbJsonLd } from '@/lib/seo';
 import { Container } from '@/components/marketing/section';
 import { Avatar } from '@/components/shared/avatar';
 import { EmptyState } from '@/components/shared/empty-state';
+import { Reveal } from '@/components/shared/reveal';
 import { JsonLd } from '@/components/shared/json-ld';
 
 // Public profile: on-demand ISR (no per-user variance); cached for `revalidate`.
@@ -145,7 +146,12 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
 
         {/* Header */}
         <div className="mt-6 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-          <Avatar name={name} src={user?.avatar} size={96} className="shrink-0 shadow-card" />
+          <Avatar
+            name={name}
+            src={user?.avatar}
+            size={96}
+            className="shrink-0 border-outline border-ink shadow-sticker"
+          />
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <h1 className="font-display text-[26px] font-extrabold tracking-tight text-ink sm:text-[30px]">
@@ -170,7 +176,7 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
             {/* Niche / verified pills */}
             <div className="mt-3 flex flex-wrap gap-1.5">
               {profile.isUGCOnly && (
-                <span className="inline-flex items-center rounded-full bg-mint-soft px-2.5 py-1 text-[12px] font-bold text-mint">
+                <span className="inline-flex items-center rounded-full border-2 border-ink bg-money-soft px-2.5 py-1 text-[12px] font-bold text-money-ink">
                   UGC creator
                 </span>
               )}
@@ -179,7 +185,7 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
                 return (
                   <span
                     key={n}
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-bold ${
+                    className={`inline-flex items-center gap-1 rounded-full border-2 border-ink px-2.5 py-1 text-[12px] font-bold ${
                       pillTints[i % pillTints.length]
                     }`}
                   >
@@ -197,7 +203,7 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
         )}
 
         {/* Stat row */}
-        <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-y border-hair py-5">
+        <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-y-2 border-ink py-5">
           {totalFollowers > 0 && (
             <Stat value={formatCompactNumber(totalFollowers)} label="Followers" />
           )}
@@ -217,9 +223,9 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
                 href={s.link}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="inline-flex items-center gap-3 rounded-2xl border border-hair bg-card px-4 py-3 transition-colors hover:border-brand"
+                className="sticker lift inline-flex items-center gap-3 rounded-card bg-card px-4 py-3"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-soft text-brand">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink bg-brand-soft text-brand">
                   <s.icon className="h-[18px] w-[18px]" />
                 </span>
                 <div>
@@ -244,7 +250,7 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
             {profile.contentTypes.map((t) => (
               <span
                 key={t}
-                className="rounded-full border border-hair bg-card px-2.5 py-1 text-[13px] text-muted"
+                className="rounded-full border-2 border-ink bg-elev px-2.5 py-1 text-[13px] text-ink"
               >
                 {t}
               </span>
@@ -256,14 +262,14 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
         <div className="mt-10">
           <h2 className="mb-5 font-display text-[22px] font-bold text-ink">Portfolio</h2>
           {profile.portfolio.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
+            <Reveal className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
               {profile.portfolio.map((item, i) => (
                 <a
                   key={i}
                   href={item.link || item.imageUrl}
                   target="_blank"
                   rel="noopener noreferrer nofollow"
-                  className="group relative aspect-square overflow-hidden rounded-2xl bg-secondary"
+                  className="pop group relative aspect-square overflow-hidden rounded-card border-2 border-ink bg-elev"
                 >
                   <Image
                     src={item.imageUrl}
@@ -282,7 +288,7 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
                   )}
                 </a>
               ))}
-            </div>
+            </Reveal>
           ) : (
             <EmptyState
               icon={<ImageIcon />}

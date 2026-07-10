@@ -4,7 +4,11 @@
  * enforces the richer rules: guests → `/login`, admins → the marketing site
  * (they use the separate admin app), and not-yet-onboarded users → their
  * onboarding flow. Role/area matching (creator vs business) is layered on by the
- * Phase 7/8 nested layouts via `requireRoleSession`.
+ * nested layouts via `requireRoleSession`.
+ *
+ * The Facebook-clean token set is applied by `.surface-app` on `DashboardShell`,
+ * not here — that shell also wraps the public-app views for signed-in users, and
+ * those render outside this route group. See components/dashboard/dashboard-shell.tsx.
  */
 import { requireDashboardSession } from '@/lib/auth/guards';
 

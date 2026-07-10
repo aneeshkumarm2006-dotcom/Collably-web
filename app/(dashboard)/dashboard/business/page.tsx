@@ -19,6 +19,8 @@ import { formatCompactNumber, formatCompactCurrency, initials } from '@/lib/form
 import { applicantView } from '@/lib/business/applicant';
 import { DashboardContainer, PageHeader } from '@/components/dashboard/page-shell';
 import { EmptyState } from '@/components/shared/empty-state';
+import { Reveal } from '@/components/shared/reveal';
+import { StatValue } from '@/components/business/stat-value';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = { title: 'Business Dashboard' };
@@ -31,7 +33,10 @@ function greeting(): string {
   return 'Good evening';
 }
 
-/** A restyled overview stat tile: soft corner blob, colored glyph, Bricolage value. */
+/**
+ * A restyled overview stat tile matching the design: a 38px tinted icon tile
+ * top-left, a mono delta pill top-right, a 28px tabular value, then the label.
+ */
 function StatTile({
   label,
   value,
@@ -40,30 +45,86 @@ function StatTile({
   delta,
 }: {
   label: string;
-  value: string | number;
+  value: React.ReactNode;
   icon: React.ReactNode;
   /** Tailwind classes for the glyph tile bg + text + the corner blob color. */
   glyph: { tile: string; blob: string };
+  /** `className` carries the pill's soft bg + text tone. */
   delta?: { text: string; className: string };
 }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-hair bg-card p-[18px] shadow-card">
-      <div
-        aria-hidden
-        className={`pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-60 blur-2xl ${glyph.blob}`}
-      />
-      <div
-        className={`relative inline-flex h-11 w-11 items-center justify-center rounded-xl ${glyph.tile} [&_svg]:h-5 [&_svg]:w-5`}
-      >
-        {icon}
+    <div className="r rounded-lg border border-hair bg-card p-[18px] shadow-card lift">
+      <div className="flex items-start justify-between gap-2">
+        <div
+          className={`inline-flex h-[38px] w-[38px] items-center justify-center rounded-md ${glyph.tile} [&_svg]:h-5 [&_svg]:w-5`}
+        >
+          {icon}
+        </div>
+        {delta && (
+          <span
+            className={`num inline-flex items-center rounded-[6px] px-2 py-1 font-mono text-[12px] font-semibold ${delta.className}`}
+          >
+            {delta.text}
+          </span>
+        )}
       </div>
-      <div className="relative mt-4 text-[13px] font-semibold text-muted">{label}</div>
-      <div className="relative mt-1 font-display text-[30px] font-extrabold leading-none tracking-tight text-ink">
+      <div className="num mt-3.5 font-mono text-[28px] font-bold leading-none tracking-tight text-ink">
         {value}
       </div>
-      {delta && (
-        <div className={`relative mt-2 text-[12.5px] font-bold ${delta.className}`}>{delta.text}</div>
+      <div className="mt-1 text-[13px] text-muted">{label}</div>
+    </div>
+  );
+}
+
+/**
+ * "Reward budget" progress card from the design. The domain has no monthly
+ * budget cap field, so figures are wired to typed props: `given` is derived from
+ * real campaign reward values, and `budget` is optional — when it's absent (as
+ * today) we render the honest "given" figure without a fabricated cap or bar
+ * rather than hardcode fake money. See the data-gap note in the PR summary.
+ */
+function RewardBudgetCard({
+  given,
+  rewardsCount,
+  budget,
+}: {
+  given: number;
+  rewardsCount: number;
+  budget?: number | null;
+}) {
+  const pct = budget && budget > 0 ? Math.min(100, Math.round((given / budget) * 100)) : null;
+  return (
+    <div className="r lift rounded-lg border border-brand/15 bg-brand-soft p-[18px]">
+      <div className="font-mono text-[11px] font-semibold uppercase tracking-wide text-brand">
+        Reward value given
+      </div>
+      <div className="num mt-1.5 font-mono text-[24px] font-bold leading-none text-ink">
+        {formatCompactCurrency(given)}
+        {budget && budget > 0 && (
+          <span className="ml-1 text-[14px] font-semibold text-muted">
+            of {formatCompactCurrency(budget)}
+          </span>
+        )}
+      </div>
+      {pct !== null && (
+        <div
+          className="mt-3 h-2.5 overflow-hidden rounded-full bg-card"
+          role="progressbar"
+          aria-valuenow={given}
+          aria-valuemin={0}
+          aria-valuemax={budget ?? undefined}
+          aria-label="Reward budget used"
+        >
+          <div
+            className="h-full rounded-full bg-brand transition-[width] duration-700 ease-out"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
       )}
+      <div className="mt-2 text-[12px] font-semibold text-muted">
+        {rewardsCount} reward{rewardsCount === 1 ? '' : 's'} given across active &amp; completed
+        campaigns
+      </div>
     </div>
   );
 }
@@ -120,7 +181,7 @@ export default async function BusinessHomePage() {
         title={`${greeting()}, ${businessName}`}
         subtitle={subtitle}
         action={
-          <Button asChild size="pill-sm">
+          <Button asChild size="pill-sm" className="active:scale-[0.98]">
             <Link href="/dashboard/business/campaigns/new">
               <Plus className="h-4 w-4" /> New campaign
             </Link>
@@ -129,48 +190,48 @@ export default async function BusinessHomePage() {
       />
 
       {/* Stat grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Reveal className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatTile
           label="Active campaigns"
-          value={activeCampaigns.length}
+          value={<StatValue value={activeCampaigns.length} />}
           icon={<Flag />}
           glyph={{ tile: 'bg-brand-soft text-brand', blob: 'bg-brand-soft' }}
           delta={
             activeCampaigns.length > 0
-              ? { text: `${activeCampaigns.length} filling fast`, className: 'text-brand' }
+              ? { text: `${activeCampaigns.length} filling fast`, className: 'bg-brand-soft text-brand' }
               : undefined
           }
         />
         <StatTile
           label="Total applicants"
-          value={formatCompactNumber(totalApplications)}
+          value={<StatValue value={totalApplications} format="compactNumber" />}
           icon={<Star />}
           glyph={{ tile: 'bg-grape-soft text-grape', blob: 'bg-grape-soft' }}
           delta={
             pending.length > 0
-              ? { text: `▲ ${pending.length} this week`, className: 'text-grape' }
+              ? { text: `+${pending.length} this week`, className: 'bg-success-soft text-success' }
               : undefined
           }
         />
         <StatTile
           label="Content approved"
-          value={approvedContent}
+          value={<StatValue value={approvedContent} />}
           icon={<CheckCircle2 />}
-          glyph={{ tile: 'bg-mint-soft text-mint', blob: 'bg-mint-soft' }}
+          glyph={{ tile: 'bg-money-soft text-money', blob: 'bg-money-soft' }}
         />
         <StatTile
           label="Reward value given"
-          value={formatCompactCurrency(rewardValueGiven)}
+          value={<StatValue value={rewardValueGiven} format="compactCurrency" />}
           icon={<DollarSign />}
           glyph={{ tile: 'bg-warn-soft text-warn', blob: 'bg-warn-soft' }}
         />
-      </div>
+      </Reveal>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <Reveal className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)]">
         {/* Active campaigns */}
-        <section className="rounded-2xl border border-hair bg-card p-[18px] shadow-card">
+        <section className="r rounded-lg border border-hair bg-card p-[18px] shadow-card">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-lg font-bold text-ink">Active campaigns</h2>
+            <h2 className="text-lg font-bold text-ink">Active campaigns</h2>
             <Link
               href="/dashboard/business/campaigns"
               className="text-[13px] font-bold text-brand hover:underline"
@@ -184,7 +245,7 @@ export default async function BusinessHomePage() {
               title="No campaigns yet"
               description="Post your first campaign to start receiving applications from creators."
               action={
-                <Button asChild size="pill-sm">
+                <Button asChild size="pill-sm" className="active:scale-[0.98]">
                   <Link href="/dashboard/business/campaigns/new">
                     <Plus className="h-4 w-4" /> Create a campaign
                   </Link>
@@ -197,10 +258,10 @@ export default async function BusinessHomePage() {
                 <li key={c._id}>
                   <Link
                     href={`/dashboard/business/campaigns/${c._id}/applications`}
-                    className="flex items-center gap-3.5 rounded-xl border border-hair p-3 transition-colors hover:bg-secondary"
+                    className="flex items-center gap-3.5 rounded-md border border-hair p-3 transition-colors hover:bg-secondary"
                   >
                     <span
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-display text-[15px] font-extrabold text-white"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-[15px] font-extrabold text-white"
                       style={{ background: categoryGradient(c.category) }}
                     >
                       {initials(c.title)}
@@ -215,7 +276,7 @@ export default async function BusinessHomePage() {
                       </p>
                     </div>
                     <span className="shrink-0 text-right">
-                      <span className="font-display text-lg font-extrabold text-ink">
+                      <span className="num font-mono text-lg font-bold text-ink">
                         {c.applicationsCount}
                       </span>
                       <span className="block text-[11px] font-semibold text-faint">applicants</span>
@@ -227,10 +288,11 @@ export default async function BusinessHomePage() {
           )}
         </section>
 
-        {/* New applications */}
-        <section className="rounded-2xl border border-hair bg-card p-[18px] shadow-card">
+        {/* Right rail: recent applicants + reward budget */}
+        <div className="flex flex-col gap-6">
+        <section className="r rounded-lg border border-hair bg-card p-[18px] shadow-card">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-lg font-bold text-ink">New applications</h2>
+            <h2 className="text-lg font-bold text-ink">New applications</h2>
             <Link
               href="/dashboard/business/applications"
               className="text-[13px] font-bold text-brand hover:underline"
@@ -247,10 +309,10 @@ export default async function BusinessHomePage() {
                 return (
                   <li
                     key={app._id}
-                    className="flex items-center gap-3.5 rounded-xl border border-hair p-3"
+                    className="flex items-center gap-3.5 rounded-md border border-hair p-3"
                   >
                     <span
-                      className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full font-display text-[14px] font-extrabold text-white"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full text-[14px] font-extrabold text-white"
                       style={view.avatar ? undefined : { background: categoryGradient(view.niche[0]) }}
                     >
                       {view.avatar ? (
@@ -288,7 +350,7 @@ export default async function BusinessHomePage() {
           {pending.length > 0 && (
             <Link
               href="/dashboard/business/applications"
-              className="mt-4 flex items-center justify-between rounded-xl bg-brand-soft px-3.5 py-2.5 text-[13px] font-bold text-brand transition-opacity hover:opacity-80"
+              className="mt-4 flex items-center justify-between rounded-md bg-brand-soft px-3.5 py-2.5 text-[13px] font-bold text-brand transition-opacity hover:opacity-80"
             >
               <span className="inline-flex items-center gap-2">
                 <BadgeCheck className="h-4 w-4" />
@@ -298,7 +360,17 @@ export default async function BusinessHomePage() {
             </Link>
           )}
         </section>
-      </div>
+
+          <RewardBudgetCard
+            given={rewardValueGiven}
+            rewardsCount={approvedContent}
+            // No monthly-budget field exists in the domain yet; passing null keeps
+            // the card honest (given amount only, no fabricated cap). Wire a real
+            // budget here once the API exposes one.
+            budget={null}
+          />
+        </div>
+      </Reveal>
     </DashboardContainer>
   );
 }

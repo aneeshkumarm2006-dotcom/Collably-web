@@ -19,6 +19,7 @@ import { config } from '@/lib/config';
 export type AnalyticsEvent =
   | 'cta_get_started' // hero / nav / live-rail "get started" / "sign up to apply"
   | 'cta_login' // nav "log in"
+  | 'cta_browse_all' // live-rail "browse all" → sign-in gate (guests)
   | 'signup_started' // role chosen on /signup
   | 'signup_completed' // account created
   | 'login_completed' // signed in

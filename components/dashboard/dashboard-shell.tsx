@@ -23,10 +23,13 @@ export function DashboardShell({
   role,
   user,
   children,
+  highlight,
 }: {
   role: 'creator' | 'business';
   user: SessionUser;
   children: React.ReactNode;
+  /** Card pinned above the sidebar profile chip (e.g. creator "Rewards earned"). */
+  highlight?: React.ReactNode;
 }) {
   const pathname = usePathname() ?? `/dashboard/${role}`;
   const { logout } = useAuth();
@@ -52,17 +55,43 @@ export function DashboardShell({
     item.href === messagesHref && unreadMessages > 0 ? { ...item, badge: unreadMessages } : item,
   );
 
+  const crumbs = dashboardBreadcrumbs(pathname, role);
+  // Per the creator design the top bar shows a mono date eyebrow + the page
+  // title in place of the breadcrumb trail. Business keeps its breadcrumbs.
+  const creatorEyebrow =
+    role === 'creator'
+      ? new Intl.DateTimeFormat('en-US', {
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric',
+        }).format(new Date())
+      : undefined;
+  const creatorTitle =
+    role === 'creator'
+      ? crumbs.length > 1
+        ? crumbs[crumbs.length - 1]?.label
+        : (DASH_NAV.creator.main[0]?.label ?? 'Overview')
+      : undefined;
+
   return (
-    <div className="flex min-h-screen bg-page">
+    // `.surface-app` lives HERE, not on the (dashboard) route-group layout: this
+    // shell also wraps the public-app views (explore, campaign/profile detail)
+    // for signed-in users via `PublicAppChrome`, which renders outside that
+    // group. Scoping it to the layout would leave the dashboard chrome sitting
+    // on the public surface's cream tokens.
+    <div className="surface-app flex min-h-screen bg-page text-ink">
       <DashboardSidebar
         role={role}
         user={{ name: user.name, role: user.role, avatar: user.avatar }}
         items={navItems}
         onLogout={onLogout}
+        highlight={highlight}
       />
       <div className="flex min-w-0 flex-1 flex-col">
         <DashboardTopBar
-          breadcrumbs={dashboardBreadcrumbs(pathname, role)}
+          breadcrumbs={crumbs}
+          eyebrow={creatorEyebrow}
+          title={creatorTitle}
           user={user}
           notifications={items}
           unreadNotifications={unreadNotifications}
@@ -74,17 +103,9 @@ export function DashboardShell({
           notificationsHref={`/dashboard/${role}/notifications`}
           onLogout={onLogout}
         />
-        {/* Bottom padding on mobile clears the fixed bottom tab bar. Light content
-            area with a subtle brand/grape radial wash per the mockups. */}
-        <main
-          className="flex-1 bg-elev pb-20 md:pb-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(1100px 560px at 100% -8%,#E9F1FF 0,transparent 55%), radial-gradient(820px 520px at -8% 18%,#F1ECFF 0,transparent 52%)',
-          }}
-        >
-          {children}
-        </main>
+        {/* Flat grey content area, per the dashboard designs. Bottom padding on
+            mobile clears the fixed bottom tab bar. */}
+        <main className="flex-1 bg-page pb-20 md:pb-0">{children}</main>
       </div>
     </div>
   );

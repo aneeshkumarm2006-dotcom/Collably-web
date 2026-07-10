@@ -24,7 +24,8 @@ import {
 } from '@/components/shared/filter-sidebar';
 import { CampaignCard } from '@/components/shared/campaign-card';
 import { EmptyState } from '@/components/shared/empty-state';
-import { Button } from '@/components/ui/button';
+import { Reveal } from '@/components/shared/reveal';
+import { StickerButton, Eyebrow } from '@/components/shared/sticker';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   Select,
@@ -133,9 +134,10 @@ export function ExploreClient({
   return (
     <>
       {/* Header */}
-      <div className="border-b border-hair bg-card">
+      <div className="border-b-2 border-ink bg-card">
         <div className="mx-auto max-w-[1320px] px-6 pb-6 pt-9">
-          <h1 className="font-display text-[32px] font-extrabold leading-tight tracking-tight text-ink sm:text-[40px]">
+          <Eyebrow>Explore</Eyebrow>
+          <h1 className="mt-2 font-display text-[32px] font-extrabold leading-tight tracking-tight text-ink sm:text-[40px]">
             Explore local collabs
           </h1>
           <p className="mt-2 max-w-2xl text-[15px] text-muted">
@@ -151,10 +153,10 @@ export function ExploreClient({
                 onChange={(e) => setSearchDraft(e.target.value)}
                 placeholder="Search campaigns, brands, or rewards…"
                 aria-label="Search campaigns"
-                className="w-full rounded-md border border-hair bg-card py-3 pl-11 pr-[15px] text-[15px] text-ink outline-none transition-colors placeholder:text-faint focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/20"
+                className="w-full rounded-md border-2 border-ink bg-card py-3 pl-11 pr-[15px] text-[15px] text-ink outline-none transition-shadow placeholder:text-faint focus-visible:border-brand focus-visible:shadow-focus"
               />
             </div>
-            <span className="inline-flex items-center gap-2 rounded-md border border-hair bg-card px-[15px] py-3 text-[14px] font-semibold text-ink">
+            <span className="inline-flex items-center gap-2 rounded-md border-2 border-ink bg-card px-[15px] py-3 text-[14px] font-semibold text-ink shadow-sticker-muted">
               <MapPin className="h-[18px] w-[18px] text-brand" aria-hidden />
               {locationLabel}
             </span>
@@ -186,7 +188,7 @@ export function ExploreClient({
       <div className="mx-auto grid max-w-[1320px] gap-8 px-6 py-7 md:grid-cols-[260px_1fr]">
         {/* Desktop sidebar */}
         <aside className="hidden md:block">
-          <div className="sticky top-[88px] rounded-2xl border border-hair bg-card px-4 pb-3 shadow-card">
+          <div className="sticker sticky top-[88px] rounded-xl bg-card px-4 pb-3">
             <FilterSidebar value={filters} onChange={setFilters} />
           </div>
         </aside>
@@ -213,7 +215,7 @@ export function ExploreClient({
             </div>
             <div className="flex items-center gap-3">
               <div
-                className="inline-flex rounded-[11px] bg-[#EEF1F8] p-[3px]"
+                className="inline-flex rounded-md border-2 border-ink bg-elev p-1"
                 role="group"
                 aria-label="View mode"
               >
@@ -221,9 +223,9 @@ export function ExploreClient({
                   type="button"
                   onClick={() => setView('list')}
                   aria-pressed={view === 'list'}
-                  className={`inline-flex items-center gap-1.5 rounded-[9px] px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+                  className={`inline-flex items-center gap-1.5 rounded-[7px] px-3 py-1.5 text-[13px] font-semibold transition-colors ${
                     view === 'list'
-                      ? 'bg-card text-ink shadow-sm'
+                      ? 'bg-brand text-white'
                       : 'text-muted hover:text-ink'
                   }`}
                 >
@@ -233,9 +235,9 @@ export function ExploreClient({
                   type="button"
                   onClick={() => setView('map')}
                   aria-pressed={view === 'map'}
-                  className={`inline-flex items-center gap-1.5 rounded-[9px] px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+                  className={`inline-flex items-center gap-1.5 rounded-[7px] px-3 py-1.5 text-[13px] font-semibold transition-colors ${
                     view === 'map'
-                      ? 'bg-card text-ink shadow-sm'
+                      ? 'bg-brand text-white'
                       : 'text-muted hover:text-ink'
                   }`}
                 >
@@ -259,7 +261,7 @@ export function ExploreClient({
 
           {/* Guest banner */}
           {isGuest && (
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-brand/30 bg-brand-soft px-5 py-4">
+            <div className="sticker mb-6 flex flex-wrap items-center justify-between gap-3 rounded-card bg-brand-soft px-5 py-4">
               <div className="flex items-center gap-3">
                 <Sparkles className="h-5 w-5 shrink-0 text-brand" />
                 <p className="text-sm text-ink">
@@ -267,9 +269,9 @@ export function ExploreClient({
                   your niche.
                 </p>
               </div>
-              <Button asChild size="sm">
+              <StickerButton asChild tone="brand" size="sm">
                 <Link href="/signup">Sign up to apply</Link>
-              </Button>
+              </StickerButton>
             </div>
           )}
 
@@ -282,9 +284,9 @@ export function ExploreClient({
               title="Couldn’t load campaigns"
               description="Something went wrong fetching campaigns. Please try again."
               action={
-                <Button onClick={() => query.refetch()} variant="outline">
+                <StickerButton tone="white" onClick={() => query.refetch()}>
                   Retry
-                </Button>
+                </StickerButton>
               }
             />
           ) : campaigns.length === 0 ? (
@@ -297,16 +299,21 @@ export function ExploreClient({
             <CampaignMap campaigns={campaigns} className="min-h-[520px]" />
           ) : (
             <>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {campaigns.map((c) => (
-                  <CampaignCard
-                    key={c._id}
-                    campaign={toCampaignCardData(c, {
-                      applicationStatus: applicationStatusByCampaign?.[c._id],
-                    })}
-                  />
-                ))}
-              </div>
+              {/* Reveal the results as one block: per-card `.r` is unsafe here
+                  because infinite-scroll appends new cards after the observer is
+                  set up, which would leave them stuck hidden. */}
+              <Reveal>
+                <div className="r grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {campaigns.map((c) => (
+                    <CampaignCard
+                      key={c._id}
+                      campaign={toCampaignCardData(c, {
+                        applicationStatus: applicationStatusByCampaign?.[c._id],
+                      })}
+                    />
+                  ))}
+                </div>
+              </Reveal>
 
               {/* Infinite-scroll sentinel + fetching state */}
               <div ref={sentinelRef} className="h-10" aria-hidden />
@@ -340,10 +347,10 @@ function CategoryChip({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-full border-[1.5px] px-[15px] py-[9px] text-[13.5px] font-bold transition-colors ${
+      className={`rounded-full border-2 border-ink px-[15px] py-[9px] font-display text-[13.5px] font-semibold transition-all ${
         active
-          ? 'border-brand bg-brand text-white'
-          : 'border-hair bg-card text-muted hover:border-brand hover:text-brand'
+          ? 'bg-brand text-white shadow-sticker-active'
+          : 'bg-elev text-ink shadow-sticker-muted hover:-translate-y-0.5 hover:bg-brand-soft'
       }`}
     >
       {label}
@@ -355,7 +362,7 @@ function CampaignGridSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="overflow-hidden rounded-lg border border-hair bg-card">
+        <div key={i} className="sticker overflow-hidden rounded-card bg-card">
           <Skeleton className="aspect-video w-full rounded-none" />
           <div className="space-y-3 p-[18px]">
             <Skeleton className="h-5 w-2/3" />

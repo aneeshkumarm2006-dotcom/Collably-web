@@ -42,8 +42,8 @@ const SOCIALS = [
 /** Footer: always-dark, 4-column. Brand + tagline + socials, then link columns. */
 export function Footer({ className }: { className?: string }) {
   return (
-    <footer className={cn('bg-dark-sidebar text-white/60', className)}>
-      <div className="mx-auto max-w-[1600px] px-6 py-16 lg:px-10">
+    <footer className={cn('border-t-outline border-ink bg-band text-white/60', className)}>
+      <div className="mx-auto max-w-shell px-6 py-16 lg:px-10">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
           <div className="col-span-2 md:col-span-1">
             <BrandMark onDark />

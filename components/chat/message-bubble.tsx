@@ -15,11 +15,15 @@ export function MessageBubble({
   message,
   mine,
   tight = false,
+  animateIn = false,
 }: {
   message: Message;
   mine: boolean;
   /** Same sender as the message just above: tighten spacing, drop the tail. */
   tight?: boolean;
+  /** Newest bubble: play a one-shot rise/fade as it mounts. Pure CSS, so it
+   *  degrades to a plain visible bubble with JS off or reduced motion. */
+  animateIn?: boolean;
 }) {
   const pending = message._id.startsWith('temp-');
 
@@ -29,13 +33,14 @@ export function MessageBubble({
     >
       <div
         className={cn(
-          'max-w-[78%] rounded-2xl px-3 py-2 shadow-sm',
-          mine ? 'bg-brand text-white' : 'border border-hair bg-card text-ink',
-          mine && !tight && 'rounded-tr-sm',
-          !mine && !tight && 'rounded-tl-sm',
+          'max-w-[74%] px-3.5 py-2.5 shadow-[0_1px_1px_rgba(0,0,0,0.04)]',
+          mine
+            ? 'rounded-[14px_4px_14px_14px] bg-brand text-white'
+            : 'rounded-[4px_14px_14px_14px] bg-card text-ink',
+          animateIn && 'animate-ls-rise',
         )}
       >
-        <p className="whitespace-pre-wrap break-words text-sm leading-snug">{message.body}</p>
+        <p className="whitespace-pre-wrap break-words text-[14px] leading-[1.45]">{message.body}</p>
         <div
           className={cn(
             'mt-0.5 flex items-center justify-end gap-1',
@@ -61,7 +66,7 @@ export function MessageBubble({
 export function DateSeparator({ label }: { label: string }) {
   return (
     <div className="my-3 flex justify-center">
-      <span className="rounded-md bg-secondary px-3 py-1 text-[11px] font-semibold tracking-wide text-muted">
+      <span className="rounded-full bg-secondary px-3 py-1 text-[11.5px] font-semibold tracking-wide text-muted">
         {label}
       </span>
     </div>
@@ -72,7 +77,7 @@ export function DateSeparator({ label }: { label: string }) {
 export function TypingBubble() {
   return (
     <div className="flex justify-start px-3 pt-2.5">
-      <div className="flex items-center gap-1 rounded-2xl rounded-tl-sm border border-hair bg-card px-3.5 py-3">
+      <div className="flex items-center gap-1 rounded-[4px_14px_14px_14px] border border-hair bg-card px-3.5 py-3">
         {[0, 1, 2].map((i) => (
           <span
             key={i}

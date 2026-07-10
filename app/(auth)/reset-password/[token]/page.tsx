@@ -16,14 +16,7 @@ export default async function ResetPasswordPage({
   const { token } = await params;
 
   return (
-    <AuthLayout
-      tagline="Almost there. Set a new password."
-      subtitle="Pick a strong password and we'll log you straight back in."
-      proof={[
-        { value: '8,500+', label: 'creators' },
-        { value: '1,200+', label: 'brands' },
-      ]}
-    >
+    <AuthLayout>
       <ResetPasswordForm token={token} />
     </AuthLayout>
   );

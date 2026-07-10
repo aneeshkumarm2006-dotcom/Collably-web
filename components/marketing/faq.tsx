@@ -33,7 +33,7 @@ export function Faq({
         return (
           <div
             key={i}
-            className="rounded-2xl border border-hair bg-card shadow-card transition"
+            className="sticker rounded-card bg-card transition"
           >
             <h3 className="m-0">
               <button
@@ -48,8 +48,8 @@ export function Faq({
                 <span
                   aria-hidden
                   className={cn(
-                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xl font-medium leading-none transition-colors',
-                    isOpen ? 'bg-brand text-white' : 'bg-brand-soft text-brand',
+                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-outline border-ink text-xl font-medium leading-none transition-colors',
+                    isOpen ? 'bg-brand text-white' : 'bg-yellow text-ink',
                   )}
                 >
                   {isOpen ? '−' : '+'}

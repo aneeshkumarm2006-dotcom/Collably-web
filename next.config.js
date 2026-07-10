@@ -39,6 +39,18 @@ const nextConfig = {
   // script/host is missing, add it here (or switch this one header to
   // `Content-Security-Policy-Report-Only` while tuning).
   async headers() {
+    // Next.js dev-mode Fast Refresh evaluates its HMR runtime with `eval`, which
+    // a strict `script-src` blocks — the whole client bundle then fails to boot
+    // and the page renders as a bare server shell. `unsafe-eval` is added ONLY in
+    // development; the production CSP stays locked down (no eval).
+    const isDev = process.env.NODE_ENV !== 'production';
+    const scriptSrc = [
+      "script-src 'self' 'unsafe-inline'",
+      isDev ? "'unsafe-eval'" : '',
+      'https://www.googletagmanager.com https://www.google-analytics.com https://plausible.io https://maps.googleapis.com https://maps.gstatic.com',
+    ]
+      .filter(Boolean)
+      .join(' ');
     const csp = [
       "default-src 'self'",
       "base-uri 'self'",
@@ -48,7 +60,7 @@ const nextConfig = {
       "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://cdn.pixabay.com https://maps.gstatic.com https://maps.googleapis.com",
       "font-src 'self' data: https://fonts.gstatic.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://plausible.io https://maps.googleapis.com https://maps.gstatic.com",
+      scriptSrc,
       "connect-src 'self' https: wss:",
     ].join('; ');
     return [

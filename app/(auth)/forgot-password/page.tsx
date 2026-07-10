@@ -10,14 +10,7 @@ export const metadata: Metadata = {
 
 export default function ForgotPasswordPage() {
   return (
-    <AuthLayout
-      tagline="Forgot your password? No problem."
-      subtitle="We'll email you a secure link so you can set a new one and get right back to your collabs."
-      proof={[
-        { value: '30 min', label: 'link validity' },
-        { value: 'Secure', label: 'one-time token' },
-      ]}
-    >
+    <AuthLayout>
       <ForgotPasswordForm />
     </AuthLayout>
   );

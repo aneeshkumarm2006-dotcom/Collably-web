@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 
 import { buildMetadata } from '@/lib/seo';
+import { BUSINESS_TIERS } from '@/lib/marketing-content';
 import { Section, SectionLabel } from '@/components/marketing/section';
 import { CtaBand } from '@/components/marketing/cta-band';
 import { Faq } from '@/components/marketing/faq';
-import { PricingTiers, type CreatorBanner, type BusinessTier } from './pricing-tiers';
+import { PricingTiers, type CreatorBanner } from './pricing-tiers';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Pricing',
@@ -21,51 +22,6 @@ const CREATOR_BANNER: CreatorBanner = {
   cta: { label: 'Join as a creator', href: '/signup' },
 };
 
-const BUSINESS_TIERS: BusinessTier[] = [
-  {
-    name: 'Starter',
-    monthly: 0,
-    annual: 0,
-    note: 'Pay only in the rewards you offer.',
-    cta: { label: 'Get started', href: '/signup' },
-    features: [
-      'Post collabs & receive pitches',
-      'Review applications & accept creators',
-      'Verify submissions end-to-end',
-      'Direct messaging with creators',
-      '1 active collab at a time',
-    ],
-  },
-  {
-    name: 'Growth',
-    monthly: 49,
-    annual: 39,
-    note: 'For growing local brands running steady collabs.',
-    cta: { label: 'Start Growth', href: '/signup' },
-    featured: true,
-    features: [
-      'Everything in Starter',
-      'Up to 10 active collabs',
-      'Priority placement in Explore',
-      'Campaign analytics dashboard',
-      'Faster support',
-    ],
-  },
-  {
-    name: 'Pro',
-    monthly: 99,
-    annual: 79,
-    note: 'For multi-location brands and teams at scale.',
-    cta: { label: 'Talk to sales', href: '/contact' },
-    features: [
-      'Everything in Growth',
-      'Unlimited active collabs',
-      'Team seats & roles',
-      'Advanced analytics & exports',
-      'Priority support',
-    ],
-  },
-];
 
 const PRICING_FAQS = [
   {
@@ -110,7 +66,7 @@ export default function PricingPage() {
         </p>
       </Section>
 
-      <Section tone="card">
+      <Section tone="card" className="border-t-outline border-ink">
         <div className="mb-12 text-center">
           <SectionLabel className="justify-center">FAQ</SectionLabel>
           <h2 className="text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
@@ -123,6 +79,7 @@ export default function PricingPage() {
       </Section>
 
       <CtaBand
+        className="border-t-outline border-ink"
         title="Start free, today."
         subtitle="Join as a creator or list your business. No card required to get started."
         primary={{ label: 'Join as a creator', href: '/for-creators' }}

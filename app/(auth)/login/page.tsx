@@ -16,15 +16,7 @@ export default async function LoginPage({
   const { next } = await searchParams;
 
   return (
-    <AuthLayout
-      tagline="Where collabs happen."
-      subtitle="Log back in to manage your campaigns, review applications, and keep your collabs moving."
-      proof={[
-        { value: '8,500+', label: 'creators' },
-        { value: '1,200+', label: 'brands' },
-        { value: '4,200+', label: 'collabs done' },
-      ]}
-    >
+    <AuthLayout next={next}>
       <LoginForm next={next} />
     </AuthLayout>
   );

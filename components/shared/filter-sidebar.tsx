@@ -13,7 +13,6 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -205,10 +204,16 @@ export function FilterSidebarSheet(props: FilterSidebarProps & { triggerClassNam
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className={triggerClassName}>
+        <button
+          type="button"
+          className={cn(
+            'sticker press inline-flex h-11 select-none items-center justify-center gap-2 rounded-md bg-card px-5 font-display text-[15px] font-semibold text-ink',
+            triggerClassName,
+          )}
+        >
           <SlidersHorizontal className="h-4 w-4" />
           Filters
-        </Button>
+        </button>
       </SheetTrigger>
       <SheetContent side="left" className="w-[min(300px,85vw)] overflow-y-auto">
         <SheetHeader className="px-0 pt-0">

@@ -5,6 +5,9 @@ import { buildMetadata } from '@/lib/seo';
 import { PLATFORM_STATS } from '@/lib/marketing-content';
 import { Container, Section, SectionLabel } from '@/components/marketing/section';
 import { CtaBand } from '@/components/marketing/cta-band';
+import { StatFigure } from '@/components/marketing/count-up';
+import { Reveal } from '@/components/shared/reveal';
+import { StickerCard, Pill } from '@/components/shared/sticker';
 
 export const metadata: Metadata = buildMetadata({
   title: 'About',
@@ -23,7 +26,7 @@ const VALUES = [
   },
   {
     icon: Sparkles,
-    tone: 'bg-warm-soft text-warm',
+    tone: 'bg-coral text-white',
     title: 'No gatekeeping',
     body: 'Talent and fit beat follower counts. Nano and UGC creators deserve the same shot as anyone.',
   },
@@ -65,62 +68,51 @@ export default function AboutPage() {
       {/* Stats band */}
       <section className="bg-page pb-16 sm:pb-20">
         <Container>
-          <div
-            className="relative overflow-hidden rounded-[22px] px-6 py-12 text-white sm:px-12"
-            style={{ background: '#0A1526' }}
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  'radial-gradient(520px 320px at 88% 12%, rgba(24,119,242,0.22), transparent 60%), radial-gradient(420px 300px at 6% 90%, rgba(123,97,255,0.18), transparent 60%)',
-              }}
-            />
-            <div className="relative grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="sticker relative overflow-hidden rounded-3xl bg-band px-6 py-12 text-white shadow-sticker-lg sm:px-12">
+            <Reveal className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
               {PLATFORM_STATS.map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="font-display text-5xl font-extrabold tracking-[-0.03em] sm:text-6xl">
-                    {stat.value}
+                <div key={stat.label} className="pop text-center">
+                  <div className="font-display text-5xl font-extrabold tracking-[-0.03em] text-yellow sm:text-6xl">
+                    <StatFigure value={stat.value} />
                   </div>
-                  <div className="mt-2 text-sm font-medium text-[#9DB2C9]">{stat.label}</div>
+                  <div className="mt-2 font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-white/70">
+                    {stat.label}
+                  </div>
                 </div>
               ))}
-            </div>
+            </Reveal>
           </div>
         </Container>
       </section>
 
       {/* What we believe */}
-      <Section tone="card">
+      <Section tone="card" className="border-t-outline border-ink">
         <div className="mb-12 text-center">
           <SectionLabel className="justify-center">Our values</SectionLabel>
           <h2 className="mt-4 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
             What we believe
           </h2>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
+        <Reveal className="grid gap-6 md:grid-cols-3">
           {VALUES.map((v) => (
-            <div
-              key={v.title}
-              className="rounded-2xl border border-hair bg-card p-7 shadow-card transition hover:-translate-y-1 hover:shadow-card-hover"
-            >
-              <span className={`flex h-12 w-12 items-center justify-center rounded-2xl ${v.tone}`}>
+            <StickerCard key={v.title} lift className="group r p-7 hover:!-translate-y-1">
+              <span
+                className={`flex h-12 w-12 items-center justify-center rounded-card border-outline border-ink transition-transform duration-150 group-hover:rotate-3 ${v.tone}`}
+              >
                 <v.icon className="h-5 w-5" />
               </span>
               <h3 className="mt-5 font-display text-lg font-bold text-ink">{v.title}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-muted">{v.body}</p>
-            </div>
+            </StickerCard>
           ))}
-        </div>
+        </Reveal>
         <div className="mt-12 flex justify-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft px-4 py-2 text-sm font-bold text-brand">
-            Proudly built in Canada
-          </span>
+          <Pill tone="brand">Proudly built in Canada</Pill>
         </div>
       </Section>
 
       <CtaBand
+        className="border-t-outline border-ink"
         title="Come build with us."
         subtitle="Whether you create or run a local business, there's a place for you on LocalShout."
         primary={{ label: 'Join as a creator', href: '/for-creators' }}

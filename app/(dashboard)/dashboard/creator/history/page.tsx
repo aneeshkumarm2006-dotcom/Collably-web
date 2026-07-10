@@ -4,7 +4,8 @@ import { ExternalLink, History } from 'lucide-react';
 
 import { serverApi } from '@/lib/api/server';
 import { formatDate } from '@/lib/format';
-import { DashboardContainer, PageHeader } from '@/components/dashboard/page-shell';
+import { DashboardContainer } from '@/components/dashboard/page-shell';
+import { Reveal } from '@/components/shared/reveal';
 import { CreatorApplicationRow } from '@/components/creator/application-row';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
@@ -25,10 +26,8 @@ export default async function CreatorHistoryPage() {
 
   return (
     <DashboardContainer>
-      <PageHeader title="History" subtitle="Every collab you've completed." />
-
       {completed.length === 0 ? (
-        <div className="rounded-2xl border border-hair bg-card shadow-card">
+        <div className="rounded-lg border border-hair bg-card">
           <EmptyState
             icon={<History />}
             title="No completed collabs yet"
@@ -41,32 +40,31 @@ export default async function CreatorHistoryPage() {
           />
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-hair bg-card shadow-card">
-          <div className="flex items-center gap-4 border-b border-hair bg-secondary px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
-            <span className="flex-[2]">Collab</span>
-            <span className="hidden flex-1 sm:block">Reward</span>
-            <span className="hidden flex-1 md:block">Completed</span>
-            <span className="shrink-0">Status</span>
+        <Reveal className="overflow-hidden rounded-lg border border-hair bg-card">
+          <div className="grid grid-cols-[minmax(0,2.4fr)_auto] gap-3 border-b border-hair px-[18px] py-3 text-[11px] font-bold uppercase tracking-[0.04em] text-faint sm:grid-cols-[minmax(0,2.4fr)_1fr_1fr_auto]">
+            <span>Collab</span>
+            <span className="hidden sm:block">Reward</span>
+            <span className="hidden sm:block">Completed</span>
+            <span className="text-right">Status</span>
           </div>
-          <div className="divide-y divide-hair">
-            {completed.map((a) => (
-              <CreatorApplicationRow
-                key={a._id}
-                application={a}
-                dateLabel={a.verifiedAt ? `Completed ${formatDate(a.verifiedAt)}` : 'Completed'}
-                actions={
-                  a.submissionLink ? (
-                    <Button asChild variant="outline" size="sm">
-                      <a href={a.submissionLink} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="h-4 w-4" /> View post
-                      </a>
-                    </Button>
-                  ) : undefined
-                }
-              />
-            ))}
-          </div>
-        </div>
+          {completed.map((a) => (
+            <CreatorApplicationRow
+              key={a._id}
+              application={a}
+              className="r"
+              dateLabel={a.verifiedAt ? formatDate(a.verifiedAt) : 'Completed'}
+              actions={
+                a.submissionLink ? (
+                  <Button asChild variant="outline" size="sm">
+                    <a href={a.submissionLink} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="h-4 w-4" /> View post
+                    </a>
+                  </Button>
+                ) : undefined
+              }
+            />
+          ))}
+        </Reveal>
       )}
     </DashboardContainer>
   );

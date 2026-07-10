@@ -3,11 +3,11 @@
 import { useMemo } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
+import { StickerButton } from '@/components/shared/sticker';
 import { OnboardingFrame } from '@/components/onboarding/onboarding-ui';
 
-/** Brand-ish confetti colors (blue / green / soft accents). */
-const CONFETTI_COLORS = ['#1877F2', '#2D88FF', '#31A24C', '#F3A608', '#E7F0FF'];
+/** Sticker-palette confetti (brand blue / money green / yellow / coral / grape). */
+const CONFETTI_COLORS = ['#1877F2', '#31A24C', '#FFC24B', '#FF6B4A', '#7A3FA0'];
 
 type Piece = { left: number; bg: string; duration: number; delay: number; rotate: number };
 
@@ -65,23 +65,21 @@ export function OnboardingCelebration({
         ))}
       </div>
 
-      <div className="relative z-10 rounded-[22px] border border-hair bg-card p-8 text-center shadow-card">
-        <span
-          className="mx-auto mb-6 flex h-[92px] w-[92px] animate-in zoom-in-50 items-center justify-center rounded-full text-white duration-500"
-          style={{ background: 'linear-gradient(135deg,#0064E0,#7B61FF)' }}
-        >
+      <div className="sticker relative z-10 rounded-xl bg-card p-8 text-center">
+        <span className="mx-auto mb-6 flex h-[92px] w-[92px] animate-in zoom-in-50 items-center justify-center rounded-full border-outline border-ink bg-money text-white shadow-sticker duration-500">
           <Check className="h-12 w-12" strokeWidth={3} />
         </span>
         <h1 className="font-display text-[44px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
           {title}
         </h1>
         <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-muted">{message}</p>
-        <Button
+        <StickerButton
           type="button"
-          size="pill"
+          tone="brand"
+          size="lg"
           onClick={onContinue}
           disabled={loading}
-          className="mt-7 w-full shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
+          className="mt-7 w-full"
         >
           {loading ? (
             'Taking you in…'
@@ -90,7 +88,7 @@ export function OnboardingCelebration({
               {ctaLabel} <ArrowRight />
             </>
           )}
-        </Button>
+        </StickerButton>
       </div>
     </OnboardingFrame>
   );

@@ -17,15 +17,7 @@ export default async function SignupPage({
   const { next } = await searchParams;
 
   return (
-    <AuthLayout
-      tagline="Start earning from your audience today."
-      subtitle="Join thousands of Canadian creators and brands making collabs happen, with no agencies and no gatekeeping."
-      proof={[
-        { value: 'Free', label: 'to join' },
-        { value: '0', label: 'follower minimum' },
-        { value: '5 min', label: 'to set up' },
-      ]}
-    >
+    <AuthLayout variant="join" next={next}>
       <SignupForm next={next} />
     </AuthLayout>
   );

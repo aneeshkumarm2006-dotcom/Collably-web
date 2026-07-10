@@ -15,6 +15,7 @@ import { categoryGradient } from '@/lib/domain-meta';
 import { cn } from '@/lib/utils';
 import { StatusBadge } from '@/components/shared/status-badge';
 import { EmptyState } from '@/components/shared/empty-state';
+import { Reveal } from '@/components/shared/reveal';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -64,8 +65,10 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
             onClick={() => setTab(t)}
             aria-pressed={tab === t}
             className={cn(
-              'inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-bold transition-colors',
-              tab === t ? 'bg-brand text-white' : 'bg-secondary text-muted hover:text-ink',
+              'inline-flex items-center gap-1.5 rounded-md border px-3.5 py-1.5 text-[13px] font-bold transition-colors',
+              tab === t
+                ? 'border-ink bg-ink text-white'
+                : 'border-hair bg-card text-muted hover:text-ink',
             )}
           >
             {t}
@@ -79,7 +82,7 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
       {query.isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-[92px] w-full rounded-2xl" />
+            <Skeleton key={i} className="h-[92px] w-full rounded-lg" />
           ))}
         </div>
       ) : query.isError ? (
@@ -106,7 +109,7 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
       ) : rows.length === 0 ? (
         <EmptyState icon={<FileText />} title={`No ${tab.toLowerCase()} applications`} />
       ) : (
-        <div className="space-y-3">
+        <Reveal key={tab} className="space-y-3">
           {rows.map((app) => (
             <ApplicantRow
               key={app._id}
@@ -117,7 +120,7 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
               onReject={() => onDecide(app, 'Rejected')}
             />
           ))}
-        </div>
+        </Reveal>
       )}
     </>
   );
@@ -146,9 +149,9 @@ function ApplicantRow({
     .join(' · ');
 
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-hair bg-card p-[18px] shadow-card">
+    <div className="r lift flex flex-col gap-4 rounded-lg border border-hair bg-card p-[18px] shadow-card sm:flex-row sm:items-start">
       <span
-        className="flex h-[52px] w-[52px] shrink-0 items-center justify-center overflow-hidden rounded-full font-display text-[16px] font-extrabold text-white"
+        className="flex h-[52px] w-[52px] shrink-0 items-center justify-center overflow-hidden rounded-full text-[16px] font-extrabold text-white"
         style={view.avatar ? undefined : { background: categoryGradient(view.niche[0]) }}
       >
         {view.avatar ? (
@@ -162,6 +165,9 @@ function ApplicantRow({
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="text-[16px] font-bold text-ink">{view.name}</h3>
+          {view.handle && (
+            <span className="font-mono text-[12px] text-muted">{view.handle}</span>
+          )}
           {app.status !== 'Pending' && <StatusBadge status={app.status} />}
         </div>
         {subline && <p className="mt-0.5 truncate text-[13px] text-muted">{subline}</p>}
@@ -170,13 +176,16 @@ function ApplicantRow({
             Applied to <b className="text-ink">{app.campaign.title}</b>
           </p>
         )}
+        {app.pitch && (
+          <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-body">“{app.pitch}”</p>
+        )}
       </div>
 
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
         {view.profileHref && (
           <Button asChild variant="ghost" size="sm">
             <Link href={view.profileHref} target="_blank">
-              <ExternalLink className="h-4 w-4" /> Profile
+              <ExternalLink className="h-4 w-4" /> View profile
             </Link>
           </Button>
         )}
@@ -191,7 +200,13 @@ function ApplicantRow({
             >
               <X className="h-4 w-4" /> Decline
             </Button>
-            <Button size="sm" disabled={acting} onClick={onAccept}>
+            <Button
+              variant="money"
+              size="sm"
+              className="active:scale-[0.98]"
+              disabled={acting}
+              onClick={onAccept}
+            >
               <Check className="h-4 w-4" /> Approve
             </Button>
           </>

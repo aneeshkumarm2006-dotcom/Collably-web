@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { Field } from '@/components/auth/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { StickerButton } from '@/components/shared/sticker';
 
 const EMPTY: ContactValues = { name: '', email: '', topic: 'General', message: '' };
 
@@ -63,8 +64,8 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
 
   if (sent) {
     return (
-      <div className="flex flex-col items-center rounded-2xl border border-hair bg-card p-10 text-center shadow-card">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-success-soft text-success">
+      <div className="sticker flex flex-col items-center rounded-card bg-card p-10 text-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full border-outline border-ink bg-money text-white">
           <CheckCircle2 className="h-7 w-7" />
         </span>
         <h3 className="mt-5 font-display text-xl font-bold text-ink">Message sent</h3>
@@ -80,7 +81,7 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-2xl border border-hair bg-card p-6 shadow-card sm:p-8"
+      className="sticker rounded-card bg-card p-6 sm:p-8"
     >
       <div className="grid gap-5">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -118,10 +119,10 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
                   aria-pressed={selected}
                   onClick={() => set({ topic: opt.topic })}
                   className={cn(
-                    'rounded-full border-[1.5px] px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2',
+                    'rounded-full border-outline px-4 py-2 font-mono text-[13px] font-semibold uppercase tracking-[0.06em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2',
                     selected
-                      ? 'border-brand bg-brand text-white'
-                      : 'border-hair-strong bg-card text-muted hover:border-brand hover:text-ink',
+                      ? 'border-ink bg-brand text-white'
+                      : 'border-ink bg-card text-muted hover:bg-yellow hover:text-ink',
                   )}
                 >
                   {opt.label}
@@ -142,11 +143,7 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
           />
         </Field>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand text-[15px] font-semibold text-white shadow-[0_10px_22px_-8px_rgba(0,100,224,0.5)] transition-colors hover:bg-[#0052BD] disabled:pointer-events-none disabled:opacity-50"
-        >
+        <StickerButton type="submit" size="lg" disabled={submitting} className="w-full">
           {submitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" /> Sending…
@@ -156,7 +153,7 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactValues['to
               <Send className="h-4 w-4" /> Send message
             </>
           )}
-        </button>
+        </StickerButton>
       </div>
     </form>
   );

@@ -1,18 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Check } from 'lucide-react';
+import { ArrowRight, Loader2, Lock } from 'lucide-react';
 
 import { useAuth } from '@/components/providers/auth-provider';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Field, authInputClass } from '@/components/auth/field';
+import { StickerButton } from '@/components/shared/sticker';
+import { Field } from '@/components/auth/field';
+import { PasswordInput } from '@/components/auth/password-input';
 import { ErrorBanner } from '@/components/auth/auth-layout';
-import { resetPasswordSchema, fieldErrors } from '@/lib/auth/schemas';
+import { resetPasswordSchema, fieldErrors, MIN_PASSWORD_LENGTH } from '@/lib/auth/schemas';
 import { postAuthPath } from '@/lib/auth/user';
 import { errorMessage } from '@/lib/api/errors';
+import { cn } from '@/lib/utils';
+
+/**
+ * Local password-strength heuristic — UX guidance only. The backend enforces the
+ * real rule (min length); this never blocks submit and is not a security control.
+ */
+function strengthOf(password: string): { score: 0 | 1 | 2 | 3 | 4; label: string; color: string } {
+  if (!password) return { score: 0, label: '', color: '' };
+  let score = 0;
+  if (password.length >= MIN_PASSWORD_LENGTH) score += 1;
+  if (password.length >= 12) score += 1;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password) && /\d/.test(password)) score += 1;
+  if (/[^A-Za-z0-9]/.test(password)) score += 1;
+  const clamped = Math.min(score, 4) as 0 | 1 | 2 | 3 | 4;
+  const meta = [
+    { label: 'Add a few more characters', color: 'bg-danger' },
+    { label: 'Weak — keep going', color: 'bg-danger' },
+    { label: 'Fair — getting there', color: 'bg-warn' },
+    { label: 'Good — almost there', color: 'bg-brand' },
+    { label: 'Strong — nice work.', color: 'bg-money' },
+  ][clamped];
+  return { score: clamped, label: meta.label, color: meta.color };
+}
 
 export function ResetPasswordForm({ token }: { token: string }) {
   const router = useRouter();
@@ -23,6 +46,8 @@ export function ResetPasswordForm({ token }: { token: string }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [banner, setBanner] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  const strength = useMemo(() => strengthOf(password), [password]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -47,65 +72,85 @@ export function ResetPasswordForm({ token }: { token: string }) {
 
   return (
     <div>
-      <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-success-soft text-success">
-        <Check className="h-7 w-7" strokeWidth={3} />
+      <span className="inline-flex h-14 w-14 rotate-[-5deg] items-center justify-center rounded-card border-2 border-ink bg-money text-white shadow-sticker">
+        <Lock className="h-7 w-7" />
       </span>
-      <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
+      <p className="mt-[22px] font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-money-ink">
+        New password
+      </p>
+      <h1 className="mt-2.5 font-display text-[34px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
         Set a new password
       </h1>
       <p className="mt-2 text-[15px] leading-relaxed text-muted">
-        Choose a new password for your account. You&apos;ll be logged in right after.
+        Choose a strong password you&apos;ll remember.
       </p>
 
       <ErrorBanner message={banner} />
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
-        <Field
-          label="New password"
-          htmlFor="password"
-          error={errors.password}
-          hint="Use 8+ characters."
-        >
-          <Input
+        <Field label="New password" htmlFor="password" error={errors.password}>
+          <PasswordInput
             id="password"
-            type="password"
             autoComplete="new-password"
             placeholder="At least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             aria-invalid={Boolean(errors.password)}
-            className={authInputClass}
           />
         </Field>
 
+        {password && (
+          <div aria-live="polite">
+            <div className="flex gap-1.5" aria-hidden>
+              {[0, 1, 2, 3].map((i) => (
+                <span
+                  key={i}
+                  className={cn(
+                    'h-1.5 flex-1 rounded-full transition-colors',
+                    i < strength.score ? strength.color : 'bg-hair-strong',
+                  )}
+                />
+              ))}
+            </div>
+            <p className="mt-1.5 text-[12px] text-muted">{strength.label}</p>
+          </div>
+        )}
+
         <Field label="Confirm password" htmlFor="confirmPassword" error={errors.confirmPassword}>
-          <Input
+          <PasswordInput
             id="confirmPassword"
-            type="password"
             autoComplete="new-password"
             placeholder="Re-enter your password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             aria-invalid={Boolean(errors.confirmPassword)}
-            className={authInputClass}
           />
         </Field>
 
-        <Button
+        <StickerButton
           type="submit"
-          className="h-auto w-full rounded-md py-[14px] text-[15px] shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
+          tone="money"
+          size="lg"
+          className="w-full"
           disabled={submitting}
         >
-          {submitting ? 'Saving…' : 'Update & log in'}
-        </Button>
+          {submitting ? (
+            <>
+              <Loader2 className="h-[18px] w-[18px] animate-spin" /> Saving…
+            </>
+          ) : (
+            <>
+              Update password <ArrowRight className="h-[18px] w-[18px]" />
+            </>
+          )}
+        </StickerButton>
       </form>
 
-      <Link
-        href="/login"
-        className="mx-auto mt-6 flex w-fit items-center gap-1.5 text-sm text-muted hover:text-ink"
-      >
-        <ArrowLeft className="h-4 w-4" /> Back to log in
-      </Link>
+      <p className="mt-6 text-center text-sm text-muted">
+        <Link href="/login" className="font-semibold text-brand hover:underline">
+          Back to log in
+        </Link>
+      </p>
     </div>
   );
 }

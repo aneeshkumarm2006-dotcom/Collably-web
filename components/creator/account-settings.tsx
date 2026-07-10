@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTheme } from 'next-themes';
-import { Loader2, Monitor, Moon, Sun, Trash2 } from 'lucide-react';
+import { Loader2, Trash2 } from 'lucide-react';
 
 import { clientApi } from '@/lib/api/client';
 import { errorMessage } from '@/lib/api/errors';
@@ -38,48 +37,16 @@ function SettingsSection({
   return (
     <section
       className={cn(
-        'rounded-2xl border bg-card p-5 shadow-card sm:p-6',
+        'rounded-lg border bg-card p-5 sm:p-6',
         danger ? 'border-danger/30' : 'border-hair',
       )}
     >
-      <h2 className={cn('font-display text-base font-bold', danger ? 'text-danger' : 'text-ink')}>
+      <h2 className={cn('text-[16px] font-bold', danger ? 'text-danger' : 'text-ink')}>
         {title}
       </h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
     </section>
-  );
-}
-
-const THEME_OPTIONS = [
-  { value: 'light', label: 'Light', icon: Sun },
-  { value: 'dark', label: 'Dark', icon: Moon },
-  { value: 'system', label: 'System', icon: Monitor },
-] as const;
-
-function AppearanceSetting() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  const active = mounted ? (theme ?? 'system') : undefined;
-
-  return (
-    <div className="inline-flex rounded-lg border border-hair p-1">
-      {THEME_OPTIONS.map((opt) => (
-        <button
-          key={opt.value}
-          type="button"
-          onClick={() => setTheme(opt.value)}
-          aria-pressed={active === opt.value}
-          className={cn(
-            'inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium transition-colors',
-            active === opt.value ? 'bg-brand text-white' : 'text-muted hover:text-ink',
-          )}
-        >
-          <opt.icon className="h-4 w-4" /> {opt.label}
-        </button>
-      ))}
-    </div>
   );
 }
 
@@ -182,10 +149,6 @@ export function AccountSettings({ user }: { user: PublicUser }) {
 
   return (
     <div className="grid gap-5 lg:grid-cols-2">
-      <SettingsSection title="Appearance" description="Choose how LocalShout looks on this device.">
-        <AppearanceSetting />
-      </SettingsSection>
-
       <SettingsSection
         title="Notifications"
         description="The in-app feed is always on. Control off-channel alerts here."

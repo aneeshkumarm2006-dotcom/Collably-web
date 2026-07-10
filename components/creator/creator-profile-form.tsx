@@ -43,8 +43,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
-      <h2 className="font-display text-base font-bold text-ink">{title}</h2>
+    <section className="rounded-lg border border-hair bg-card p-5 sm:p-6">
+      <h2 className="text-[16px] font-bold text-ink">{title}</h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
     </section>
@@ -96,25 +96,24 @@ export function CreatorProfileForm({
   return (
     <div className="space-y-5">
       {/* Profile hero header */}
-      <section className="flex flex-wrap items-center gap-4 rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
+      <section className="flex flex-wrap items-center gap-4 rounded-lg border border-hair bg-card p-5 sm:p-6">
         {avatar ? (
           // eslint-disable-next-line @next/next/no-img-element -- avatar preview
           <img
             src={avatar}
             alt=""
-            className="h-20 w-20 shrink-0 rounded-[22px] object-cover"
+            className="h-20 w-20 shrink-0 rounded-full object-cover"
           />
         ) : (
           <span
-            className="flex h-20 w-20 shrink-0 items-center justify-center rounded-[22px] font-display text-3xl font-extrabold text-white"
-            style={{ background: 'linear-gradient(135deg,#0064E0,#7B61FF)' }}
+            className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-warn-soft text-3xl font-bold text-warn"
             aria-hidden
           >
             {initial}
           </span>
         )}
         <div className="min-w-0 flex-1">
-          <h2 className="font-display text-xl font-extrabold text-ink">{name ?? 'Your profile'}</h2>
+          <h2 className="text-xl font-bold text-ink">{name ?? 'Your profile'}</h2>
           {form.niche.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1.5">
               {form.niche.slice(0, 5).map((n) => (
@@ -219,7 +218,7 @@ export function CreatorProfileForm({
         <button
           type="button"
           onClick={() => void logout()}
-          className="inline-flex items-center gap-2 rounded-xl bg-danger-soft px-4 py-2.5 text-sm font-semibold text-danger transition-colors hover:brightness-95"
+          className="inline-flex items-center gap-2 rounded-sm bg-danger-soft px-4 py-2.5 text-sm font-semibold text-danger transition-colors hover:brightness-95"
         >
           <LogOut className="h-4 w-4" /> Log out
         </button>

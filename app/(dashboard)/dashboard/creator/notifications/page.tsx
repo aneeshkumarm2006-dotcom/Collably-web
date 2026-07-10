@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { DashboardContainer, PageHeader } from '@/components/dashboard/page-shell';
+import { DashboardContainer } from '@/components/dashboard/page-shell';
 import { NotificationsClient } from '@/components/creator/notifications-client';
 
 export const metadata: Metadata = { title: 'Notifications' };
@@ -8,7 +8,6 @@ export const metadata: Metadata = { title: 'Notifications' };
 export default function CreatorNotificationsPage() {
   return (
     <DashboardContainer>
-      <PageHeader title="Notifications" subtitle="Everything happening with your collabs." />
       <NotificationsClient role="creator" />
     </DashboardContainer>
   );

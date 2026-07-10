@@ -4,6 +4,7 @@ import { AlertTriangle, BadgeCheck, Instagram, Music2, Youtube } from 'lucide-re
 
 import type { CreatorForm } from '@/lib/onboarding/creator';
 import { digits, platformStarted, platformValid } from '@/lib/onboarding/creator';
+import { Pill } from '@/components/shared/sticker';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -105,7 +106,7 @@ export function SocialHandlesStep({
         />
       </PlatformCard>
 
-      <label className="flex cursor-pointer items-center gap-3 rounded-md bg-secondary p-4">
+      <label className="sticker flex cursor-pointer items-center gap-3 rounded-card bg-elev p-4">
         <Switch checked={isUGCOnly} onCheckedChange={onUGCChange} />
         <span className="flex-1">
           <span className="block text-sm font-semibold text-ink">I&apos;m a UGC creator</span>
@@ -152,12 +153,17 @@ function PlatformCard({
   return (
     <div
       className={cn(
-        'rounded-lg border p-4 transition-colors',
-        complete ? 'border-brand bg-brand-soft' : 'border-hair bg-card',
+        'sticker rounded-card p-4 transition-colors',
+        complete ? 'bg-brand-soft' : 'bg-card',
       )}
     >
       <div className="mb-3 flex items-center gap-3">
-        <span className={cn('flex h-10 w-10 items-center justify-center rounded-md text-white', iconClass)}>
+        <span
+          className={cn(
+            'flex h-10 w-10 items-center justify-center rounded-md border-2 border-ink text-white',
+            iconClass,
+          )}
+        >
           {icon}
         </span>
         <div className="flex-1">
@@ -165,9 +171,9 @@ function PlatformCard({
           <p className="text-xs text-muted">{sub}</p>
         </div>
         {complete && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-success-soft px-2.5 py-1 text-[11.5px] font-semibold text-success">
+          <Pill tone="money">
             <BadgeCheck className="h-3.5 w-3.5" /> Connected
-          </span>
+          </Pill>
         )}
       </div>
 

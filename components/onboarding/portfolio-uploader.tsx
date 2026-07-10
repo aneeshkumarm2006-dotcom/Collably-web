@@ -72,7 +72,7 @@ export function PortfolioUploader({
         {items.map((item, i) => (
           <li
             key={`${item.imageUrl}-${i}`}
-            className="group relative aspect-square overflow-hidden rounded-[14px] border border-hair"
+            className="group relative aspect-square overflow-hidden rounded-card border-2 border-ink"
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- user-supplied portfolio thumbnail */}
             <img src={item.imageUrl} alt="" className="h-full w-full object-cover" />
@@ -95,7 +95,7 @@ export function PortfolioUploader({
                 onClick={() => inputRef.current?.click()}
                 disabled={disabled || uploading}
                 className={cn(
-                  'flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-[14px] border-2 border-dashed border-hair-strong bg-secondary text-faint transition-colors hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-60',
+                  'flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-card border-2 border-dashed border-ink bg-elev text-muted transition-colors hover:bg-brand-soft hover:text-brand disabled:cursor-not-allowed disabled:opacity-60',
                 )}
               >
                 {uploading ? (
@@ -117,7 +117,7 @@ export function PortfolioUploader({
                 }}
                 disabled={disabled}
                 aria-expanded={urlOpen}
-                className="flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-[14px] border-2 border-dashed border-hair-strong bg-secondary text-faint transition-colors hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-card border-2 border-dashed border-ink bg-elev text-muted transition-colors hover:bg-brand-soft hover:text-brand disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Link2 className="h-5 w-5" />
                 <span className="text-[11px] font-bold">Add URL</span>

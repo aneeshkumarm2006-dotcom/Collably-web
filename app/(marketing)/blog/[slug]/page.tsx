@@ -14,6 +14,7 @@ import { Container } from '@/components/marketing/section';
 import { Prose } from '@/components/marketing/prose';
 import { CtaBand } from '@/components/marketing/cta-band';
 import { PostCard } from '@/components/blog/post-card';
+import { Reveal } from '@/components/shared/reveal';
 import { JsonLd } from '@/components/shared/json-ld';
 
 // Slugs are open-ended (new DB posts appear without a rebuild), so resolve at
@@ -102,7 +103,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Header */}
         <header className="mt-6">
-          <span className="text-[13px] font-extrabold uppercase tracking-[0.1em] text-brand">
+          <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-coral">
             {meta.category}
           </span>
           <h1 className="mt-3 text-balance font-display text-3xl font-extrabold leading-[1.1] tracking-[-0.03em] sm:text-[42px]">
@@ -110,10 +111,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </h1>
 
           {/* Author row */}
-          <div className="mt-6 flex items-center gap-3 border-b border-hair pb-6">
+          <div className="mt-6 flex items-center gap-3 border-b-2 border-hair-strong pb-6">
             <span
               aria-hidden
-              className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full font-display text-sm font-bold text-white"
+              className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full border-outline border-ink font-display text-sm font-bold text-white"
               style={{ background: gradient }}
             >
               {initials(meta.author.name)}
@@ -134,7 +135,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Hero */}
         <div
-          className="relative mt-8 h-[280px] overflow-hidden rounded-2xl"
+          className="sticker relative mt-8 h-[280px] overflow-hidden rounded-card"
           style={{ background: gradient }}
         >
           {meta.coverImage && (
@@ -164,7 +165,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {meta.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-hair bg-card px-3 py-1 text-[12px] font-medium text-muted"
+                className="rounded-full border-outline border-ink bg-card px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-muted"
               >
                 #{tag}
               </span>
@@ -173,7 +174,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         )}
 
         {/* Share */}
-        <div className="mt-8 flex items-center gap-3 border-t border-hair pt-6">
+        <div className="mt-8 flex items-center gap-3 border-t-2 border-hair-strong pt-6">
           <span className="text-sm font-semibold text-ink">Share:</span>
           <ShareTiles title={meta.title} slug={meta.slug} />
         </div>
@@ -185,16 +186,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <h2 className="mb-6 font-display text-2xl font-bold tracking-[-0.02em] text-ink">
             Keep reading
           </h2>
-          <div className="grid gap-6 sm:grid-cols-2">
+          <Reveal className="grid gap-6 sm:grid-cols-2">
             {related.map((r) => (
-              <PostCard key={r.meta.slug} post={r.meta} />
+              <div key={r.meta.slug} className="r">
+                <PostCard post={r.meta} className="h-full" />
+              </div>
             ))}
-          </div>
+          </Reveal>
         </Container>
       )}
 
       <div className="mt-16">
         <CtaBand
+          className="border-t-outline border-ink"
           title="Start your first collab free"
           subtitle="Join LocalShout free, as a creator or a business, and put these ideas to work."
           primary={{ label: 'Get started', href: '/signup' }}
@@ -236,7 +240,7 @@ function ShareTiles({ title, slug }: { title: string; slug: string }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={t.label}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-hair-strong bg-card text-sm font-bold text-muted transition-colors hover:border-brand hover:text-brand"
+          className="sticker press flex h-9 w-9 items-center justify-center rounded-md bg-card text-sm font-bold text-ink"
         >
           {t.glyph}
         </a>

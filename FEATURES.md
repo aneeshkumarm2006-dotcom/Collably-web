@@ -129,19 +129,40 @@
 
 ---
 
+## 7b. Analytics Hub — `app/analyticshub/`
+
+> Password-gated, single-user analytics dashboard. Pulls **GA4**, **Search Console**,
+> **Meta Ads** and **Google Ads** into one overview + per-source deep dives. All
+> credentials are entered in-dashboard and stored **AES-256-GCM encrypted** in
+> MongoDB — never in code or env. See `ANALYTICSHUB_SETUP.md`.
+
+| Feature | Route |
+| --- | --- |
+| Overview | `/analyticshub` |
+| GA4 · Search Console · Meta Ads · Google Ads | `/analyticshub/{ga4,gsc,meta,gads}` |
+| Users (intentionally a stub — no local users table) | `/analyticshub/users` |
+| Settings (credential entry + live validation) | `/analyticshub/settings` |
+| Catch-all API + OAuth callback | `/api/analyticshub/[...path]` |
+
+**Charts are hand-rolled inline SVG** (`components/analyticshub/{line-chart,sparkline}.tsx`),
+not a chart library — restyling means touching that SVG directly.
+
+---
+
 ## 8. Cross-cutting / System
 
 - **Real-time chat** (socket.io) — conversation list, threads, composer, message bubbles; `socket-token` auth endpoint
 - **Notifications** system — bell + unread badges
 - **Cookie consent** + analytics scripts (consent-gated)
-- **Dark / light theme** toggle (next-themes)
+- **Light-only theme.** Dark mode was removed in the redesign — the source designs define none. See `REDESIGN-IMPLEMENTATION.md`.
 - **Image uploads** (Cloudinary)
 - **Report / flag** system (report content / users)
 - **Location autocomplete** (Canada-first city/region/country) + location fields — used in campaigns, onboarding, explore filters
 - **Geocoding** (address → coordinates for maps)
 - **Explore filters** — sort options, category filters, follower buckets, status tabs
 - Toasts (sonner), confirm modals, empty states, error states, skeletons
-- Full **shadcn/ui** component library (~35 primitives)
+- **shadcn/ui** primitives (24, in `components/ui/`) + the sticker primitives in `components/shared/sticker.tsx`
+- **Motion hooks** (`lib/motion/`) — scroll reveal with stagger, count-up, cursor tilt; all reduced-motion aware
 - **Mock mode** (MSW) — run the UI without a live backend
 
 ---
@@ -157,11 +178,23 @@
 
 ---
 
-## Redesign heads-up
+## Design system
 
-- **SEO Team CMS** uses **TipTap** — if the redesign changes its editor layout, send those screens explicitly so the editor integration is adapted, not just restyled.
-- **Maps** use **Google Maps JS** — same note; layout changes need the integration re-wired.
+The app runs **two visual languages on one token set**:
+
+- **Public** (marketing, auth, onboarding, public-app views, errors) — neo-brutalist
+  "sticker": cream `#FFFDF8`, ink `#14181F`, `2.5px` ink outlines, solid offset shadows,
+  Space Grotesk headings, yellow `#FFC24B` + coral `#FF6B4A`.
+- **App** (`.surface-app`, both dashboards) — Facebook-clean: grey `#F0F2F5`, ink
+  `#050505`, hairlines, soft elevation, system-ui.
+
+Shared across both: brand blue `#1877F2`, money green `#31A24C`. Light-only.
+Full token table in `app/globals.css` + `tailwind.config.ts`.
+Rationale and deviations: **`REDESIGN-IMPLEMENTATION.md`**.
+
+## Heads-up for future work
+
+- **SEO Team CMS** uses **TipTap** — layout changes need the editor integration adapted, not just restyled.
+- **Maps** use **Google Maps JS** (`lib/maps/*`) — same note; layout changes need the integration re-wired.
+- **Analytics Hub** charts are **hand-rolled inline SVG** — same note.
 - **Blog** is **dual-sourced** (static `.tsx` + DB posts) — the post template must render both.
-- **Identity to keep:** Meta-blue `#1877F2`, FB-green `#31A24C` (money), grey `#F0F2F5` surfaces,
-  rounded radii (6/8/12/16/22/28), system sans + mono editorial accents. Full token table lives in
-  `app/globals.css` and `tailwind.config.ts`.

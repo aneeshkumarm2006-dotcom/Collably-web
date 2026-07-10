@@ -43,7 +43,7 @@ export function Section({
     page: 'bg-page text-ink',
     card: 'bg-card text-ink',
     muted: 'bg-elev text-ink',
-    dark: 'bg-dark-sidebar text-white',
+    dark: 'bg-band text-white',
     brand: 'bg-brand text-white',
   }[tone];
 
@@ -54,7 +54,7 @@ export function Section({
   );
 }
 
-/** Mono eyebrow label with an optional ordinal (e.g. "01"). `onDark` for dark bands. */
+/** Uppercase mono eyebrow label with an optional ordinal (e.g. "01"). `onDark` for dark bands. */
 export function SectionLabel({
   children,
   ordinal,
@@ -69,8 +69,8 @@ export function SectionLabel({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-[0.1em]',
-        onDark ? 'text-white/70' : 'text-brand',
+        'inline-flex items-center gap-2 font-mono text-[12px] font-semibold uppercase tracking-[0.14em]',
+        onDark ? 'text-yellow' : 'text-coral',
         className,
       )}
     >

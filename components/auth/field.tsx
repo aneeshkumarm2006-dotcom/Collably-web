@@ -18,25 +18,31 @@ export interface FieldProps {
 }
 
 /**
- * Shared input classes for the redesigned auth fields: taller, softer inputs with
- * a 1.5px hairline that turns brand on focus. Spread onto each `<Input>` so the
- * Field stays input-agnostic while matching the mockups.
+ * Shared input classes for the auth fields in the "sticker" language: a solid
+ * 2px ink border on the cream page, `rounded-md`, that turns `brand` with a soft
+ * focus ring on focus. `aria-invalid` (set by the forms from field errors) flips
+ * the border to `danger`. Spread onto each `<Input>` so the Field stays
+ * input-agnostic while matching the design.
  */
-export const authInputClass =
-  'h-auto rounded-md border-[1.5px] border-hair-strong px-[15px] py-[13px] text-[15px]';
+export const authInputClass = cn(
+  'h-auto rounded-md border-2 border-ink bg-card px-[15px] py-[13px] text-[15px] font-medium text-ink',
+  'placeholder:font-normal placeholder:text-faint',
+  'focus-visible:border-brand focus-visible:shadow-focus focus-visible:ring-0',
+  'aria-[invalid=true]:border-danger aria-[invalid=true]:focus-visible:border-danger aria-[invalid=true]:focus-visible:shadow-none',
+);
 
 export function Field({ label, htmlFor, error, hint, action, children, className }: FieldProps) {
   return (
     <div className={cn('space-y-1.5', className)}>
       <div className="flex items-center justify-between">
-        <Label htmlFor={htmlFor} className="text-[13px] font-bold text-muted">
+        <Label htmlFor={htmlFor} className="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-muted">
           {label}
         </Label>
         {action}
       </div>
       {children}
       {error ? (
-        <p id={`${htmlFor}-error`} className="text-[13px] text-danger">
+        <p id={`${htmlFor}-error`} className="text-[13px] font-medium text-danger-ink">
           {error}
         </p>
       ) : hint ? (

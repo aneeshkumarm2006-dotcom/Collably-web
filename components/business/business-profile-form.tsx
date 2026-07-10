@@ -38,8 +38,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
-      <h2 className="font-display text-base font-bold text-ink">{title}</h2>
+    <section className="rounded-lg border border-hair bg-card p-5 shadow-card sm:p-6">
+      <h2 className="text-base font-bold text-ink">{title}</h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
     </section>
@@ -88,9 +88,9 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
   return (
     <div className="space-y-5">
       {/* Profile header */}
-      <div className="flex items-center gap-4 rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
+      <div className="flex items-center gap-4 rounded-lg border border-hair bg-card p-5 shadow-card sm:p-6">
         <span
-          className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[22px] font-display text-[24px] font-extrabold text-white"
+          className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg text-[24px] font-extrabold text-white"
           style={
             form.logo
               ? undefined
@@ -105,7 +105,7 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
           )}
         </span>
         <div className="min-w-0">
-          <h2 className="truncate font-display text-[20px] font-extrabold text-ink">
+          <h2 className="truncate text-[20px] font-extrabold text-ink">
             {form.businessName || profile.businessName || 'Your business'}
           </h2>
           {profile.isVerified ? (
@@ -217,7 +217,7 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
         <button
           type="button"
           onClick={() => void logout()}
-          className="inline-flex items-center gap-2 rounded-xl bg-danger-soft px-4 py-2.5 text-sm font-bold text-danger transition-opacity hover:opacity-80"
+          className="inline-flex items-center gap-2 rounded-sm bg-danger-soft px-4 py-2.5 text-sm font-bold text-danger transition-opacity hover:opacity-80"
         >
           <LogOut className="h-4 w-4" /> Log out
         </button>

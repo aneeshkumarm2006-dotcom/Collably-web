@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, CheckCircle2, Mail } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, KeyRound, Loader2, Mail } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { StickerButton } from '@/components/shared/sticker';
 import { Field, authInputClass } from '@/components/auth/field';
 import { ErrorBanner } from '@/components/auth/auth-layout';
 import { forgotPasswordSchema, fieldErrors } from '@/lib/auth/schemas';
@@ -55,10 +55,10 @@ export function ForgotPasswordForm() {
   if (sent) {
     return (
       <div>
-        <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-success-soft text-success">
+        <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full border-2 border-ink bg-money-soft text-money-ink shadow-sticker">
           <CheckCircle2 className="h-7 w-7" />
         </span>
-        <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
+        <h1 className="font-display text-[36px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
           Check your inbox
         </h1>
         <p className="mt-2 text-[15px] leading-relaxed text-muted">
@@ -69,15 +69,21 @@ export function ForgotPasswordForm() {
         {sent.devResetToken && (
           <Link
             href={`/reset-password/${sent.devResetToken}`}
-            className="mt-4 inline-block rounded-md border border-warn/40 bg-warn-soft px-3.5 py-2.5 text-[13px] font-medium text-warn hover:underline"
+            className="mt-4 inline-block rounded-md border-2 border-warn bg-warn-soft px-3.5 py-2.5 text-[13px] font-semibold text-warn hover:underline"
           >
             Dev shortcut → reset with this token
           </Link>
         )}
 
-        <Button variant="outline" size="lg" className="mt-6 w-full" onClick={() => setSent(null)}>
+        <StickerButton
+          type="button"
+          tone="white"
+          size="lg"
+          className="mt-6 w-full"
+          onClick={() => setSent(null)}
+        >
           Use a different email
-        </Button>
+        </StickerButton>
 
         <Link
           href="/login"
@@ -91,14 +97,17 @@ export function ForgotPasswordForm() {
 
   return (
     <div>
-      <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-soft text-brand">
-        <Mail className="h-7 w-7" />
+      <span className="inline-flex h-14 w-14 rotate-[-5deg] items-center justify-center rounded-card border-2 border-ink bg-yellow text-ink shadow-sticker">
+        <KeyRound className="h-7 w-7" />
       </span>
-      <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
-        Reset password
+      <p className="mt-[22px] font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-brand">
+        Reset access
+      </p>
+      <h1 className="mt-2.5 font-display text-[34px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
+        Forgot your password?
       </h1>
       <p className="mt-2 text-[15px] leading-relaxed text-muted">
-        Enter the email tied to your account and we&apos;ll send you a link to reset your password.
+        No worries. Enter your email and we&apos;ll send a link to reset it.
       </p>
 
       <ErrorBanner message={banner} />
@@ -117,21 +126,36 @@ export function ForgotPasswordForm() {
           />
         </Field>
 
-        <Button
+        <StickerButton
           type="submit"
-          className="h-auto w-full rounded-md py-[14px] text-[15px] shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
+          tone="brand"
+          size="lg"
+          className="w-full"
           disabled={submitting}
         >
-          {submitting ? 'Sending…' : 'Send reset link'}
-        </Button>
+          {submitting ? (
+            <>
+              <Loader2 className="h-[18px] w-[18px] animate-spin" /> Sending…
+            </>
+          ) : (
+            <>
+              Send reset link <ArrowRight className="h-[18px] w-[18px]" />
+            </>
+          )}
+        </StickerButton>
+
+        <div className="flex items-center gap-2.5 rounded-md border-2 border-money bg-money-soft px-3.5 py-3 text-[13px] leading-snug text-money-ink shadow-[3px_3px_0_#31a24c]">
+          <Mail className="h-[18px] w-[18px] shrink-0" />
+          <span>We&apos;ll email a secure link that expires in 30 minutes.</span>
+        </div>
       </form>
 
-      <Link
-        href="/login"
-        className="mx-auto mt-6 flex w-fit items-center gap-1.5 text-sm text-muted hover:text-ink"
-      >
-        <ArrowLeft className="h-4 w-4" /> Back to log in
-      </Link>
+      <p className="mt-6 text-center text-sm text-muted">
+        Remembered it?{' '}
+        <Link href="/login" className="font-semibold text-brand hover:underline">
+          Back to log in
+        </Link>
+      </p>
     </div>
   );
 }

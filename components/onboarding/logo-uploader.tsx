@@ -45,7 +45,7 @@ export function LogoUploader({
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={disabled || uploading}
-        className="flex h-[160px] w-[160px] flex-col items-center justify-center gap-2 overflow-hidden rounded-[18px] border-2 border-dashed border-hair-strong bg-secondary text-faint transition-colors hover:border-warm hover:text-warm disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex h-[160px] w-[160px] flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-ink bg-elev text-muted transition-colors hover:bg-warn-soft hover:text-coral disabled:cursor-not-allowed disabled:opacity-60"
         aria-label={value ? 'Replace logo' : 'Upload logo'}
       >
         {uploading ? (

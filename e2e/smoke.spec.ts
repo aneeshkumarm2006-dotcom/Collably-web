@@ -17,7 +17,7 @@ test('landing page renders the marketing hero', async ({ page }) => {
 
 test('explore lists seeded campaigns', async ({ page }) => {
   await page.goto('/explore');
-  await expect(page.getByRole('heading', { name: 'Explore campaigns' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Explore local collabs' })).toBeVisible();
   // Seed data should surface at least one known campaign card.
   await expect(
     page.getByRole('link').filter({ hasText: /Tasting Menu|Skincare Set Review|Fitness Challenge/ }).first(),
@@ -28,18 +28,18 @@ test('a campaign detail page renders with an apply CTA', async ({ page }) => {
   await page.goto('/explore');
   await page.getByRole('link').filter({ hasText: 'Skincare Set Review' }).first().click();
   await page.waitForURL(/\/campaign\//);
-  // As a guest, the apply CTA invites signup (it's a Link styled as a button, so role=link).
-  await expect(page.getByRole('link', { name: 'Sign up to apply' })).toBeVisible();
+  // As a guest, the apply CTA routes into auth (it's a Link styled as a button, so role=link).
+  await expect(page.getByRole('link', { name: /Continue to apply/i })).toBeVisible();
 });
 
 test('auth pages render', async ({ page }) => {
   await page.goto('/login');
-  await expect(page.getByRole('heading', { name: 'Welcome back' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Log in to your block' })).toBeVisible();
   await expect(page.getByLabel('Email')).toBeVisible();
 
   await page.goto('/signup');
-  await expect(page.getByRole('heading', { name: 'Join LocalShout' })).toBeVisible();
-  await expect(page.getByRole('button', { name: /I'm a Creator/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Create your account' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /I'm a creator/i })).toBeVisible();
 });
 
 test('pricing + a legal page render', async ({ page }) => {

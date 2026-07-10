@@ -1,11 +1,14 @@
 'use client';
 
 /**
- * /styleguide: dev/QA route rendering every Phase 1 shared component. Most
- * sections render twice, side by side: a light panel and a `.dark`-scoped panel,
- * so the blend can be eyeballed in both themes at once. (Portalled overlays such as
- * dropdowns, popovers, sheets, and toasts follow the GLOBAL theme; use the navbar
- * toggle to check those.)
+ * /styleguide: dev/QA route rendering every shared component. Most sections
+ * render twice, side by side — once on the public "sticker" surface and once
+ * inside `.surface-app` — so a shared component can be checked against both
+ * token bindings at once. Light-only; there is no dark theme.
+ *
+ * (Portalled overlays — dropdowns, popovers, sheets, toasts — mount at the body,
+ * so they always render on the public surface regardless of which panel opened
+ * them. Check those on a real dashboard route.)
  */
 import { useState } from 'react';
 import {
@@ -77,7 +80,6 @@ import { Navbar } from '@/components/shared/navbar';
 import { Footer } from '@/components/shared/footer';
 import { DashboardSidebar } from '@/components/shared/dashboard-sidebar';
 import { DashboardTopBar } from '@/components/shared/dashboard-topbar';
-import { ThemeToggle } from '@/components/shared/theme-toggle';
 import { toast } from '@/lib/toast';
 
 // --- Mock data ----------------------------------------------------------------
@@ -156,12 +158,28 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-/** Renders content in a light panel and a `.dark`-scoped panel, side by side. */
+/**
+ * Renders content once per surface, side by side: the public "sticker" language
+ * (`:root`) and the Facebook-clean dashboard (`.surface-app`). Shared components
+ * must read correctly in BOTH — this is the canary for a token regression.
+ *
+ * (This replaced a light/dark pair: there is no dark theme any more.)
+ */
 function DualPanel({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <div className="rounded-lg border border-hair bg-page p-6">{children}</div>
-      <div className="dark rounded-lg border border-dark-border bg-page p-6 text-ink">{children}</div>
+      <div className="rounded-card border-outline border-ink bg-page p-6">
+        <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-faint">
+          Public · sticker
+        </p>
+        {children}
+      </div>
+      <div className="surface-app rounded-card border border-hair bg-page p-6 text-ink">
+        <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-faint">
+          App · .surface-app
+        </p>
+        {children}
+      </div>
     </div>
   );
 }
@@ -176,11 +194,10 @@ export default function StyleguidePage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-ink">LocalShout Style Guide</h1>
           <p className="mt-1 text-sm text-muted">
-            Phase 1 design system (the &ldquo;blend&rdquo;). App palette · reference anatomy ·
-            shadcn/ui.
+            Two surfaces, one token set: the public sticker language and{' '}
+            <code className="font-mono text-[13px]">.surface-app</code>. Light-only.
           </p>
         </div>
-        <ThemeToggle />
       </header>
 
       <div className="mt-10 space-y-10">

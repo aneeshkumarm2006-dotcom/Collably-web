@@ -19,8 +19,8 @@ import {
 } from '@/components/ui/sheet';
 import { track } from '@/lib/analytics';
 import { BrandMark } from '@/components/shared/brand-mark';
+import { StickerButton } from '@/components/shared/sticker';
 import { NotificationBell } from '@/components/shared/notification-bell';
-import { ThemeToggle } from '@/components/shared/theme-toggle';
 import { UserMenu } from '@/components/shared/user-menu';
 
 const LINKS = [
@@ -36,7 +36,10 @@ function isActive(pathname: string, href: string) {
 
 /**
  * Public, auth-aware navbar. Signed out → Log in / Get started; signed in →
- * notification bell + avatar menu. `onDark` tints it for the landing hero.
+ * notification bell + avatar menu.
+ *
+ * Sticker language: solid (never translucent) so the heavy ink underline reads
+ * as a drawn rule rather than a blurred edge. `onDark` tints it for dark bands.
  */
 export function Navbar({ onDark }: { onDark?: boolean }) {
   const { user, logout } = useAuth();
@@ -51,11 +54,11 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
   return (
     <nav
       className={cn(
-        'sticky top-0 z-50 h-16 border-b backdrop-blur-md',
-        onDark ? 'border-dark-border bg-dark-sidebar/85' : 'border-hair bg-page/85',
+        'sticky top-0 z-50 h-[68px] border-b-outline',
+        onDark ? 'border-ink bg-band' : 'border-ink bg-page',
       )}
     >
-      <div className="mx-auto flex h-full max-w-[1600px] items-center justify-between gap-4 px-6 lg:px-10">
+      <div className="mx-auto flex h-full max-w-shell items-center justify-between gap-4 px-6 lg:px-10">
         <div className="flex items-center gap-8">
           <Link href={homeHref} aria-label={user ? 'LocalShout dashboard' : 'LocalShout home'}>
             <BrandMark onDark={onDark} />
@@ -66,12 +69,12 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
                 key={l.href}
                 href={l.href}
                 className={cn(
-                  'text-[15px] font-semibold transition-colors',
+                  'font-display text-[15px] font-semibold transition-colors',
                   isActive(pathname, l.href)
                     ? 'text-brand'
                     : onDark
                       ? 'text-white/70 hover:text-white'
-                      : 'text-muted hover:text-ink',
+                      : 'text-ink hover:text-coral',
                 )}
               >
                 {l.label}
@@ -81,7 +84,6 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
         </div>
 
         <div className="flex items-center gap-1.5">
-          <ThemeToggle />
           {user ? (
             <>
               <NotificationBell notifications={[]} />
@@ -89,19 +91,21 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
             </>
           ) : (
             <>
-              <Button asChild variant="ghost" size="pill-sm" className="hidden font-bold text-ink sm:inline-flex">
-                <Link href="/login" onClick={() => track('cta_login', { location: 'navbar' })}>
-                  Log in
-                </Link>
-              </Button>
-              <Button asChild size="pill-sm" className="font-bold">
+              <Link
+                href="/login"
+                onClick={() => track('cta_login', { location: 'navbar' })}
+                className="hidden rounded-md px-3.5 py-2 font-display text-[15px] font-semibold text-ink transition-colors hover:text-coral sm:inline-flex"
+              >
+                Log in
+              </Link>
+              <StickerButton asChild tone="yellow" size="sm">
                 <Link
                   href="/signup"
                   onClick={() => track('cta_get_started', { location: 'navbar' })}
                 >
                   Get started
                 </Link>
-              </Button>
+              </StickerButton>
             </>
           )}
 

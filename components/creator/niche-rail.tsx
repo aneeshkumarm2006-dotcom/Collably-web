@@ -1,14 +1,13 @@
-import { Sparkles } from 'lucide-react';
-
 import type { PublicCampaign } from '@/lib/api/types';
-import { toCampaignCardData } from '@/lib/campaign-card';
 import type { CardAppStatus } from '@/lib/creator/application-status';
-import { CampaignCard } from '@/components/shared/campaign-card';
+import { Reveal } from '@/components/shared/reveal';
+import { CreatorCampaignCard } from '@/components/creator/creator-campaign-card';
 
 /**
- * "Matching your niche" rail on the authed creator Explore: a brand-tinted band
- * with a horizontally-scrolling set of relevance-ranked campaigns for the
- * creator's niches. Hidden when there's nothing to recommend.
+ * "Matching your niche" rail on the authed creator Explore: an eyebrow + heading
+ * over a horizontally-scrolling set of relevance-ranked campaigns for the
+ * creator's niches, styled in the Facebook-clean dashboard language. Hidden when
+ * there's nothing to recommend.
  */
 export function CreatorNicheRail({
   campaigns,
@@ -21,36 +20,31 @@ export function CreatorNicheRail({
 }) {
   if (campaigns.length === 0) return null;
 
-  const nicheText =
-    niches.length > 0 ? niches.slice(0, 3).join(' & ') : 'your niche';
+  const nicheText = niches.length > 0 ? niches.slice(0, 3).join(' & ') : 'your niche';
 
   return (
-    <section className="rounded-2xl border border-brand/20 bg-brand-soft p-5 shadow-card">
-      <div className="mb-4 flex items-center gap-2.5">
-        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand/15 text-brand">
-          <Sparkles className="h-[18px] w-[18px]" />
-        </span>
+    <section className="mb-6">
+      <div className="mb-3.5 flex items-end justify-between">
         <div>
-          <h2 className="font-display font-bold text-ink">
-            Matching your niche{' '}
-            <span className="text-brand">
-              {niches.length > 0 ? `: ${nicheText}` : ''}
-            </span>
+          <div className="flex items-center gap-1.5 text-[12px] font-semibold text-brand">
+            <span className="h-[7px] w-[7px] animate-ls-pulse rounded-full bg-money" />
+            Matching your niche
+          </div>
+          <h2 className="mt-1 text-[19px] font-bold tracking-[-0.02em] text-ink">
+            Hand-picked for {nicheText}
           </h2>
-          <p className="text-[13px] text-muted">Hand-picked from your profile</p>
         </div>
       </div>
-      <div className="-mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+      <Reveal className="-mx-1 flex gap-3.5 overflow-x-auto px-1 pb-2">
         {campaigns.map((c) => (
-          <CampaignCard
+          <CreatorCampaignCard
             key={c._id}
-            className="w-[min(260px,80vw)] shrink-0 sm:w-[260px]"
-            campaign={toCampaignCardData(c, {
-              applicationStatus: applicationStatusByCampaign?.[c._id],
-            })}
+            className="r w-[min(280px,82vw)] shrink-0 sm:w-[280px]"
+            campaign={c}
+            applicationStatus={applicationStatusByCampaign?.[c._id]}
           />
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }

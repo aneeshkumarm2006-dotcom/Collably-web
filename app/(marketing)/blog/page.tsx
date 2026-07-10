@@ -6,6 +6,7 @@ import { buildMetadata } from '@/lib/seo';
 import { getAllPostsMeta, getFeaturedPost } from '@/lib/blog';
 import { Section, SectionLabel } from '@/components/marketing/section';
 import { PostCard } from '@/components/blog/post-card';
+import { StickerButton } from '@/components/shared/sticker';
 import { BlogFilter } from './blog-filter';
 
 export const metadata: Metadata = buildMetadata({
@@ -39,12 +40,11 @@ export default async function BlogIndexPage() {
             economy in Canada.
           </p>
         </div>
-        <Link
-          href="/feed.xml"
-          className="inline-flex items-center gap-2 rounded-full border border-hair-strong bg-card px-4 py-2 text-sm font-semibold text-muted transition-colors hover:border-brand hover:text-brand"
-        >
-          <Rss className="h-4 w-4" /> RSS
-        </Link>
+        <StickerButton asChild tone="white" size="sm" className="rounded-full">
+          <Link href="/feed.xml">
+            <Rss className="h-4 w-4" /> RSS
+          </Link>
+        </StickerButton>
       </div>
 
       {/* Featured */}

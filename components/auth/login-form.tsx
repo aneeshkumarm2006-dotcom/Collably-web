@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ArrowRight, Loader2 } from 'lucide-react';
 
 import { useAuth } from '@/components/providers/auth-provider';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { StickerButton } from '@/components/shared/sticker';
 import { Field, authInputClass } from '@/components/auth/field';
+import { PasswordInput } from '@/components/auth/password-input';
 import { GoogleButton } from '@/components/auth/google-button';
 import { ErrorBanner, OrDivider } from '@/components/auth/auth-layout';
 import { loginSchema, fieldErrors } from '@/lib/auth/schemas';
@@ -72,15 +74,18 @@ export function LoginForm({ next }: { next?: string }) {
 
   return (
     <div>
-      <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
+      <p className="font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-brand">
         Welcome back
+      </p>
+      <h1 className="mt-2.5 font-display text-[34px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
+        Log in to your block
       </h1>
-      <p className="mt-1.5 text-[15px] text-muted">Log in to your LocalShout account.</p>
+      <p className="mt-2 text-[15px] text-muted">Good to see you again. Let&apos;s get shouting.</p>
 
       <div className="mt-7">
         <GoogleButton onCredential={handleGoogle} text="signin_with" disabled={submitting} />
       </div>
-      <OrDivider />
+      <OrDivider label="or with email" />
 
       <ErrorBanner message={banner} />
 
@@ -103,37 +108,53 @@ export function LoginForm({ next }: { next?: string }) {
           htmlFor="password"
           error={errors.password}
           action={
-            <Link href="/forgot-password" className="text-[13px] font-bold text-brand hover:underline">
-              Forgot password?
+            <Link
+              href="/forgot-password"
+              className="font-mono text-[12px] font-semibold uppercase tracking-[0.06em] text-brand hover:underline"
+            >
+              Forgot?
             </Link>
           }
         >
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             autoComplete="current-password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             aria-invalid={Boolean(errors.password)}
-            className={authInputClass}
           />
         </Field>
 
-        <Button
+        {/* The design shows a "Keep me logged in" checkbox, but session lifetime is
+            fixed server-side by the httpOnly cookie and `/api/auth/login` accepts
+            no `rememberMe` flag. Rather than render a control that silently does
+            nothing, it is omitted until the backend supports it. */}
+
+        <StickerButton
           type="submit"
-          className="h-auto w-full rounded-md py-[14px] text-[15px] shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
+          tone="brand"
+          size="lg"
+          className="w-full"
           disabled={submitting}
         >
-          {submitting ? 'Logging in…' : 'Log in'}
-        </Button>
+          {submitting ? (
+            <>
+              <Loader2 className="h-[18px] w-[18px] animate-spin" /> Logging in…
+            </>
+          ) : (
+            <>
+              Log in <ArrowRight className="h-[18px] w-[18px]" />
+            </>
+          )}
+        </StickerButton>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
         New to LocalShout?{' '}
         <Link
           href={target ? `/signup?next=${encodeURIComponent(target)}` : '/signup'}
-          className="font-bold text-brand hover:underline"
+          className="font-semibold text-brand hover:underline"
         >
           Create an account
         </Link>

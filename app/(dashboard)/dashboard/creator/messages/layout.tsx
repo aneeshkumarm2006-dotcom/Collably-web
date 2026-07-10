@@ -22,13 +22,13 @@ export default function CreatorMessagesLayout({ children }: { children: React.Re
     <div className="flex h-[calc(100dvh-4rem)] overflow-hidden md:h-[calc(100vh-4rem)]">
       <aside
         className={cn(
-          'flex w-full shrink-0 flex-col overflow-y-auto border-r border-hair bg-card md:w-[340px]',
+          'flex w-full shrink-0 flex-col overflow-y-auto border-r border-hair bg-card md:w-[286px]',
           hasActive && 'hidden md:flex',
         )}
       >
         <div className="border-b border-hair px-5 py-4">
-          <h1 className="font-display text-[22px] font-extrabold tracking-tight text-ink">Messages</h1>
-          <p className="mt-0.5 text-[13px] text-muted">
+          <h1 className="text-[16px] font-bold text-ink">Messages</h1>
+          <p className="mt-0.5 text-[12px] text-faint">
             Chat with the brands you’re collaborating with.
           </p>
         </div>

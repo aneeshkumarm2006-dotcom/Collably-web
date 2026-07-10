@@ -1,22 +1,23 @@
 import type { Metadata, Viewport } from 'next';
-import { Bricolage_Grotesque, Plus_Jakarta_Sans } from 'next/font/google';
+import { IBM_Plex_Mono, Space_Grotesk } from 'next/font/google';
 import { Providers } from './providers';
 import { AnalyticsScripts } from '@/components/analytics/analytics-scripts';
 import { CookieConsent } from '@/components/analytics/cookie-consent';
 import './globals.css';
 
-// Display face for headings/wordmark; body face for everything else. Exposed as
-// CSS variables (`--font-display`, `--font-sans`) that Tailwind's fontFamily maps.
-const fontDisplay = Bricolage_Grotesque({
+// Headings + wordmark. Body text is the system stack on both surfaces, so there
+// is no webfont for running text — only for display and mono.
+const fontDisplay = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-display',
   display: 'swap',
 });
-const fontSans = Plus_Jakarta_Sans({
+// Eyebrows, metric figures, badges and meta labels.
+const fontMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-sans',
+  weight: ['400', '500', '600'],
+  variable: '--font-mono',
   display: 'swap',
 });
 
@@ -30,11 +31,10 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://localshout.app'),
 };
 
+// Light-only: the designs define no dark theme, so the browser chrome is pinned
+// to the public surface's cream page colour regardless of OS preference.
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FBFBFE' },
-    { media: '(prefers-color-scheme: dark)', color: '#0A1526' },
-  ],
+  themeColor: '#FFFDF8',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -45,7 +45,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   // routes keep their own server-side guards (`requireRoleSession`), which is
   // where the durable, per-request session check lives.
   return (
-    <html lang="en" suppressHydrationWarning className={`${fontSans.variable} ${fontDisplay.variable}`}>
+    // suppressHydrationWarning: the client bundle adds a `.js` class to <html>
+    // before hydration (see app/providers.tsx), so the root element's className
+    // intentionally differs from the server HTML. This scopes the suppression to
+    // <html>'s own attributes only — children still hydrate strictly.
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${fontDisplay.variable} ${fontMono.variable}`}
+    >
       <body className="min-h-screen bg-page font-sans text-ink antialiased">
         <Providers>{children}</Providers>
         <AnalyticsScripts />

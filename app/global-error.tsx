@@ -25,17 +25,24 @@ export default function GlobalError({
     <html lang="en">
       <body className="min-h-screen bg-page font-sans text-ink antialiased">
         <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-          <h1 className="text-2xl font-bold text-ink">Something went wrong</h1>
-          <p className="mt-2 max-w-sm text-sm text-muted">
-            The page failed to load. Please try again.
-          </p>
-          <button
-            type="button"
-            onClick={reset}
-            className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-brand px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-secondary"
-          >
-            Try again
-          </button>
+          <div className="sticker w-full max-w-md rounded-xl bg-card px-8 py-10">
+            <p className="font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-coral">
+              Something broke
+            </p>
+            <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-ink">
+              Something went wrong
+            </h1>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
+              The page failed to load. Please try again.
+            </p>
+            <button
+              type="button"
+              onClick={reset}
+              className="sticker press mt-7 inline-flex h-11 select-none items-center justify-center rounded-md bg-brand px-6 text-[15px] font-semibold text-white"
+            >
+              Try again
+            </button>
+          </div>
         </main>
       </body>
     </html>

@@ -7,6 +7,7 @@ import { useInfiniteNotifications, useMarkAllNotificationsRead } from '@/lib/api
 import { NOTIF_CHIP_CLASS, notificationHref, notificationVisual } from '@/lib/notifications';
 import { formatRelativeTime } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { Reveal } from '@/components/shared/reveal';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -17,6 +18,10 @@ export function NotificationsClient({ role }: { role: 'creator' | 'business' }) 
 
   const notifications = query.data?.pages.flatMap((p) => p.data) ?? [];
   const unreadCount = query.data?.pages[0]?.unreadCount ?? 0;
+  // Reveal only the initial page: `useReveal` scans once on mount, so rows
+  // appended by "Load more" would never receive `.in` and stay hidden. Those
+  // later rows simply render visible (no `.r`), which is the safe degrade.
+  const firstPageIds = new Set(query.data?.pages[0]?.data.map((n) => n._id));
 
   return (
     <>
@@ -56,38 +61,50 @@ export function NotificationsClient({ role }: { role: 'creator' | 'business' }) 
         />
       ) : (
         <>
-          <ul className="overflow-hidden rounded-2xl border border-hair bg-card shadow-card">
+          <Reveal as="ul" className="overflow-hidden rounded-lg border border-hair bg-card">
             {notifications.map((n) => {
               const { icon: Icon, dot } = notificationVisual(n.type);
               return (
-                <li key={n._id} className="border-b border-hair last:border-b-0">
+                <li
+                  key={n._id}
+                  className={cn(
+                    'border-b border-divider last:border-b-0',
+                    firstPageIds.has(n._id) && 'r',
+                  )}
+                >
                   <Link
                     href={notificationHref(n.deepLinkPath, role)}
                     className={cn(
-                      'flex items-start gap-3.5 px-4 py-3.5 transition-colors hover:bg-secondary',
-                      !n.isRead && 'bg-brand-soft/40',
+                      'flex items-center gap-3.5 px-5 py-4 transition-colors hover:bg-elev',
+                      !n.isRead && 'bg-[#F0F5FF]',
                     )}
                   >
                     <span
                       className={cn(
-                        'mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl [&_svg]:h-[18px] [&_svg]:w-[18px]',
+                        'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[11px] [&_svg]:h-[18px] [&_svg]:w-[18px]',
                         NOTIF_CHIP_CLASS[dot],
                       )}
                     >
                       <Icon />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm leading-snug text-ink">{n.message}</p>
-                      <p className="mt-0.5 text-[12px] text-faint">{formatRelativeTime(n.createdAt)}</p>
+                      <p className="text-[14.5px] font-semibold leading-snug text-ink">{n.message}</p>
                     </div>
-                    {!n.isRead && (
-                      <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-info" aria-label="Unread" />
-                    )}
+                    <div className="flex shrink-0 items-center gap-3.5">
+                      <span className="text-[12px] text-faint">{formatRelativeTime(n.createdAt)}</span>
+                      <span
+                        className={cn(
+                          'h-[9px] w-[9px] rounded-full',
+                          n.isRead ? 'bg-transparent' : 'bg-brand',
+                        )}
+                        aria-label={n.isRead ? undefined : 'Unread'}
+                      />
+                    </div>
                   </Link>
                 </li>
               );
             })}
-          </ul>
+          </Reveal>
 
           {query.hasNextPage && (
             <div className="mt-5 text-center">

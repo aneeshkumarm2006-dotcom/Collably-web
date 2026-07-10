@@ -12,7 +12,9 @@ import { applicantView } from '@/lib/business/applicant';
 import { formatRelativeTime } from '@/lib/format';
 import { categoryGradient } from '@/lib/domain-meta';
 import { Avatar } from '@/components/shared/avatar';
+import { StatusBadge } from '@/components/shared/status-badge';
 import { EmptyState } from '@/components/shared/empty-state';
+import { Reveal } from '@/components/shared/reveal';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -38,7 +40,7 @@ export function BusinessSubmissionsClient() {
       {query.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2">
           {Array.from({ length: 2 }).map((_, i) => (
-            <Skeleton key={i} className="h-72 w-full rounded-2xl" />
+            <Skeleton key={i} className="h-72 w-full rounded-lg" />
           ))}
         </div>
       ) : query.isError ? (
@@ -59,11 +61,11 @@ export function BusinessSubmissionsClient() {
           description="When an accepted creator submits their content, it lands here for you to verify."
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <Reveal className="grid gap-4 sm:grid-cols-2">
           {submissions.map((app) => (
             <SubmissionCard key={app._id} app={app} onViewProof={setProof} />
           ))}
-        </div>
+        </Reveal>
       )}
 
       <Dialog open={proof !== null} onOpenChange={(open) => !open && setProof(null)}>
@@ -118,7 +120,7 @@ function SubmissionCard({
   const gradientKey = app.campaign?.category;
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-hair bg-card shadow-card">
+    <div className="r lift flex flex-col overflow-hidden rounded-lg border border-hair bg-card shadow-card">
       {/* Preview */}
       <button
         type="button"
@@ -142,8 +144,11 @@ function SubmissionCard({
             <Play className="translate-x-px fill-current" />
           </span>
         </span>
-        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-ink">
+        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wide text-ink">
           {contentType}
+        </span>
+        <span className="absolute right-3 top-3">
+          <StatusBadge status="Submitted" tone="info" />
         </span>
       </button>
 
@@ -152,7 +157,7 @@ function SubmissionCard({
         <div className="flex items-center gap-3">
           <Avatar name={view.name} src={view.avatar} size={40} />
           <div className="min-w-0">
-            <h3 className="truncate font-display text-[15px] font-bold text-ink">{view.name}</h3>
+            <h3 className="truncate text-[15px] font-bold text-ink">{view.name}</h3>
             <p className="truncate text-[13px] text-muted">
               {app.campaign?.title ? `“${app.campaign.title}”` : 'Campaign'}
             </p>
@@ -175,7 +180,7 @@ function SubmissionCard({
         )}
 
         {app.submissionNote && (
-          <div className="mt-3 rounded-xl bg-secondary px-3.5 py-3 text-sm text-muted">
+          <div className="mt-3 rounded-md bg-secondary px-3.5 py-3 text-sm text-muted">
             <span className="font-semibold text-ink">Creator note: </span>
             {app.submissionNote}
           </div>
@@ -183,7 +188,7 @@ function SubmissionCard({
 
         {/* Revision box */}
         {revisionOpen && (
-          <div className="mt-3 rounded-xl border border-warn/30 bg-warn-soft p-3.5">
+          <div className="mt-3 rounded-md border border-warn/30 bg-warn-soft p-3.5">
             <Textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
@@ -214,7 +219,13 @@ function SubmissionCard({
           >
             <RotateCcw className="h-4 w-4" /> Request changes
           </Button>
-          <Button variant="money" size="sm" className="flex-1" disabled={busy} onClick={() => act('verify')}>
+          <Button
+            variant="money"
+            size="sm"
+            className="flex-1 active:scale-[0.98]"
+            disabled={busy}
+            onClick={() => act('verify')}
+          >
             <Check className="h-4 w-4" /> Approve
           </Button>
         </div>

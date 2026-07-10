@@ -13,7 +13,8 @@ import { Container } from '@/components/marketing/section';
 import { Avatar } from '@/components/shared/avatar';
 import { CampaignCard } from '@/components/shared/campaign-card';
 import { EmptyState } from '@/components/shared/empty-state';
-import { Button } from '@/components/ui/button';
+import { Reveal } from '@/components/shared/reveal';
+import { StickerButton } from '@/components/shared/sticker';
 import { JsonLd } from '@/components/shared/json-ld';
 
 // Public profile: on-demand ISR (no per-user variance); cached for `revalidate`.
@@ -95,7 +96,7 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
         {/* Cover banner */}
         <div className="relative">
           <div
-            className="h-[180px] w-full overflow-hidden rounded-[22px]"
+            className="sticker h-[180px] w-full overflow-hidden rounded-xl"
             style={{ background: 'linear-gradient(135deg,#0064E0,#3E8BFF)' }}
           />
           <Link
@@ -108,7 +109,7 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
 
         {/* Identity */}
         <div className="px-2 sm:px-4">
-          <div className="-mt-[44px] flex h-[104px] w-[104px] items-center justify-center overflow-hidden rounded-[26px] border-4 border-card bg-card shadow-card">
+          <div className="-mt-[44px] flex h-[104px] w-[104px] items-center justify-center overflow-hidden rounded-2xl border-outline border-ink bg-card shadow-sticker">
             <Avatar
               name={profile.businessName}
               src={profile.logo}
@@ -143,14 +144,14 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
 
             <div className="flex gap-2">
               {profile.website && (
-                <Button asChild variant="outline" size="pill-sm">
+                <StickerButton asChild tone="white" size="sm">
                   <a href={profile.website} target="_blank" rel="noopener noreferrer nofollow">
                     <Globe className="h-4 w-4" /> Website
                   </a>
-                </Button>
+                </StickerButton>
               )}
               {igHandle && (
-                <Button asChild variant="outline" size="pill-sm">
+                <StickerButton asChild tone="white" size="sm">
                   <a
                     href={`https://instagram.com/${igHandle.replace(/^@/, '')}`}
                     target="_blank"
@@ -159,7 +160,7 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
                   >
                     <Instagram className="h-4 w-4" />
                   </a>
-                </Button>
+                </StickerButton>
               )}
             </div>
           </div>
@@ -172,7 +173,7 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
           )}
 
           {/* Stat row */}
-          <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-y border-hair py-5">
+          <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-y-2 border-ink py-5">
             <Stat value={String(profile.totalCampaigns)} label="Collabs run" />
             <Stat value={String(profile.totalCollabsCompleted)} label="Collabs completed" />
             <Stat value={String(active.length)} label="Live now" />
@@ -193,11 +194,13 @@ export default async function BusinessProfilePage({ params }: { params: Promise<
             )}
           </div>
           {active.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Reveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {active.map((c) => (
-                <CampaignCard key={c._id} campaign={toCampaignCardData(c)} />
+                <div key={c._id} className="r">
+                  <CampaignCard campaign={toCampaignCardData(c)} className="h-full" />
+                </div>
               ))}
-            </div>
+            </Reveal>
           ) : (
             <EmptyState
               icon={<Megaphone />}

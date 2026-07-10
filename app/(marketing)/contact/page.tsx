@@ -5,6 +5,8 @@ import { buildMetadata } from '@/lib/seo';
 import { CONTACT_TOPICS, type ContactTopic } from '@/lib/contact';
 import { Section, SectionLabel } from '@/components/marketing/section';
 import { ContactForm } from '@/components/marketing/contact-form';
+import { Reveal } from '@/components/shared/reveal';
+import { StickerCard } from '@/components/shared/sticker';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Contact',
@@ -27,7 +29,7 @@ const CHANNELS = [
     label: 'Support',
     value: 'support@localshout.ca',
     href: 'mailto:support@localshout.ca',
-    tone: 'bg-warm-soft text-warm',
+    tone: 'bg-coral text-white',
   },
   { icon: MapPin, label: 'HQ', value: 'Toronto · Vancouver', tone: 'bg-grape-soft text-grape' },
 ];
@@ -55,19 +57,21 @@ export default async function ContactPage({
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
-        <ul className="flex flex-col gap-4">
+        <Reveal as="ul" className="flex flex-col gap-4">
           {CHANNELS.map((c) => (
-            <li
+            <StickerCard
+              as="li"
               key={c.label}
-              className="flex items-start gap-4 rounded-2xl border border-hair bg-card p-5 shadow-card"
+              lift
+              className="group r flex items-start gap-4 p-5 hover:!-translate-y-1"
             >
               <span
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${c.tone}`}
+                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-card border-outline border-ink transition-transform duration-150 group-hover:-rotate-6 ${c.tone}`}
               >
                 <c.icon className="h-5 w-5" />
               </span>
               <div>
-                <div className="text-xs font-bold uppercase tracking-[0.08em] text-faint">
+                <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-coral">
                   {c.label}
                 </div>
                 {c.href ? (
@@ -81,9 +85,9 @@ export default async function ContactPage({
                   <div className="text-[15px] font-bold text-ink">{c.value}</div>
                 )}
               </div>
-            </li>
+            </StickerCard>
           ))}
-        </ul>
+        </Reveal>
 
         <ContactForm defaultTopic={defaultTopic} />
       </div>

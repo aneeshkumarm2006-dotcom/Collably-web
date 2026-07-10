@@ -27,7 +27,7 @@ export default function BusinessMessagesLayout({ children }: { children: React.R
         )}
       >
         <div className="border-b border-hair px-5 py-4">
-          <h1 className="font-display text-[22px] font-extrabold tracking-tight text-ink">Messages</h1>
+          <h1 className="text-[22px] font-extrabold tracking-tight text-ink">Messages</h1>
           <p className="mt-0.5 text-[13px] text-muted">Chat with the creators in your collabs.</p>
         </div>
         <div className="p-4">

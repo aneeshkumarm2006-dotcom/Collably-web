@@ -66,7 +66,7 @@ export function CollabCard({
   return (
     <div
       className={cn(
-        'rounded-lg border border-hair bg-card p-5 shadow-sm transition-shadow hover:shadow-md',
+        'rounded-lg border border-hair bg-card p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-hair-strong hover:shadow-card-hover',
         overdue && 'border-l-4 border-l-danger bg-danger-soft',
         className,
       )}

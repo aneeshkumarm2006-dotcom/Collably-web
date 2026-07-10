@@ -1,15 +1,12 @@
 import Link from 'next/link';
-import { Calendar, CheckCircle2, ExternalLink, MapPin, MessageSquare } from 'lucide-react';
+import { ExternalLink, MessageSquare } from 'lucide-react';
 
 import type { PublicApplication } from '@/lib/api/types';
 import type { CampaignDeliverable } from '@/lib/shared';
 import { cn } from '@/lib/utils';
-import { categoryGradient } from '@/lib/domain-meta';
-import { formatDate, isOverdue } from '@/lib/format';
-import { CountdownChip } from '@/components/shared/collab-card';
-import { RewardPill } from '@/components/shared/reward-pill';
-import { StatusBadge } from '@/components/shared/status-badge';
-import { Button } from '@/components/ui/button';
+import { formatCurrency, formatDateShort, isOverdue } from '@/lib/format';
+import { CategoryTile } from '@/components/creator/category-tile';
+import { StatusChip } from '@/components/creator/status-chip';
 
 /** "1× Instagram Reel: tag @brand, 20s+" for the "what to create" checklist. */
 export function deliverableLabel(d: CampaignDeliverable): string {
@@ -27,109 +24,143 @@ export function compareCollabPriority(a: PublicApplication, b: PublicApplication
   return ad - bd;
 }
 
-/** The submission-progress label a creator cares about (not the raw status). */
-function progressStatus(app: PublicApplication): string {
-  if (app.status === 'Completed') return 'Completed';
-  if (app.submittedAt) return 'Submitted';
+/** The submission-progress the creator cares about (label + bar), not the raw status. */
+function progress(app: PublicApplication): { status: string; pct: number; bar: string; task: string } {
+  if (app.status === 'Completed')
+    return {
+      status: 'Approved',
+      pct: 100,
+      bar: 'bg-money',
+      task: 'Approved — your reward is ready to claim.',
+    };
+  if (app.submittedAt)
+    return {
+      status: 'In review',
+      pct: 80,
+      bar: 'bg-brand',
+      task: 'Submitted — waiting on the business to approve.',
+    };
   if (app.status === 'Overdue' || (app.campaign?.deadline && isOverdue(app.campaign.deadline)))
-    return 'Overdue';
-  return 'Not started';
+    return {
+      status: 'Overdue',
+      pct: 40,
+      bar: 'bg-danger',
+      task: 'This collab is overdue — submit your content as soon as you can.',
+    };
+  return {
+    status: 'Content due',
+    pct: 40,
+    bar: 'bg-[#FFC24B]',
+    task: 'Create and post your content, then submit it for approval.',
+  };
 }
 
-/** A small square gradient tile with the business/campaign initial. */
-function InitialTile({
-  label,
-  category,
-  className,
-}: {
-  label?: string;
-  category?: string;
-  className?: string;
-}) {
+function Meta({ label, value, money }: { label: string; value: string; money?: boolean }) {
   return (
-    <span
-      className={cn(
-        'flex shrink-0 items-center justify-center rounded-xl font-display font-bold text-white',
-        className,
-      )}
-      style={{ background: categoryGradient(category) }}
-      aria-hidden
-    >
-      {(label ?? '?').charAt(0).toUpperCase()}
-    </span>
+    <div>
+      <div className="text-[11px] font-semibold uppercase tracking-[0.03em] text-faint">{label}</div>
+      <div
+        className={cn(
+          'mt-0.5 text-[15px] font-bold',
+          money ? 'num text-money-ink' : 'text-ink',
+        )}
+      >
+        {value}
+      </div>
+    </div>
   );
 }
 
 /**
- * A creator's accepted collaboration in flight. `compact` is the dashboard-home
- * "take action" tile; `full` adds the "what to create" deliverables checklist and
- * a "View briefing" link (the Active Collabs page). Goes red along the left edge
- * when overdue.
+ * A creator's accepted collaboration in flight (the Active Collabs page), per the
+ * design: a tinted tile, title + status, the task line, a reward/due/deliverable
+ * meta row, and a right rail with a progress bar, the primary action and a
+ * Message button. `compact` is the condensed dashboard tile.
  */
 export function CreatorCollabCard({
   application,
   variant = 'full',
+  className,
 }: {
   application: PublicApplication;
   variant?: 'full' | 'compact';
+  className?: string;
 }) {
   const campaign = application.campaign;
   const business = campaign?.business ?? application.business;
-  const status = progressStatus(application);
-  const overdue = status === 'Overdue';
+  const { status, pct, bar, task } = progress(application);
   const submitted = Boolean(application.submittedAt);
   const submitHref = `/dashboard/creator/collabs/${application._id}/submit`;
-  const briefingHref = campaign ? `/campaign/${campaign._id}` : undefined;
-  const locationText = campaign?.isRemote
-    ? 'Remote'
-    : [business?.location?.city].filter(Boolean).join(', ');
 
-  const submitAction = submitted ? (
-    application.submissionLink ? (
-      <Button asChild variant="outline" size="sm">
-        <a href={application.submissionLink} target="_blank" rel="noopener noreferrer">
-          <ExternalLink className="h-4 w-4" /> View submission
-        </a>
-      </Button>
+  const reward = campaign?.reward;
+  const rewardText = reward
+    ? reward.estimatedValue
+      ? formatCurrency(reward.estimatedValue)
+      : reward.description || reward.type
+    : '—';
+  const dueText = campaign?.deadline ? formatDateShort(campaign.deadline) : status === 'Approved' ? 'Done' : 'Soon';
+  const firstDeliverable = campaign?.deliverables?.[0];
+  const deliverableText = firstDeliverable
+    ? `${firstDeliverable.quantity} ${firstDeliverable.contentType}`
+    : `${campaign?.deliverables?.length ?? 1} item`;
+
+  const primary =
+    submitted && application.submissionLink ? (
+      <a
+        href={application.submissionLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          'inline-flex w-full items-center justify-center gap-1.5 rounded-sm px-3 py-2.5 text-[14px] font-semibold text-white transition-colors active:scale-[0.98]',
+          status === 'Approved' ? 'bg-money hover:bg-money-ink' : 'bg-brand hover:bg-brand-hover',
+        )}
+      >
+        <ExternalLink className="h-4 w-4" /> View submission
+      </a>
+    ) : submitted ? (
+      <Link
+        href={submitHref}
+        className="inline-flex w-full items-center justify-center rounded-sm bg-brand px-3 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-brand-hover active:scale-[0.98]"
+      >
+        View submission
+      </Link>
     ) : (
-      <span className="text-[13px] font-medium text-muted">Under review</span>
-    )
-  ) : (
-    <Button asChild size="sm">
-      <Link href={submitHref}>Submit content →</Link>
-    </Button>
-  );
+      <Link
+        href={submitHref}
+        className="inline-flex w-full items-center justify-center rounded-sm bg-brand px-3 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-brand-hover active:scale-[0.98]"
+      >
+        Submit content
+      </Link>
+    );
+
+  const messageBtn = application.conversationId ? (
+    <Link
+      href={`/dashboard/creator/messages/${application.conversationId}`}
+      className="inline-flex w-full items-center justify-center gap-1.5 rounded-sm bg-page px-3 py-2.5 text-[14px] font-semibold text-ink transition-colors hover:bg-secondary active:scale-[0.98]"
+    >
+      <MessageSquare className="h-4 w-4" /> Message
+    </Link>
+  ) : null;
 
   if (variant === 'compact') {
     return (
       <div
         className={cn(
-          'flex items-center gap-3.5 rounded-2xl border border-hair bg-card p-3.5 shadow-card',
-          overdue && 'border-l-4 border-l-danger',
+          'lift flex items-center gap-3.5 rounded-lg border border-hair bg-card p-3.5',
+          className,
         )}
       >
-        <InitialTile
-          label={business?.businessName ?? campaign?.title}
-          category={campaign?.category}
-          className="h-11 w-11 text-lg"
-        />
+        <CategoryTile category={campaign?.category} size={44} radius={11} />
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-semibold leading-tight text-ink">
-            {campaign?.title ?? 'Campaign'}
-          </h3>
-          <p className="mt-0.5 truncate text-[13px] text-muted">
-            {business?.businessName}
-            {locationText ? ` · ${locationText}` : ''}
-          </p>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            {campaign?.reward && <RewardPill reward={campaign.reward} />}
-            {campaign?.deadline && <CountdownChip deadline={campaign.deadline} />}
+          <div className="flex items-center gap-2">
+            <h3 className="truncate text-[15px] font-semibold text-ink">
+              {campaign?.title ?? 'Campaign'}
+            </h3>
+            <StatusChip status={status} />
           </div>
+          <p className="mt-0.5 truncate text-[13px] text-muted">{business?.businessName}</p>
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-2">
-          <StatusBadge status={status} />
-          {submitAction}
-        </div>
+        <div className="num shrink-0 text-[14px] font-bold text-money-ink">{rewardText}</div>
       </div>
     );
   }
@@ -137,80 +168,42 @@ export function CreatorCollabCard({
   return (
     <div
       className={cn(
-        'flex flex-col rounded-2xl border border-hair bg-card p-5 shadow-card transition hover:-translate-y-1 hover:shadow-card-hover',
-        overdue && 'border-l-4 border-l-danger',
+        'lift grid gap-6 rounded-lg border border-hair bg-card p-5 md:grid-cols-[minmax(0,1fr)_220px]',
+        className,
       )}
     >
-      <div className="flex items-start gap-3.5">
-        <InitialTile
-          label={business?.businessName ?? campaign?.title}
-          category={campaign?.category}
-          className="h-12 w-12 text-xl"
-        />
-        <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h3 className="font-display text-lg font-bold leading-snug text-ink">
-                {campaign?.title ?? 'Campaign'}
-              </h3>
-              <p className="mt-0.5 flex items-center gap-1.5 text-[13px] text-muted">
-                <span className="font-medium text-ink">{business?.businessName}</span>
-                {locationText && (
-                  <>
-                    <span>·</span>
-                    <MapPin className="h-3.5 w-3.5" />
-                    {locationText}
-                  </>
-                )}
-              </p>
-            </div>
-            <StatusBadge status={status} className="shrink-0" />
+      <div className="flex gap-4">
+        <CategoryTile category={campaign?.category} size={52} radius={13} />
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h3 className="text-[17px] font-bold text-ink">{campaign?.title ?? 'Campaign'}</h3>
+            <StatusChip status={status} />
           </div>
-          {campaign?.reward && <RewardPill reward={campaign.reward} className="mt-3" />}
-        </div>
-      </div>
-
-      {campaign?.deliverables && campaign.deliverables.length > 0 && (
-        <div className="mt-4 rounded-xl bg-black/[0.04] p-3 dark:bg-white/[0.05]">
-          <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
-            Deliverable
+          <p className="mt-1 text-[13.5px] text-muted">
+            <span className="font-medium text-ink">{business?.businessName}</span>
+            {' — '}
+            {task}
           </p>
-          <ul className="space-y-1.5">
-            {campaign.deliverables.map((d, i) => (
-              <li key={i} className="flex items-start gap-2 text-[13px] text-muted">
-                <CheckCircle2
-                  className={cn('mt-0.5 h-4 w-4 shrink-0', submitted ? 'text-success' : 'text-faint')}
-                />
-                <span>{deliverableLabel(d)}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-3.5 flex flex-wrap gap-x-8 gap-y-3">
+            <Meta label="Reward" value={rewardText} money />
+            <Meta label="Due" value={dueText} />
+            <Meta label="Deliverable" value={deliverableText} />
+          </div>
         </div>
-      )}
-
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        {campaign?.deadline && <CountdownChip deadline={campaign.deadline} />}
-        {campaign?.deadline && (
-          <span className="inline-flex items-center gap-1.5 text-[13px] text-muted">
-            <Calendar className="h-3.5 w-3.5" /> Deadline {formatDate(campaign.deadline)}
-          </span>
-        )}
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-hair pt-4">
-        {submitAction}
-        {application.conversationId && (
-          <Button asChild variant="outline" size="sm">
-            <Link href={`/dashboard/creator/messages/${application.conversationId}`}>
-              <MessageSquare className="h-4 w-4" /> Message
-            </Link>
-          </Button>
-        )}
-        {briefingHref && (
-          <Button asChild variant="outline" size="sm">
-            <Link href={briefingHref}>View briefing</Link>
-          </Button>
-        )}
+      <div className="flex flex-col justify-center gap-2.5 border-t border-divider pt-4 md:border-l md:border-t-0 md:pl-6 md:pt-0">
+        <div>
+          <div className="mb-1.5 flex items-center justify-between text-[12px] text-muted">
+            <span>Progress</span>
+            <span className="num font-bold text-ink">{pct}%</span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-[#EBEDF0]">
+            <div className={cn('h-full rounded-full', bar)} style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+        {primary}
+        {messageBtn}
       </div>
     </div>
   );

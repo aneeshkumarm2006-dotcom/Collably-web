@@ -2,7 +2,7 @@
 
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Briefcase, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Briefcase, Info, MessageSquare } from 'lucide-react';
 
 import type { UserRole } from '@/lib/constants';
 import {
@@ -20,6 +20,7 @@ import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChatComposer } from './chat-composer';
+import { ContactPanel } from './contact-panel';
 import { DateSeparator, MessageBubble, TypingBubble } from './message-bubble';
 
 interface TypingPayload {
@@ -27,6 +28,9 @@ interface TypingPayload {
   fromUserId?: string;
   isTyping?: boolean;
 }
+
+/** One-tap phrases that prefill (never auto-send) the composer. */
+const QUICK_REPLIES = ['Sounds good', 'Posting today', 'Share the brief'] as const;
 
 /**
  * One chat thread: header (other participant + collab context), the scrolling
@@ -54,6 +58,7 @@ export function ChatThread({
   const topSentinel = useRef<HTMLDivElement>(null);
   const typingClear = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [otherTyping, setOtherTyping] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   const conversation = convo.data?.conversation;
   const other = conversation?.otherParticipant;
@@ -127,7 +132,7 @@ export function ChatThread({
   }
 
   return (
-    <div className="flex h-full flex-col bg-page">
+    <div className="relative flex h-full flex-col overflow-hidden bg-page">
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-hair bg-card px-4 py-3">
         <Link
@@ -144,13 +149,32 @@ export function ChatThread({
           </div>
         ) : (
           <>
-            <Avatar name={other?.name ?? 'Chat'} src={other?.avatar} size={40} />
-            <div className="min-w-0">
-              <div className="truncate font-semibold text-ink">{other?.name ?? 'Conversation'}</div>
-              <div className="truncate text-[12px] text-muted">
-                {otherTyping ? 'typing…' : (conversation?.campaignTitle ?? 'Collab chat')}
+            <button
+              type="button"
+              onClick={() => setContactOpen((v) => !v)}
+              aria-expanded={contactOpen}
+              aria-label="View contact info"
+              className="flex min-w-0 flex-1 items-center gap-3 rounded-md text-left transition-colors hover:bg-secondary/60"
+            >
+              <Avatar name={other?.name ?? 'Chat'} src={other?.avatar} size={40} />
+              <div className="min-w-0">
+                <div className="truncate font-semibold text-ink">
+                  {other?.name ?? 'Conversation'}
+                </div>
+                <div className="truncate text-[12px] text-muted">
+                  {otherTyping ? 'typing…' : (conversation?.campaignTitle ?? 'Collab chat')}
+                </div>
               </div>
-            </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setContactOpen((v) => !v)}
+              aria-expanded={contactOpen}
+              aria-label="View contact info"
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-secondary hover:text-ink"
+            >
+              <Info className="h-5 w-5" />
+            </button>
           </>
         )}
       </div>
@@ -192,7 +216,7 @@ export function ChatThread({
           />
         </div>
       ) : (
-        <div ref={scrollRef} className="flex flex-1 flex-col-reverse overflow-y-auto py-3">
+        <div ref={scrollRef} className="flex flex-1 flex-col-reverse overflow-y-auto bg-elev py-3">
           {otherTyping && <TypingBubble />}
           {messages.map((m, i) => {
             const older = messages[i + 1]; // newest-first → next item is chronologically earlier
@@ -205,7 +229,12 @@ export function ChatThread({
               <Fragment key={m._id}>
                 {/* DOM order is reversed by col-reverse, so the separator (rendered
                     after the bubble) appears visually above the day's first message. */}
-                <MessageBubble message={m} mine={m.senderUserId === me.id} tight={tight} />
+                <MessageBubble
+                  message={m}
+                  mine={m.senderUserId === me.id}
+                  tight={tight}
+                  animateIn={i === 0}
+                />
                 {firstOfDay && <DateSeparator label={dayLabel(m.createdAt)} />}
               </Fragment>
             );
@@ -217,7 +246,21 @@ export function ChatThread({
         </div>
       )}
 
-      <ChatComposer onSend={onSend} onTyping={emitTyping} disabled={convo.isError} />
+      <ChatComposer
+        onSend={onSend}
+        onTyping={emitTyping}
+        disabled={convo.isError}
+        quickReplies={QUICK_REPLIES}
+      />
+
+      {contactOpen && conversation && (
+        <ContactPanel
+          conversation={conversation}
+          other={other}
+          role={role}
+          onClose={() => setContactOpen(false)}
+        />
+      )}
     </div>
   );
 }

@@ -23,6 +23,7 @@ import { Container } from '@/components/marketing/section';
 import { StatusBadge } from '@/components/shared/status-badge';
 import { Avatar } from '@/components/shared/avatar';
 import { CampaignCard } from '@/components/shared/campaign-card';
+import { Reveal } from '@/components/shared/reveal';
 import { JsonLd } from '@/components/shared/json-ld';
 import { ApplyPanel } from '@/components/campaign/apply-panel';
 import { CampaignLocationMap } from '@/components/maps/campaign-location-map.lazy';
@@ -133,7 +134,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
 
         {/* Hero banner */}
         <div
-          className="relative mt-5 h-[230px] w-full overflow-hidden rounded-[22px]"
+          className="sticker relative mt-5 h-[230px] w-full overflow-hidden rounded-xl"
           style={{ background: categoryGradient(campaign.category) }}
         >
           {campaign.coverImage && (
@@ -176,7 +177,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
           <div>
             {/* Business row */}
             {business && (
-              <div className="flex items-center gap-4 rounded-2xl border border-hair bg-card p-4">
+              <div className="sticker flex items-center gap-4 rounded-card bg-card p-4">
                 <Avatar name={business.businessName} src={business.logo} size={52} shape="square" />
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
@@ -219,10 +220,10 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                 <h2 className="mb-3 font-display text-[20px] font-bold text-ink">
                   What you&rsquo;ll create
                 </h2>
-                <ul className="flex flex-col gap-3">
+                <Reveal as="ul" className="flex flex-col gap-3">
                   {campaign.deliverables.map((d, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
+                    <li key={i} className="r flex items-start gap-3">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-brand-soft text-brand">
                         <Check className="h-3.5 w-3.5" />
                       </span>
                       <div className="min-w-0">
@@ -237,7 +238,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                       </div>
                     </li>
                   ))}
-                </ul>
+                </Reveal>
               </section>
             )}
 
@@ -248,7 +249,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                   {campaign.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-hair bg-card px-3 py-1 font-mono text-[12px] text-muted"
+                      className="rounded-full border-2 border-ink bg-elev px-3 py-1 font-mono text-[12px] text-ink"
                     >
                       #{tag}
                     </span>
@@ -263,7 +264,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                 <h2 className="mb-3 flex items-center gap-2 font-display text-[20px] font-bold text-ink">
                   <MapPin className="h-5 w-5 text-brand" /> Location
                 </h2>
-                <div className="overflow-hidden rounded-2xl">
+                <div className="overflow-hidden rounded-xl border-2 border-ink">
                   <CampaignLocationMap location={campaign.location} />
                 </div>
               </section>
@@ -309,11 +310,13 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                 <h3 className="mb-3 font-mono text-[11px] uppercase tracking-[0.08em] text-muted">
                   More from {business?.businessName}
                 </h3>
-                <div className="flex flex-col gap-3">
+                <Reveal className="flex flex-col gap-3">
                   {otherCampaigns.map((c) => (
-                    <CampaignCard key={c._id} campaign={toCampaignCardData(c)} variant="compact" />
+                    <div key={c._id} className="r">
+                      <CampaignCard campaign={toCampaignCardData(c)} variant="compact" />
+                    </div>
                   ))}
-                </div>
+                </Reveal>
               </div>
             )}
           </aside>

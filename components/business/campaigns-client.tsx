@@ -30,6 +30,8 @@ import { categoryIcon, categoryGradient } from '@/lib/domain-meta';
 import { formatCompactCurrency } from '@/lib/format';
 import { EmptyState } from '@/components/shared/empty-state';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
+import { Reveal } from '@/components/shared/reveal';
+import { ProgressFill } from '@/components/business/progress-fill';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -160,10 +162,10 @@ export function BusinessCampaignsClient() {
               onClick={() => setTab(t)}
               aria-pressed={tab === t}
               className={cn(
-                'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-bold transition-colors',
+                'inline-flex items-center gap-1.5 rounded-md border px-3.5 py-1.5 text-[13px] font-bold transition-colors',
                 tab === t
-                  ? 'bg-brand text-white'
-                  : 'bg-secondary text-muted hover:text-ink',
+                  ? 'border-ink bg-ink text-white'
+                  : 'border-hair bg-card text-muted hover:text-ink',
               )}
             >
               {t}
@@ -200,7 +202,7 @@ export function BusinessCampaignsClient() {
       {query.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-[260px] w-full rounded-2xl" />
+            <Skeleton key={i} className="h-[260px] w-full rounded-lg" />
           ))}
         </div>
       ) : query.isError ? (
@@ -220,7 +222,7 @@ export function BusinessCampaignsClient() {
           title="No campaigns yet"
           description="Create your first campaign to start receiving applications from creators."
           action={
-            <Button asChild>
+            <Button asChild className="active:scale-[0.98]">
               <Link href="/dashboard/business/campaigns/new">
                 <Plus className="h-4 w-4" /> New campaign
               </Link>
@@ -230,7 +232,10 @@ export function BusinessCampaignsClient() {
       ) : rows.length === 0 ? (
         <EmptyState icon={<SearchX />} title="No campaigns match" description="Try a different tab or search." />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal
+          key={`${tab}|${sort}|${q}`}
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {rows.map((c) => (
             <CampaignRow
               key={c._id}
@@ -244,7 +249,7 @@ export function BusinessCampaignsClient() {
               onDelete={() => setPending({ type: 'delete', campaign: c })}
             />
           ))}
-        </div>
+        </Reveal>
       )}
 
       <ConfirmModal
@@ -275,13 +280,16 @@ export function BusinessCampaignsClient() {
   );
 }
 
-/** Domain status → design pill (label + soft tint colors). */
-const STATUS_PILL: Record<CampaignStatus, { label: string; className: string }> = {
-  Active: { label: 'Live', className: 'bg-mint-soft text-[#0FA57E]' },
-  Paused: { label: 'Paused', className: 'bg-warn-soft text-warn' },
-  Draft: { label: 'Draft', className: 'bg-secondary text-muted' },
-  Closed: { label: 'Closed', className: 'bg-secondary text-muted' },
-  Completed: { label: 'Completed', className: 'bg-brand-soft text-brand' },
+/**
+ * Domain status → design pill. Per the design the badge sits on the card cover as
+ * a white chip with a colored label (no dot), so we map status → text tone only.
+ */
+const STATUS_PILL: Record<CampaignStatus, { label: string; text: string }> = {
+  Active: { label: 'Live', text: 'text-money-ink' },
+  Paused: { label: 'Paused', text: 'text-warn' },
+  Draft: { label: 'Draft', text: 'text-muted' },
+  Closed: { label: 'Closed', text: 'text-muted' },
+  Completed: { label: 'Completed', text: 'text-brand' },
 };
 
 function CampaignRow({
@@ -316,11 +324,13 @@ function CampaignRow({
   // The domain has no "spots" model, so we surface deliverable quantity as the
   // spots target when available, and the real applicant count.
   const spots = c.deliverables?.reduce((sum, d) => sum + (d.quantity ?? 0), 0) || null;
+  const filled = spots ? Math.min(c.applicationsCount ?? 0, spots) : 0;
+  const filledPct = spots ? Math.round((filled / spots) * 100) : 0;
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-hair bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
+    <div className="r group flex flex-col overflow-hidden rounded-lg border border-hair bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
       {/* Gradient header */}
-      <Link href={appsHref} className="relative block h-24" style={{ background: categoryGradient(c.category) }}>
+      <Link href={appsHref} className="relative block h-[88px]" style={{ background: categoryGradient(c.category) }}>
         {c.coverImage ? (
           <Image src={c.coverImage} alt="" fill sizes="360px" className="object-cover" />
         ) : (
@@ -330,34 +340,57 @@ function CampaignRow({
         )}
         <span
           className={cn(
-            'absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold',
-            pill.className,
+            'absolute left-3 top-3 inline-flex items-center rounded-[6px] bg-white px-2 py-0.5 text-[10px] font-bold shadow-xs',
+            pill.text,
           )}
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-current" />
           {pill.label}
         </span>
       </Link>
 
       {/* Body */}
       <div className="flex flex-1 flex-col p-[18px]">
-        <Link href={appsHref} className="line-clamp-2 font-display text-[17px] font-bold leading-snug text-ink hover:text-brand">
+        <Link href={appsHref} className="line-clamp-2 text-[17px] font-bold leading-snug text-ink hover:text-brand">
           {c.title}
         </Link>
         <p className="mt-1.5 text-[13px] font-bold text-brand">
           {rewardValue ? `${c.reward.description || c.reward.type} · ${rewardValue}` : c.reward?.description || c.reward?.type}
         </p>
 
-        <div className="mt-3 flex items-center justify-between border-t border-hair pt-3 text-[12.5px] text-muted">
-          <span>
-            <b className="text-ink">{c.applicationsCount}</b> applicant{c.applicationsCount === 1 ? '' : 's'}
-          </span>
-          {spots != null && (
+        <div className="mt-3 border-t border-hair pt-3">
+          <div className="flex items-center justify-between text-[12.5px] text-muted">
             <span>
-              <b className="text-ink">{spots}</b> spot{spots === 1 ? '' : 's'}
+              <b className="num text-ink">{c.applicationsCount}</b> applicant
+              {c.applicationsCount === 1 ? '' : 's'}
             </span>
+            {spots != null && (
+              <span>
+                <b className="num text-ink">{filled}</b>
+                <span className="text-faint">/{spots}</span> spot{spots === 1 ? '' : 's'} filled
+              </span>
+            )}
+          </div>
+          {spots != null && (
+            <div
+              className="mt-2 h-1.5 overflow-hidden rounded-full bg-secondary"
+              role="progressbar"
+              aria-valuenow={filled}
+              aria-valuemin={0}
+              aria-valuemax={spots}
+              aria-label="Spots filled"
+            >
+              <ProgressFill pct={filledPct} className="bg-brand" />
+            </div>
           )}
         </div>
+
+        <Link
+          href={appsHref}
+          className="mt-3 inline-flex items-center gap-1 self-start text-[13px] font-bold text-brand transition-colors hover:text-brand-hover"
+        >
+          View campaign
+          <span aria-hidden>→</span>
+        </Link>
 
         <div className="mt-4 flex items-center gap-2">
           {canEdit ? (
@@ -369,7 +402,7 @@ function CampaignRow({
           ) : (
             <span className="flex-1" />
           )}
-          <Button asChild size="sm" className="flex-1">
+          <Button asChild size="sm" className="flex-1 active:scale-[0.98]">
             <Link href={appsHref}>
               <Users className="h-4 w-4" /> Applicants
             </Link>

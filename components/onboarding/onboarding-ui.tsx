@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, Check, type LucideIcon } from 'lucide-react';
 
 import { useAuth } from '@/components/providers/auth-provider';
 import { BrandMark } from '@/components/shared/brand-mark';
-import { Button } from '@/components/ui/button';
+import { StickerButton } from '@/components/shared/sticker';
 import { ErrorBanner } from '@/components/auth/auth-layout';
 import { cn } from '@/lib/utils';
 
@@ -30,7 +30,7 @@ export function OnboardingFrame({ children }: { children: React.ReactNode }) {
         <button
           type="button"
           onClick={() => void logout()}
-          className="text-sm font-medium text-muted transition-colors hover:text-ink"
+          className="font-display text-sm font-semibold text-muted transition-colors hover:text-ink"
         >
           Log out
         </button>
@@ -71,23 +71,25 @@ export function OnboardingShell({
 
   return (
     <OnboardingFrame>
-      {/* Step indicator + gradient progress bar */}
+      {/* Step indicator + sticker progress bar */}
       <div className="mb-5">
         <div className="mb-3 flex items-center justify-between">
-          <span className="text-[13px] font-bold text-muted">
+          <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-muted">
             Step {current + 1} of {steps.length}
           </span>
-          <span className="text-[13px] font-bold text-brand">{steps[current]}</span>
+          <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-brand">
+            {steps[current]}
+          </span>
         </div>
-        <div className="h-[7px] w-full overflow-hidden rounded-full bg-[#EEF1F8]">
+        <div className="h-3 w-full overflow-hidden rounded-full border-outline border-ink bg-elev">
           <div
-            className="h-full rounded-full transition-[width] duration-300"
-            style={{ width: `${pct}%`, background: 'linear-gradient(90deg,#0064E0,#7B61FF)' }}
+            className="h-full rounded-full bg-brand transition-[width] duration-300"
+            style={{ width: `${pct}%` }}
           />
         </div>
       </div>
 
-      <div className="rounded-[22px] border border-hair bg-card p-6 shadow-card sm:p-8">
+      <div className="sticker rounded-xl bg-card p-6 sm:p-8">
         {/* Each step animates in; reduced-motion users get the global no-op. */}
         <div key={current} className="animate-in fade-in slide-in-from-right-3 duration-300">
           {children}
@@ -96,20 +98,20 @@ export function OnboardingShell({
         {error && <ErrorBanner message={error} />}
 
         <div className="mt-8 flex items-center justify-between gap-3">
-          <Button
+          <StickerButton
             type="button"
-            variant="ghost"
+            tone="white"
             onClick={onBack}
             disabled={!onBack || submitting}
             className={cn(!onBack && 'opacity-40')}
           >
             <ArrowLeft /> Back
-          </Button>
-          <Button
+          </StickerButton>
+          <StickerButton
             type="button"
+            tone="brand"
             onClick={onNext}
             disabled={!canAdvance || submitting}
-            className="h-auto rounded-md px-7 py-[13px] text-[15px] shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
           >
             {submitting ? (
               'Saving…'
@@ -122,7 +124,7 @@ export function OnboardingShell({
                 Continue <ArrowRight />
               </>
             )}
-          </Button>
+          </StickerButton>
         </div>
       </div>
     </OnboardingFrame>
@@ -158,10 +160,10 @@ export function TogglePill({
       aria-checked={selected}
       onClick={onClick}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border-[1.5px] px-4 py-2.5 text-sm font-bold transition-colors',
+        'inline-flex items-center gap-1.5 rounded-full border-2 border-ink px-4 py-2.5 font-display text-sm font-semibold transition-all',
         selected
-          ? 'border-brand bg-brand text-white'
-          : 'border-hair-strong bg-card text-muted hover:border-brand hover:text-ink',
+          ? 'bg-brand text-white shadow-sticker-active'
+          : 'bg-elev text-ink shadow-sticker-muted hover:-translate-y-0.5 hover:bg-brand-soft',
       )}
     >
       {Icon && <Icon aria-hidden className="h-4 w-4 shrink-0" />}
@@ -188,8 +190,8 @@ export function SelectCard({
   tone?: 'brand' | 'warm';
 }) {
   const selectedClass =
-    tone === 'warm' ? 'border-warm bg-warm text-white' : 'border-brand bg-brand text-white';
-  const hoverClass = tone === 'warm' ? 'hover:border-warm' : 'hover:border-brand';
+    tone === 'warm' ? 'bg-coral text-white' : 'bg-brand text-white';
+  const hoverClass = tone === 'warm' ? 'hover:bg-warn-soft' : 'hover:bg-brand-soft';
   return (
     <button
       type="button"
@@ -197,8 +199,10 @@ export function SelectCard({
       aria-checked={selected}
       onClick={onClick}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border-[1.5px] px-4 py-2.5 text-sm font-bold transition-colors',
-        selected ? selectedClass : cn('border-hair-strong bg-card text-muted hover:text-ink', hoverClass),
+        'inline-flex items-center gap-1.5 rounded-full border-2 border-ink px-4 py-2.5 font-display text-sm font-semibold transition-all',
+        selected
+          ? cn(selectedClass, 'shadow-sticker-active')
+          : cn('bg-elev text-ink shadow-sticker-muted hover:-translate-y-0.5', hoverClass),
       )}
     >
       {Icon && <Icon className="h-4 w-4 shrink-0" aria-hidden />}

@@ -116,7 +116,7 @@ export function ConversationList({ role, meId }: { role: 'creator' | 'business';
           />
         )
       ) : (
-        <ul className="overflow-hidden rounded-xl border border-hair bg-card shadow-sm">
+        <ul className="overflow-hidden rounded-lg border border-hair bg-card">
           {shown.map((c) => (
             <ConversationRow key={c._id} conversation={c} meId={meId} role={role} />
           ))}
@@ -172,12 +172,12 @@ function ConversationRow({
     : 'No messages yet. Say hello.';
 
   return (
-    <li className="border-b border-hair last:border-b-0">
+    <li className="border-b border-divider last:border-b-0">
       <Link
         href={href}
         className={cn(
-          'flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-brand-soft/50',
-          active && 'bg-brand-soft/60',
+          'flex items-center gap-3 border-l-[3px] px-4 py-3.5 transition-colors hover:bg-elev',
+          active ? 'border-l-brand bg-[#F0F5FF]' : 'border-l-transparent',
         )}
       >
         <Avatar name={other?.name ?? 'Chat'} src={other?.avatar} size={48} />

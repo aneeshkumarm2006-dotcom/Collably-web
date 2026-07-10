@@ -43,7 +43,7 @@ export function ApplicationCard({
   return (
     <div
       className={cn(
-        'rounded-lg border border-hair border-l-4 bg-card p-5 shadow-sm transition-shadow hover:shadow-md',
+        'rounded-lg border border-hair border-l-4 bg-card p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover',
         accent,
         status === 'Rejected' && 'opacity-65',
         className,

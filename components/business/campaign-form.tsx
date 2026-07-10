@@ -22,7 +22,7 @@ import { toast } from '@/lib/toast';
 import { uploadToCloudinary } from '@/lib/upload/cloudinary';
 import { CATEGORIES, PLATFORMS, CONTENT_TYPES, REWARD_TYPES } from '@/lib/constants';
 import type { Category, ContentType, Platform, RewardType } from '@/lib/shared';
-import { categoryIcon, rewardIcon } from '@/lib/domain-meta';
+import { categoryIcon, categoryGradient, rewardIcon } from '@/lib/domain-meta';
 import {
   type CampaignForm as CampaignFormModel,
   type CampaignFormErrors,
@@ -63,7 +63,7 @@ const LocationPicker = dynamic(
   () => import('@/components/maps/location-picker').then((m) => m.LocationPicker),
   {
     ssr: false,
-    loading: () => <Skeleton className="h-64 w-full rounded-xl" />,
+    loading: () => <Skeleton className="h-64 w-full rounded-md" />,
   },
 );
 
@@ -80,12 +80,12 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-hair bg-card p-5 shadow-card sm:p-6">
+    <section className="rounded-lg border border-hair bg-card p-5 shadow-card sm:p-6">
       <div className="flex items-baseline gap-2.5">
         <span className="font-mono text-[12px] font-semibold text-faint">
           {String(index).padStart(2, '0')}
         </span>
-        <h2 className="font-display text-base font-bold text-ink">{title}</h2>
+        <h2 className="text-base font-bold text-ink">{title}</h2>
       </div>
       {description && <p className="mt-0.5 pl-7 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
@@ -96,6 +96,62 @@ function Section({
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return <p className="mt-1.5 text-[12.5px] text-danger">{message}</p>;
+}
+
+/**
+ * Right-rail live preview that mirrors the form input as a mini campaign card,
+ * matching the design's "Live preview" panel. Reads straight off `form` state —
+ * every value is what the business just typed, so nothing is fabricated.
+ */
+function LivePreview({ form }: { form: CampaignFormModel }) {
+  const CategoryIcon = form.category ? categoryIcon(form.category) : ImagePlus;
+  const raw = form.reward.estimatedValue.trim();
+  const rewardValue =
+    raw !== '' && Number.isFinite(Number(raw)) && Number(raw) > 0
+      ? `$${Number(raw).toLocaleString()}`
+      : null;
+
+  return (
+    <div className="lift rounded-lg border border-hair bg-card p-[18px] shadow-card">
+      <div className="mb-3 font-mono text-[11px] font-bold uppercase tracking-wide text-faint">
+        Live preview
+      </div>
+      <div className="overflow-hidden rounded-[14px] border border-hair">
+        <div
+          className="relative flex h-20 items-center justify-center overflow-hidden bg-secondary"
+          style={form.category ? { background: categoryGradient(form.category) } : undefined}
+        >
+          {form.coverImage ? (
+            // eslint-disable-next-line @next/next/no-img-element -- user-supplied cover preview
+            <img src={form.coverImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          ) : (
+            <CategoryIcon className="h-7 w-7 text-white/85" />
+          )}
+        </div>
+        <div className="p-3.5">
+          <h3 className="line-clamp-2 text-[15px] font-bold leading-snug text-ink">
+            {form.title.trim() || 'Campaign title'}
+          </h3>
+          {form.category && (
+            <span className="mt-1.5 inline-flex items-center rounded-full bg-brand-soft px-2.5 py-1 font-mono text-[11px] font-semibold text-brand">
+              {form.category}
+            </span>
+          )}
+          <p className="mt-2 line-clamp-2 text-[13px] text-muted">
+            {form.description.trim() || 'Your campaign brief will appear here as you type.'}
+          </p>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <span className="num min-w-0 truncate font-mono text-[15px] font-bold text-money">
+              {rewardValue ?? (form.reward.description.trim() || 'Reward')}
+            </span>
+            <span className="shrink-0 rounded-sm bg-brand px-3 py-1.5 text-[12px] font-semibold text-white">
+              Apply
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function CampaignForm({
@@ -174,6 +230,8 @@ export function CampaignForm({
     <div className="space-y-5">
       {banner && <ErrorBanner message={banner} />}
 
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:items-start">
+        <div className="space-y-5">
       {/* 01: Basics */}
       <Section index={1} title="Basics" description="The headline creators see first.">
         <div className="space-y-1.5">
@@ -383,6 +441,13 @@ export function CampaignForm({
       <Section index={7} title="Tags" description="Help creators discover this campaign.">
         <TagEditor tags={form.tags} onChange={(tags) => patch({ tags })} />
       </Section>
+        </div>
+
+        {/* Right rail: a live preview that mirrors the form as the business types. */}
+        <aside className="lg:sticky lg:top-6">
+          <LivePreview form={form} />
+        </aside>
+      </div>
 
       {/* Sticky action bar */}
       <div className="sticky bottom-0 z-10 -mx-5 border-t border-hair bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
@@ -406,7 +471,7 @@ export function CampaignForm({
             </Button>
             <Button
               size="lg"
-              className="flex-1"
+              className="flex-1 active:scale-[0.98]"
               disabled={submitting || !canPublish}
               onClick={() => handleSubmit(true)}
             >
@@ -422,7 +487,12 @@ export function CampaignForm({
             >
               Cancel
             </Button>
-            <Button size="lg" className="flex-1" disabled={submitting} onClick={() => handleSubmit(false)}>
+            <Button
+              size="lg"
+              className="flex-1 active:scale-[0.98]"
+              disabled={submitting}
+              onClick={() => handleSubmit(false)}
+            >
               {submitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" /> Saving…

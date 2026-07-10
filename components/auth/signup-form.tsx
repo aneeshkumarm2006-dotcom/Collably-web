@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Sparkles, Store } from 'lucide-react';
+import { ArrowRight, Check, Loader2, Sparkles, Store } from 'lucide-react';
 
 import { useAuth, type SessionUser } from '@/components/providers/auth-provider';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { StickerButton } from '@/components/shared/sticker';
 import { Field, authInputClass } from '@/components/auth/field';
+import { PasswordInput } from '@/components/auth/password-input';
 import { GoogleButton } from '@/components/auth/google-button';
 import { ErrorBanner, OrDivider } from '@/components/auth/auth-layout';
 import { signupSchema, fieldErrors } from '@/lib/auth/schemas';
@@ -20,9 +21,30 @@ import { cn } from '@/lib/utils';
 
 type Role = 'business' | 'creator';
 
-const ROLES: { role: Role; icon: typeof Store; title: string; sub: string }[] = [
-  { role: 'business', icon: Store, title: "I'm a Business", sub: 'Post campaigns & find creators' },
-  { role: 'creator', icon: Sparkles, title: "I'm a Creator", sub: 'Find collabs & earn rewards' },
+const ROLES: {
+  role: Role;
+  icon: typeof Store;
+  title: string;
+  sub: string;
+  dot: string;
+  tile: string;
+}[] = [
+  {
+    role: 'creator',
+    icon: Sparkles,
+    title: "I'm a creator",
+    sub: 'Earn rewards for content',
+    dot: 'bg-brand',
+    tile: 'bg-brand-soft text-brand',
+  },
+  {
+    role: 'business',
+    icon: Store,
+    title: "I'm a business",
+    sub: 'Launch local campaigns',
+    dot: 'bg-money',
+    tile: 'bg-money-soft text-money-ink',
+  },
 ];
 
 export function SignupForm({ next }: { next?: string }) {
@@ -33,25 +55,43 @@ export function SignupForm({ next }: { next?: string }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [agreed, setAgreed] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [banner, setBanner] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const target = sanitizeNext(next);
 
+  function chooseRole(r: Role) {
+    if (r === role) return;
+    setRole(r);
+    setErrors((prev) => ({ ...prev, role: '' }));
+    track('signup_started', { role: r });
+  }
+
   /** After auth, new accounts go to onboarding; honor `next` only if onboarded. */
   function routeAfter(user: SessionUser) {
     router.push(user.isOnboarded ? (target ?? postAuthPath(user)) : onboardingPath(user.role));
   }
 
+  function requireRole(): boolean {
+    if (!role) {
+      setErrors((prev) => ({ ...prev, role: 'Choose creator or business to continue' }));
+      return false;
+    }
+    return true;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!role) return;
     setBanner(null);
+    if (!requireRole() || !role) return;
 
     const parsed = signupSchema.safeParse({ name, email, password });
-    if (!parsed.success) {
-      setErrors(fieldErrors(parsed.error));
+    const nextErrors = parsed.success ? {} : fieldErrors(parsed.error);
+    if (!agreed) nextErrors.terms = 'Please accept the Terms and Privacy Policy';
+    if (!parsed.success || !agreed) {
+      setErrors(nextErrors);
       return;
     }
     setErrors({});
@@ -67,8 +107,8 @@ export function SignupForm({ next }: { next?: string }) {
   }
 
   async function handleGoogle(idToken: string) {
-    if (!role) return;
     setBanner(null);
+    if (!requireRole() || !role) return;
     setSubmitting(true);
     try {
       const { user } = await loginWithGoogle(idToken, role);
@@ -80,99 +120,75 @@ export function SignupForm({ next }: { next?: string }) {
     }
   }
 
-  // Step 1: choose a role.
-  if (!role) {
-    return (
-      <div>
-        <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
-          Create your account
-        </h1>
-        <p className="mt-1.5 text-[15px] text-muted">First, tell us who you are.</p>
+  const isBusiness = role === 'business';
 
-        <div className="mt-7 grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-          {ROLES.map(({ role: r, icon: Icon, title, sub }) => {
-            const warm = r === 'business';
+  return (
+    <div>
+      <p className="font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-money-ink">
+        Join free
+      </p>
+      <h1 className="mt-2.5 font-display text-[34px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
+        Create your account
+      </h1>
+      <p className="mt-2 text-[15px] text-muted">First, tell us who you are.</p>
+
+      {/* Role picker */}
+      <fieldset className="mt-5">
+        <legend className="sr-only">I&apos;m joining as</legend>
+        <div className="mt-2.5 grid grid-cols-2 gap-3">
+          {ROLES.map(({ role: r, icon: Icon, title, sub, dot, tile }) => {
+            const selected = role === r;
             return (
               <button
                 key={r}
                 type="button"
-                onClick={() => {
-                  setRole(r);
-                  setErrors({});
-                  setBanner(null);
-                  track('signup_started', { role: r });
-                }}
+                onClick={() => chooseRole(r)}
+                aria-pressed={selected}
                 className={cn(
-                  'group flex flex-col items-center gap-2.5 rounded-[22px] border-2 border-hair bg-card px-4 py-7 text-center transition-all hover:-translate-y-0.5 hover:shadow-card',
-                  warm ? 'hover:border-warm' : 'hover:border-brand',
+                  'group relative rounded-card border-2 border-ink px-3.5 py-4 text-left transition-all',
+                  selected
+                    ? 'bg-card shadow-sticker'
+                    : 'bg-elev shadow-sticker-muted hover:-translate-y-0.5 hover:shadow-sticker',
                 )}
               >
                 <span
+                  aria-hidden
                   className={cn(
-                    'flex h-12 w-12 items-center justify-center rounded-[14px]',
-                    warm ? 'bg-warm-soft text-warm' : 'bg-brand-soft text-brand',
+                    'absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full transition-colors',
+                    selected ? dot : 'border-2 border-hair-strong',
                   )}
                 >
-                  <Icon className="h-6 w-6" />
+                  {selected && <Check className="h-3 w-3 text-white" strokeWidth={3.5} />}
                 </span>
-                <span className="text-[17px] font-bold text-ink">{title}</span>
-                <span className="text-[13px] text-muted">{sub}</span>
+                <span
+                  className={cn(
+                    'flex h-10 w-10 items-center justify-center rounded-[12px]',
+                    tile,
+                  )}
+                >
+                  <Icon className="h-[18px] w-[18px]" />
+                </span>
+                <span className="mt-3 block font-display text-[16px] font-bold text-ink">
+                  {title}
+                </span>
+                <span className="mt-0.5 block text-[12px] leading-snug text-muted">{sub}</span>
               </button>
             );
           })}
         </div>
-
-        <p className="mt-6 text-center text-sm text-muted">
-          Already have an account?{' '}
-          <Link
-            href={target ? `/login?next=${encodeURIComponent(target)}` : '/login'}
-            className="font-bold text-brand hover:underline"
-          >
-            Log in
-          </Link>
-        </p>
-      </div>
-    );
-  }
-
-  // Step 2: account details for the chosen role.
-  const isBusiness = role === 'business';
-  return (
-    <div>
-      <span
-        className={cn(
-          'mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wide',
-          isBusiness ? 'bg-warm-soft text-warm' : 'bg-brand-soft text-brand',
+        {errors.role && (
+          <p className="mt-2 text-[13px] font-medium text-danger-ink">{errors.role}</p>
         )}
-      >
-        {isBusiness ? 'Business account' : 'Creator account'}
-        <button
-          type="button"
-          onClick={() => setRole(null)}
-          className="text-muted underline hover:text-ink"
-        >
-          change
-        </button>
-      </span>
-
-      <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em] text-ink">
-        Create your account
-      </h1>
-      <p className="mt-1.5 text-[15px] text-muted">Free to join. Takes about a minute.</p>
-
-      <div className="mt-7">
-        <GoogleButton onCredential={handleGoogle} text="signup_with" disabled={submitting} />
-      </div>
-      <OrDivider />
+      </fieldset>
 
       <ErrorBanner message={banner} />
 
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <Field label={isBusiness ? 'Business name' : 'Full name'} htmlFor="name" error={errors.name}>
           <Input
             id="name"
             autoComplete={isBusiness ? 'organization' : 'name'}
-            placeholder={isBusiness ? 'Your business name' : 'Your name'}
+            placeholder={isBusiness ? 'Bloom Coffee Co.' : 'Maya Johnson'}
             value={name}
             onChange={(e) => setName(e.target.value)}
             aria-invalid={Boolean(errors.name)}
@@ -197,38 +213,79 @@ export function SignupForm({ next }: { next?: string }) {
           label="Password"
           htmlFor="password"
           error={errors.password}
-          hint="Use 8+ characters."
+          hint="At least 8 characters"
         >
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             autoComplete="new-password"
             placeholder="At least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             aria-invalid={Boolean(errors.password)}
-            className={authInputClass}
           />
         </Field>
 
-        <Button
+        <div>
+          <label className="flex cursor-pointer items-start gap-2.5 text-[13px] leading-snug text-body">
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => {
+                setAgreed(e.target.checked);
+                if (e.target.checked) setErrors((prev) => ({ ...prev, terms: '' }));
+              }}
+              aria-invalid={Boolean(errors.terms)}
+              className="mt-0.5 h-[18px] w-[18px] shrink-0 cursor-pointer rounded-[5px] border-2 border-ink accent-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/25"
+            />
+            <span>
+              I agree to the{' '}
+              <Link href="/terms" className="font-semibold text-brand hover:underline">
+                Terms
+              </Link>{' '}
+              and{' '}
+              <Link href="/privacy" className="font-semibold text-brand hover:underline">
+                Privacy Policy
+              </Link>
+              .
+            </span>
+          </label>
+          {errors.terms && (
+            <p className="mt-1.5 text-[13px] font-medium text-danger-ink">{errors.terms}</p>
+          )}
+        </div>
+
+        <StickerButton
           type="submit"
-          className="h-auto w-full rounded-md py-[14px] text-[15px] shadow-[0_12px_26px_-8px_rgba(0,100,224,0.5)]"
+          tone="money"
+          size="lg"
+          className="w-full"
           disabled={submitting}
         >
-          {submitting ? 'Creating account…' : 'Create account'}
-        </Button>
+          {submitting ? (
+            <>
+              <Loader2 className="h-[18px] w-[18px] animate-spin" /> Creating account…
+            </>
+          ) : (
+            <>
+              Create account <ArrowRight className="h-[18px] w-[18px]" />
+            </>
+          )}
+        </StickerButton>
       </form>
 
-      <button
-        type="button"
-        onClick={() => setRole(null)}
-        className={cn(
-          'mx-auto mt-6 flex items-center gap-1.5 text-sm text-muted hover:text-ink',
-        )}
-      >
-        <ArrowLeft className="h-4 w-4" /> Choose a different role
-      </button>
+      <OrDivider label="or" />
+
+      <GoogleButton onCredential={handleGoogle} text="signup_with" disabled={submitting} />
+
+      <p className="mt-6 text-center text-sm text-muted">
+        Already have an account?{' '}
+        <Link
+          href={target ? `/login?next=${encodeURIComponent(target)}` : '/login'}
+          className="font-semibold text-brand hover:underline"
+        >
+          Log in
+        </Link>
+      </p>
     </div>
   );
 }

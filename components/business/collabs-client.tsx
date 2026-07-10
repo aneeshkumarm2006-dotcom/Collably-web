@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { CountdownChip } from '@/components/shared/collab-card';
 import { StatusBadge, type StatusTone } from '@/components/shared/status-badge';
 import { EmptyState } from '@/components/shared/empty-state';
+import { Reveal } from '@/components/shared/reveal';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -92,8 +93,10 @@ export function BusinessCollabsClient() {
             onClick={() => setFilter(f)}
             aria-pressed={filter === f}
             className={cn(
-              'inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-bold transition-colors',
-              filter === f ? 'bg-brand text-white' : 'bg-secondary text-muted hover:text-ink',
+              'inline-flex items-center gap-1.5 rounded-md border px-3.5 py-1.5 text-[13px] font-bold transition-colors',
+              filter === f
+                ? 'border-ink bg-ink text-white'
+                : 'border-hair bg-card text-muted hover:text-ink',
             )}
           >
             {FILTER_LABEL[f]}
@@ -107,7 +110,7 @@ export function BusinessCollabsClient() {
       {query.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-[188px] w-full rounded-2xl" />
+            <Skeleton key={i} className="h-[188px] w-full rounded-lg" />
           ))}
         </div>
       ) : query.isError ? (
@@ -130,7 +133,7 @@ export function BusinessCollabsClient() {
       ) : rows.length === 0 ? (
         <EmptyState icon={<Handshake />} title={`No ${FILTER_LABEL[filter].toLowerCase()} collabs`} />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <Reveal key={filter} className="grid gap-4 sm:grid-cols-2">
           {rows.map(([app, bucket]) => (
             <CollabRow
               key={app._id}
@@ -140,7 +143,7 @@ export function BusinessCollabsClient() {
               onRemind={() => onRemind(app)}
             />
           ))}
-        </div>
+        </Reveal>
       )}
     </>
   );
@@ -165,13 +168,13 @@ function CollabRow({
   return (
     <div
       className={cn(
-        'flex flex-col rounded-2xl border border-hair bg-card p-[18px] shadow-card',
+        'r lift flex flex-col rounded-lg border border-hair bg-card p-[18px] shadow-card',
         overdue && 'border-l-4 border-l-danger',
       )}
     >
       <div className="flex items-start gap-3.5">
         <span
-          className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl font-display text-[15px] font-extrabold text-white"
+          className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg text-[15px] font-extrabold text-white"
           style={view.avatar ? undefined : { background: categoryGradient(view.niche[0]) }}
         >
           {view.avatar ? (
@@ -184,7 +187,7 @@ function CollabRow({
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="truncate font-display text-[16px] font-bold text-ink">{view.name}</h3>
+              <h3 className="truncate text-[16px] font-bold text-ink">{view.name}</h3>
               <p className="mt-0.5 truncate text-[13px] text-muted">
                 {campaign?.title ? `“${campaign.title}”` : 'Campaign'}
               </p>
@@ -201,7 +204,7 @@ function CollabRow({
 
       <div className="mt-4 flex items-center gap-2">
         {app.submittedAt ? (
-          <Button asChild size="sm" className="flex-1">
+          <Button asChild size="sm" className="flex-1 active:scale-[0.98]">
             <Link href="/dashboard/business/submissions">Review content</Link>
           </Button>
         ) : canRemind ? (

@@ -4,10 +4,11 @@ import { ArrowRight, BadgeCheck, type LucideIcon } from 'lucide-react';
 import { Container, Section, SectionLabel } from '@/components/marketing/section';
 import { CtaBand } from '@/components/marketing/cta-band';
 import { Faq, type FaqItem } from '@/components/marketing/faq';
-import { Button } from '@/components/ui/button';
+import { Reveal } from '@/components/shared/reveal';
+import { StickerButton, StickerCard, Pill } from '@/components/shared/sticker';
 
 export interface AudiencePageConfig {
-  /** Accent theme for the page: creators = blue, businesses = warm/orange. */
+  /** Accent theme for the page: creators = brand blue, businesses = coral. */
   tone: 'creator' | 'business';
   eyebrow: string;
   title: React.ReactNode;
@@ -31,27 +32,29 @@ export interface AudiencePageConfig {
 
 const THEME = {
   creator: {
-    badge: 'bg-brand-soft text-brand',
-    glyph: 'bg-brand-soft text-brand',
-    panel: 'linear-gradient(135deg,#0064E0,#7B61FF)',
-    accent: 'bg-brand text-white',
+    panel: 'bg-brand',
+    glyph: 'bg-yellow text-ink',
     num: 'bg-brand text-white',
   },
   business: {
-    badge: 'bg-warm-soft text-warm',
-    glyph: 'bg-warm-soft text-warm',
-    panel: 'linear-gradient(135deg,#FF6A3D,#FFB020)',
-    accent: 'bg-warm text-white',
-    num: 'bg-warm text-white',
+    panel: 'bg-coral',
+    glyph: 'bg-yellow text-ink',
+    num: 'bg-coral text-white',
   },
 } as const;
 
-const GLYPH_TONES = ['bg-brand-soft text-brand', 'bg-warm-soft text-warm', 'bg-grape-soft text-grape', 'bg-mint-soft text-mint'];
+/** Rotating soft-tint glyph tiles for the benefits grid. */
+const GLYPH_TONES = [
+  'bg-brand-soft text-brand',
+  'bg-coral text-white',
+  'bg-grape-soft text-grape',
+  'bg-money-soft text-money-ink',
+];
 
 /**
  * Shared audience landing template (For Creators / For Businesses). A 2-column
- * hero with a gradient panel, a benefits grid, numbered steps, FAQ, and a closing
- * CTA, driven by config so the two pages stay structurally identical and on-brand.
+ * hero with a solid sticker panel, a benefits grid, numbered steps, FAQ, and a
+ * closing CTA, driven by config so the two pages stay structurally identical.
  */
 export function AudiencePage({ config }: { config: AudiencePageConfig }) {
   const theme = THEME[config.tone];
@@ -60,22 +63,10 @@ export function AudiencePage({ config }: { config: AudiencePageConfig }) {
     <>
       {/* Hero */}
       <header className="relative overflow-hidden bg-page text-ink">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(820px 460px at 82% 6%, rgba(24,119,242,0.10), transparent 60%)',
-          }}
-        />
         <Container className="relative py-16 sm:py-20 lg:py-24">
           <div className="grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr]">
             <div>
-              <span
-                className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[13px] font-bold ${theme.badge}`}
-              >
-                {config.eyebrow}
-              </span>
+              <Pill tone={config.tone === 'creator' ? 'brand' : 'yellow'}>{config.eyebrow}</Pill>
               <h1 className="mt-6 text-balance font-display text-[40px] font-extrabold leading-[1.0] tracking-[-0.03em] sm:text-[52px] lg:text-[58px]">
                 {config.title}
               </h1>
@@ -83,15 +74,15 @@ export function AudiencePage({ config }: { config: AudiencePageConfig }) {
                 {config.subtitle}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button asChild size="pill">
+                <StickerButton asChild size="lg">
                   <Link href={config.primaryCta.href}>
                     {config.primaryCta.label} <ArrowRight className="h-4 w-4" />
                   </Link>
-                </Button>
+                </StickerButton>
                 {config.secondaryCta && (
-                  <Button asChild size="pill" variant="outline">
+                  <StickerButton asChild tone="white" size="lg">
                     <Link href={config.secondaryCta.href}>{config.secondaryCta.label}</Link>
-                  </Button>
+                  </StickerButton>
                 )}
               </div>
               <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
@@ -104,89 +95,90 @@ export function AudiencePage({ config }: { config: AudiencePageConfig }) {
               </div>
             </div>
 
-            {/* Gradient panel with floating info card */}
+            {/* Sticker panel with floating info card */}
             <div className="relative mx-auto w-full max-w-[440px]">
               <div
-                className="relative h-[340px] w-full overflow-hidden rounded-3xl shadow-card-hover"
-                style={{ background: theme.panel }}
+                className={`sticker relative h-[340px] w-full overflow-hidden rounded-3xl shadow-sticker-lg ${theme.panel}`}
               >
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl"
+                  className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-3xl border-outline border-ink bg-yellow animate-ls-float"
                 />
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute -bottom-12 -left-8 h-48 w-48 rounded-[40px] bg-white/10 blur-2xl"
+                  className="pointer-events-none absolute -bottom-10 -left-6 h-36 w-36 rounded-full border-outline border-ink bg-page/90 animate-ls-float-r"
                 />
               </div>
-              <div className="absolute -bottom-6 left-6 right-6 flex items-center gap-3.5 rounded-2xl border border-hair bg-card p-4 shadow-card-hover animate-cb-float">
-                <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${theme.glyph}`}>
+              <StickerCard className="absolute -bottom-6 left-6 right-6 flex items-center gap-3.5 p-4 animate-ls-bob">
+                <span
+                  className={`flex h-11 w-11 items-center justify-center rounded-card border-outline border-ink ${theme.glyph}`}
+                >
                   <BadgeCheck className="h-5 w-5" />
                 </span>
                 <div className="text-sm">
-                  <div className="text-xs font-bold uppercase tracking-[0.08em] text-faint">
+                  <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-coral">
                     {config.heroCard.label}
                   </div>
-                  <div className="mt-0.5 font-bold text-ink">{config.heroCard.title}</div>
+                  <div className="mt-0.5 font-display font-bold text-ink">{config.heroCard.title}</div>
                   <div className="text-xs text-muted">{config.heroCard.sub}</div>
                 </div>
-              </div>
+              </StickerCard>
             </div>
           </div>
         </Container>
       </header>
 
       {/* Benefits */}
-      <Section tone="card">
+      <Section tone="card" className="border-t-outline border-ink">
         <div className="mb-12 text-center">
           <SectionLabel className="justify-center">{config.benefitsLabel}</SectionLabel>
           <h2 className="mt-4 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
             {config.benefitsTitle}
           </h2>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
+        <Reveal className="grid gap-6 md:grid-cols-3">
           {config.benefits.map((b, i) => (
-            <div
-              key={b.title}
-              className="rounded-2xl border border-hair bg-card p-7 shadow-card transition hover:-translate-y-1 hover:shadow-card-hover"
-            >
+            <StickerCard key={b.title} lift className="group r p-7 hover:!-translate-y-1">
               <span
-                className={`flex h-12 w-12 items-center justify-center rounded-2xl ${GLYPH_TONES[i % GLYPH_TONES.length]}`}
+                className={`flex h-12 w-12 items-center justify-center rounded-card border-outline border-ink transition-transform duration-150 group-hover:rotate-3 ${GLYPH_TONES[i % GLYPH_TONES.length]}`}
               >
                 <b.icon className="h-5 w-5" />
               </span>
               <h3 className="mt-5 font-display text-lg font-bold text-ink">{b.title}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-muted">{b.body}</p>
-            </div>
+            </StickerCard>
           ))}
-        </div>
+        </Reveal>
       </Section>
 
       {/* Steps */}
-      <Section tone="page">
+      <Section tone="page" className="border-t-outline border-ink">
         <div className="mb-12 text-center">
           <SectionLabel className="justify-center">{config.stepsLabel}</SectionLabel>
           <h2 className="mt-4 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
             {config.stepsTitle}
           </h2>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
+        <Reveal className="grid gap-6 md:grid-cols-3">
           {config.steps.map((step, i) => (
-            <div key={step.title} className="rounded-2xl border border-hair bg-card p-7 shadow-card">
+            <StickerCard
+              key={step.title}
+              className="group r p-7 transition-[transform,box-shadow] duration-200 hover:!-translate-y-1 hover:shadow-sticker-lg"
+            >
               <span
-                className={`inline-flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold ${theme.num}`}
+                className={`inline-flex h-10 w-10 items-center justify-center rounded-full border-outline border-ink font-display text-sm font-bold transition-transform duration-150 group-hover:-rotate-6 ${theme.num}`}
               >
                 {i + 1}
               </span>
               <h3 className="mt-5 font-display text-lg font-bold text-ink">{step.title}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-muted">{step.body}</p>
-            </div>
+            </StickerCard>
           ))}
-        </div>
+        </Reveal>
       </Section>
 
       {/* FAQ */}
-      <Section tone="card">
+      <Section tone="card" className="border-t-outline border-ink">
         <div className="mb-12 text-center">
           <SectionLabel className="justify-center">FAQ</SectionLabel>
           <h2 className="mt-4 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
@@ -198,7 +190,12 @@ export function AudiencePage({ config }: { config: AudiencePageConfig }) {
         </div>
       </Section>
 
-      <CtaBand title={config.cta.title} subtitle={config.cta.subtitle} primary={config.cta.primary} />
+      <CtaBand
+        className="border-t-outline border-ink"
+        title={config.cta.title}
+        subtitle={config.cta.subtitle}
+        primary={config.cta.primary}
+      />
     </>
   );
 }

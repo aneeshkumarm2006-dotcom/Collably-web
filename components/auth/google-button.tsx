@@ -155,7 +155,7 @@ export function GoogleButton({ onCredential, text = 'continue_with', disabled }:
         onClick={() =>
           toast.info('Google sign-in isn’t configured in this environment. Use email instead.')
         }
-        className="flex w-full items-center justify-center gap-2.5 rounded-md border-[1.5px] border-hair-strong bg-card px-4 py-[13px] text-[15px] font-semibold text-ink transition-colors hover:border-brand"
+        className="sticker press flex w-full items-center justify-center gap-2.5 rounded-md bg-card px-4 py-[13px] font-display text-[15px] font-semibold text-ink"
       >
         <GoogleGlyph />
         {label}
@@ -174,7 +174,7 @@ export function GoogleButton({ onCredential, text = 'continue_with', disabled }:
       />
       {/* Placeholder overlay until GIS paints its button (avoids layout shift). */}
       {!ready && (
-        <div className="absolute inset-0 flex w-full items-center justify-center gap-2.5 rounded-md border-[1.5px] border-hair-strong bg-card px-4 py-[13px] text-[15px] font-semibold text-faint">
+        <div className="sticker absolute inset-0 flex w-full items-center justify-center gap-2.5 rounded-md bg-card px-4 py-[13px] font-display text-[15px] font-semibold text-faint">
           <GoogleGlyph />
           {label}
         </div>

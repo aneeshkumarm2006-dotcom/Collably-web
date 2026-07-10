@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   ArrowLeft,
   CheckCircle2,
-  ExternalLink,
   Link2,
   Loader2,
   UploadCloud,
@@ -19,8 +18,17 @@ import { errorMessage } from '@/lib/api/errors';
 import { toast } from '@/lib/toast';
 import { looksLikeUrl, normalizeUrl } from '@/lib/onboarding/creator';
 import { uploadToCloudinary } from '@/lib/upload/cloudinary';
-import { deadlineUrgency, formatDate, formatCountdown } from '@/lib/format';
+import {
+  deadlineUrgency,
+  formatCurrency,
+  formatDate,
+  formatTime,
+  formatCountdown,
+} from '@/lib/format';
 import { deliverableLabel } from '@/components/creator/creator-collab-card';
+import { CategoryTile } from '@/components/creator/category-tile';
+import { StatusChip } from '@/components/creator/status-chip';
+import { SubmissionStepper } from '@/components/creator/submission-stepper';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -29,6 +37,17 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 
 const BACK_HREF = '/dashboard/creator/collabs';
+
+/**
+ * The uploaded proof image URL, only when it is a safe http(s) URL. The
+ * submission `link` is a post permalink (not an image), so it is never used as
+ * an `<img src>`; this keeps untrusted data out of the DOM as a resource.
+ */
+function proofOrSubmissionImage(app: PublicApplication): string | null {
+  const url = app.submissionProof;
+  if (!url) return null;
+  return /^https?:\/\//i.test(url) ? url : null;
+}
 
 /** Centered status panel for the non-submittable + success states. */
 function StatePanel({
@@ -43,7 +62,7 @@ function StatePanel({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-hair bg-card p-8 text-center shadow-card">
+    <div className="rounded-lg border border-hair bg-card p-8 text-center">
       <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-success-soft text-success animate-in zoom-in-50 [&_svg]:h-8 [&_svg]:w-8">
         {icon}
       </div>
@@ -103,25 +122,100 @@ export function SubmitContentClient({ application }: { application: PublicApplic
     );
   }
 
-  // --- Already submitted (awaiting review) ---
+  // --- Already submitted (awaiting review): the "view submission" screen ---
   if (alreadySubmitted) {
+    const businessName = campaign?.business?.businessName ?? 'The brand';
+    const deliverableText = campaign?.deliverables?.[0]
+      ? deliverableLabel(campaign.deliverables[0])
+      : (campaign?.title ?? 'Submission');
+    const submittedAt = application.submittedAt;
+    const reward = campaign?.reward;
+    const rewardValue = reward?.estimatedValue ? formatCurrency(reward.estimatedValue) : null;
+
     return (
-      <StatePanel
-        icon={<CheckCircle2 />}
-        title="Already submitted"
-        message={`Your content is in for review. ${campaign?.business?.businessName ?? 'The brand'} will verify it soon.`}
-      >
-        {application.submissionLink && (
-          <Button asChild variant="outline">
-            <a href={application.submissionLink} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="h-4 w-4" /> View submission
-            </a>
-          </Button>
-        )}
-        <Button asChild>
-          <Link href={BACK_HREF}>Back to collabs</Link>
+      <div className="space-y-6">
+        <Button asChild variant="ghost" size="sm" className="-ml-2 self-start">
+          <Link href={BACK_HREF}>
+            <ArrowLeft className="h-4 w-4" /> Back to collabs
+          </Link>
         </Button>
-      </StatePanel>
+
+        <div className="grid items-start gap-5 md:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)]">
+          {/* Submitted content */}
+          <div className="overflow-hidden rounded-lg border border-hair bg-card">
+            <div className="flex items-center gap-3 border-b border-divider px-5 py-4">
+              <CategoryTile category={campaign?.category} size={42} radius={11} />
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-[16px] font-bold text-ink">{businessName}</div>
+                <div className="truncate text-[12px] text-faint">
+                  {deliverableText}
+                  {submittedAt ? ` · submitted ${formatDate(submittedAt)}` : ''}
+                </div>
+              </div>
+              <StatusChip status="In review" />
+            </div>
+            <div className="p-5">
+              <p className="text-[11px] font-bold uppercase tracking-[0.04em] text-faint">
+                Submitted content
+              </p>
+              {proofOrSubmissionImage(application) ? (
+                <div className="mt-3 overflow-hidden rounded-xl border border-hair bg-elev">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- submission proof */}
+                  <img
+                    src={proofOrSubmissionImage(application)!}
+                    alt="Your submitted content"
+                    className="max-h-[280px] w-full object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="mt-3 flex h-[180px] items-center justify-center rounded-xl bg-page text-faint">
+                  <UploadCloud className="h-8 w-8" />
+                </div>
+              )}
+              {application.submissionNote && (
+                <p className="mt-3.5 whitespace-pre-wrap text-[14px] leading-[1.6] text-ink">
+                  {application.submissionNote}
+                </p>
+              )}
+              {application.submissionLink && (
+                <a
+                  href={application.submissionLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 break-all text-[13px] font-medium text-brand hover:underline"
+                >
+                  <Link2 className="h-3.5 w-3.5 shrink-0" />
+                  {application.submissionLink}
+                </a>
+              )}
+              {submittedAt && (
+                <p className="mt-2 text-[12px] text-faint">
+                  Submitted {formatDate(submittedAt)} · {formatTime(submittedAt)}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Review status + reward */}
+          <div className="flex flex-col gap-4">
+            <div className="rounded-lg border border-hair bg-card p-5">
+              <h2 className="mb-4 text-[15px] font-bold text-ink">Review status</h2>
+              <SubmissionStepper application={application} />
+            </div>
+            <div className="rounded-lg border border-hair bg-card p-5">
+              <p className="text-[11px] font-bold uppercase tracking-[0.04em] text-faint">
+                Reward on approval
+              </p>
+              <div className="num mt-1 text-[28px] font-bold text-money-ink">
+                {rewardValue ?? reward?.description ?? reward?.type ?? '—'}
+              </div>
+              {rewardValue && reward?.description && (
+                <div className="text-[13px] text-muted">{reward.description}</div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -167,19 +261,17 @@ export function SubmitContentClient({ application }: { application: PublicApplic
       </Button>
 
       <div>
-        <h1 className="font-display text-[26px] font-extrabold tracking-tight text-ink">
-          Submit your content
-        </h1>
+        <h1 className="text-[22px] font-bold text-ink">Submit your content</h1>
         <p className="mt-1 text-sm text-muted">Add proof of your work, then submit for review.</p>
       </div>
 
       {/* Context panel */}
-      <div className="rounded-2xl border border-hair bg-card p-5 shadow-card">
-        <h2 className="font-display font-bold text-ink">{campaign?.title ?? 'Campaign'}</h2>
+      <div className="rounded-lg border border-hair bg-card p-5">
+        <h2 className="text-[16px] font-bold text-ink">{campaign?.title ?? 'Campaign'}</h2>
         <p className="text-[13px] text-muted">{campaign?.business?.businessName}</p>
 
         {deliverables.length > 0 && (
-          <div className="mt-4 rounded-xl bg-brand-soft p-4">
+          <div className="mt-4 rounded-lg bg-brand-soft p-4">
             <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.08em] text-brand">
               The brief · deliverables to submit
             </p>
@@ -212,7 +304,7 @@ export function SubmitContentClient({ application }: { application: PublicApplic
       </div>
 
       {/* Form */}
-      <div className="rounded-2xl border border-hair bg-card p-5 shadow-card">
+      <div className="rounded-lg border border-hair bg-card p-5">
         <div className="space-y-1.5">
           <Label htmlFor="submission-link">Live post link</Label>
           <div className="relative">
@@ -256,11 +348,11 @@ export function SubmitContentClient({ application }: { application: PublicApplic
           ) : (
             <label
               className={cn(
-                'flex cursor-pointer flex-col items-center rounded-2xl border-2 border-dashed border-hair-strong bg-secondary p-8 text-center transition-colors hover:border-brand',
+                'flex cursor-pointer flex-col items-center rounded-lg border-2 border-dashed border-hair-strong bg-elev p-8 text-center transition-colors hover:border-brand',
                 proofUploading && 'pointer-events-none opacity-60',
               )}
             >
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-soft text-brand">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-sm bg-brand-soft text-brand">
                 {proofUploading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (

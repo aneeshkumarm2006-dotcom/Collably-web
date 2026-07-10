@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import { Handshake } from 'lucide-react';
 
 import { serverApi } from '@/lib/api/server';
-import { DashboardContainer, PageHeader } from '@/components/dashboard/page-shell';
+import { DashboardContainer } from '@/components/dashboard/page-shell';
+import { Reveal } from '@/components/shared/reveal';
 import { CreatorCollabCard, compareCollabPriority } from '@/components/creator/creator-collab-card';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
@@ -18,13 +19,8 @@ export default async function CreatorCollabsPage() {
 
   return (
     <DashboardContainer>
-      <PageHeader
-        title="Active Collabs"
-        subtitle="Campaigns you've been accepted to. Take action before the deadline."
-      />
-
       {collabs.length === 0 ? (
-        <div className="rounded-2xl border border-hair bg-card shadow-card">
+        <div className="rounded-lg border border-hair bg-card">
           <EmptyState
             icon={<Handshake />}
             title="No active collabs"
@@ -37,11 +33,11 @@ export default async function CreatorCollabsPage() {
           />
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
+        <Reveal className="flex flex-col gap-3.5">
           {collabs.map((a) => (
-            <CreatorCollabCard key={a._id} application={a} />
+            <CreatorCollabCard key={a._id} application={a} className="r" />
           ))}
-        </div>
+        </Reveal>
       )}
     </DashboardContainer>
   );

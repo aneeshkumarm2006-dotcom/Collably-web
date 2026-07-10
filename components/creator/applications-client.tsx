@@ -11,10 +11,14 @@ import type { ApplicationStatus } from '@/lib/shared';
 import type { PublicApplication } from '@/lib/api/types';
 import { cn } from '@/lib/utils';
 import { CreatorApplicationRow } from '@/components/creator/application-row';
+import { Reveal } from '@/components/shared/reveal';
 import { EmptyState } from '@/components/shared/empty-state';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+
+/** Dead-end statuses rendered dimmed — see CreatorApplicationRow. */
+const DIMMED_STATUSES: string[] = ['Rejected', 'Withdrawn', 'Cancelled'];
 
 /** Tabs per TODO Phase 7 (Cancelled/Overdue fold into "All"). */
 const TABS = ['All', 'Pending', 'Accepted', 'Rejected', 'Completed', 'Withdrawn'] as const;
@@ -99,7 +103,7 @@ export function CreatorApplicationsClient() {
   return (
     <>
       {/* Tabs */}
-      <div className="mb-6 flex flex-wrap gap-2">
+      <div className="mb-4 flex flex-wrap gap-2">
         {TABS.map((t) => (
           <button
             key={t}
@@ -107,21 +111,13 @@ export function CreatorApplicationsClient() {
             onClick={() => setTab(t)}
             aria-current={tab === t ? 'page' : undefined}
             className={cn(
-              'inline-flex items-center whitespace-nowrap rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors',
+              'inline-flex items-center whitespace-nowrap rounded-sm border px-4 py-2 text-[13.5px] font-semibold transition-colors',
               tab === t
-                ? 'border-brand bg-brand text-white'
+                ? 'border-ink bg-ink text-white'
                 : 'border-hair bg-card text-muted hover:text-ink',
             )}
           >
-            {t}
-            <span
-              className={cn(
-                'ml-2 rounded-full px-1.5 py-0.5 font-mono text-[11px] leading-none',
-                tab === t ? 'bg-white/20 text-white' : 'bg-secondary text-muted',
-              )}
-            >
-              {counts[t]}
-            </span>
+            {t} ({counts[t]})
           </button>
         ))}
       </div>
@@ -157,20 +153,25 @@ export function CreatorApplicationsClient() {
       ) : rows.length === 0 ? (
         <EmptyState icon={<FileText />} title={`No ${tab.toLowerCase()} applications`} />
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-hair bg-card shadow-card">
+        <Reveal className="overflow-hidden rounded-lg border border-hair bg-card">
           {/* Header row */}
-          <div className="flex items-center gap-4 border-b border-hair bg-secondary px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-faint">
-            <span className="flex-[2]">Campaign</span>
-            <span className="hidden flex-1 sm:block">Reward</span>
-            <span className="hidden flex-1 md:block">Applied</span>
-            <span className="shrink-0">Status</span>
+          <div className="grid grid-cols-[minmax(0,2.4fr)_auto] gap-3 border-b border-hair px-[18px] py-3 text-[11px] font-bold uppercase tracking-[0.04em] text-faint sm:grid-cols-[minmax(0,2.4fr)_1fr_1fr_auto]">
+            <span>Campaign</span>
+            <span className="hidden sm:block">Reward</span>
+            <span className="hidden sm:block">Applied</span>
+            <span className="text-right">Status</span>
           </div>
-          <div className="divide-y divide-hair">
-            {rows.map((a) => (
-              <CreatorApplicationRow key={a._id} application={a} actions={rowActions(a)} />
-            ))}
-          </div>
-        </div>
+          {rows.map((a) => (
+            <CreatorApplicationRow
+              key={a._id}
+              application={a}
+              actions={rowActions(a)}
+              // `.r` forces opacity:1 on reveal, which would cancel the dim on
+              // dead-end rows — so only animate the active ones.
+              className={DIMMED_STATUSES.includes(a.status) ? undefined : 'r'}
+            />
+          ))}
+        </Reveal>
       )}
 
       <ConfirmModal

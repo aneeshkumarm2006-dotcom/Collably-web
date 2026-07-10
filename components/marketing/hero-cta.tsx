@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { useAuth } from '@/components/providers/auth-provider';
 import { roleHome } from '@/lib/auth/user';
 import { track } from '@/lib/analytics';
-import { Button } from '@/components/ui/button';
+import { StickerButton } from '@/components/shared/sticker';
 
 /**
  * The landing hero's primary CTA pair. Lives client-side so the landing page can
@@ -19,38 +19,60 @@ export function HeroCta() {
   if (isAuthenticated && user) {
     return (
       <div className="mt-9 flex flex-wrap gap-3">
-        <Button asChild size="pill">
+        <StickerButton asChild size="lg">
           <Link href={roleHome(user.role)}>
             Go to dashboard <ArrowRight className="h-4 w-4" />
           </Link>
-        </Button>
-        <Button asChild size="pill" variant="outline">
+        </StickerButton>
+        <StickerButton asChild tone="white" size="lg">
           <Link href="/explore">Browse campaigns</Link>
-        </Button>
+        </StickerButton>
       </div>
     );
   }
 
   return (
     <div className="mt-9 flex flex-wrap gap-3">
-      <Button
+      <StickerButton
         asChild
-        size="pill"
+        size="lg"
         onClick={() => track('cta_get_started', { location: 'hero', audience: 'creator' })}
       >
         <Link href="/for-creators">
           Join as a creator <ArrowRight className="h-4 w-4" />
         </Link>
-      </Button>
-      <Button
+      </StickerButton>
+      <StickerButton
         asChild
-        size="pill"
-        variant="outline"
+        tone="white"
+        size="lg"
         onClick={() => track('cta_get_started', { location: 'hero', audience: 'business' })}
       >
         <Link href="/for-businesses">I&apos;m a business</Link>
-      </Button>
+      </StickerButton>
     </div>
+  );
+}
+
+/**
+ * "Browse all" CTA on the landing live-rail. Guests are routed to the sign-in
+ * page (carrying `next=/explore` so they land on the browse page once signed in);
+ * a signed-in visitor goes straight to Explore. Client-side so the rail stays in
+ * a statically-rendered page.
+ */
+export function BrowseAllButton({ label = 'Browse all' }: { label?: string }) {
+  const { isAuthenticated } = useAuth();
+  const href = isAuthenticated ? '/explore' : '/login?next=%2Fexplore';
+  return (
+    <StickerButton
+      asChild
+      tone="white"
+      onClick={() => track('cta_browse_all', { location: 'live_rail' })}
+    >
+      <Link href={href}>
+        {label} <ArrowRight className="h-4 w-4" aria-hidden />
+      </Link>
+    </StickerButton>
   );
 }
 
@@ -62,9 +84,9 @@ export function GuestApplyButton() {
   const { isAuthenticated, isLoading } = useAuth();
   if (isAuthenticated || isLoading) return null;
   return (
-    <Button
+    <StickerButton
       asChild
-      variant="outline"
+      tone="white"
       size="sm"
       className="mx-auto"
       onClick={() => track('cta_get_started', { location: 'live_rail', audience: 'creator' })}
@@ -72,7 +94,7 @@ export function GuestApplyButton() {
       <Link href="/signup">
         <LockIcon /> Sign up to apply
       </Link>
-    </Button>
+    </StickerButton>
   );
 }
 

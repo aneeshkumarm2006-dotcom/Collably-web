@@ -132,3 +132,67 @@ export const GENERAL_FAQS: FaqItem[] = [
     a: 'Creators submit live post links and proof screenshots. Businesses review each submission and can mark it verified, request a revision, or flag an issue before completing the collab.',
   },
 ];
+
+/**
+ * Canonical business pricing. Rendered by BOTH `/pricing` and the landing
+ * page's pricing section, so it lives here rather than in either of them —
+ * two copies would silently drift and put a wrong price on a public page.
+ *
+ * `monthly` and `annual` are CAD per month; `annual` is the discounted
+ * per-month rate when billed yearly. A tier at 0 renders as "Free".
+ */
+export interface BusinessTier {
+  name: string;
+  monthly: number;
+  annual: number;
+  note: string;
+  cta: { label: string; href: string };
+  features: string[];
+  featured?: boolean;
+}
+
+export const BUSINESS_TIERS: BusinessTier[] = [
+  {
+    name: 'Starter',
+    monthly: 0,
+    annual: 0,
+    note: 'Pay only in the rewards you offer.',
+    cta: { label: 'Get started', href: '/signup' },
+    features: [
+      'Post collabs & receive pitches',
+      'Review applications & accept creators',
+      'Verify submissions end-to-end',
+      'Direct messaging with creators',
+      '1 active collab at a time',
+    ],
+  },
+  {
+    name: 'Growth',
+    monthly: 49,
+    annual: 39,
+    note: 'For growing local brands running steady collabs.',
+    cta: { label: 'Start Growth', href: '/signup' },
+    featured: true,
+    features: [
+      'Everything in Starter',
+      'Up to 10 active collabs',
+      'Priority placement in Explore',
+      'Campaign analytics dashboard',
+      'Faster support',
+    ],
+  },
+  {
+    name: 'Pro',
+    monthly: 99,
+    annual: 79,
+    note: 'For multi-location brands and teams at scale.',
+    cta: { label: 'Talk to sales', href: '/contact' },
+    features: [
+      'Everything in Growth',
+      'Unlimited active collabs',
+      'Team seats & roles',
+      'Advanced analytics & exports',
+      'Priority support',
+    ],
+  },
+];

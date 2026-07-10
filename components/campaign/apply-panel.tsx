@@ -13,7 +13,7 @@ import { track } from '@/lib/analytics';
 import { toast } from '@/lib/toast';
 import type { ApplicationStatus, CampaignReward } from '@/lib/shared';
 import { formatCurrency, formatCompactNumber } from '@/lib/format';
-import { Button } from '@/components/ui/button';
+import { StickerButton, Eyebrow } from '@/components/shared/sticker';
 import { Textarea } from '@/components/ui/textarea';
 import { StatusBadge } from '@/components/shared/status-badge';
 import {
@@ -98,12 +98,10 @@ export function ApplyPanel({
   // state-specific call-to-action passed in as children.
   function PanelShell({ children }: { children: React.ReactNode }) {
     return (
-      <div className="rounded-2xl border border-hair bg-card p-6 shadow-card">
+      <div className="sticker rounded-xl bg-card p-6">
         {/* Reward hero */}
-        <div className="rounded-[14px] bg-gradient-to-br from-brand-soft to-grape-soft p-4 text-center">
-          <div className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-brand">
-            Reward
-          </div>
+        <div className="rounded-card border-2 border-ink bg-brand-soft p-4 text-center">
+          <Eyebrow>Reward</Eyebrow>
           <div className="mt-1.5 font-display text-[22px] font-extrabold leading-tight text-ink">
             {rewardName}
           </div>
@@ -130,7 +128,7 @@ export function ApplyPanel({
           )}
         </dl>
 
-        <div className="my-5 h-px bg-hair" />
+        <div className="my-5 h-0.5 bg-hair-strong" />
 
         {children}
       </div>
@@ -141,9 +139,9 @@ export function ApplyPanel({
   if (!isActive) {
     return (
       <PanelShell>
-        <Button disabled className="w-full" size="lg">
+        <StickerButton disabled tone="ink" size="lg" className="w-full">
           Campaign closed
-        </Button>
+        </StickerButton>
         <Note>This campaign isn’t accepting applications right now.</Note>
       </PanelShell>
     );
@@ -153,9 +151,9 @@ export function ApplyPanel({
   if (isLoading) {
     return (
       <PanelShell>
-        <Button disabled className="w-full" size="lg">
+        <StickerButton disabled tone="ink" size="lg" className="w-full">
           <Loader2 className="h-4 w-4 animate-spin" />
-        </Button>
+        </StickerButton>
       </PanelShell>
     );
   }
@@ -168,11 +166,11 @@ export function ApplyPanel({
         <p className="mt-1 text-[13px] text-muted">
           Create a free account to send your name and handle to the brand.
         </p>
-        <Button asChild className="mt-4 w-full" size="pill">
+        <StickerButton asChild tone="brand" size="lg" className="mt-4 w-full">
           <Link href={`/login?next=/campaign/${campaignId}`}>
             <Lock className="h-4 w-4" /> Continue to apply
           </Link>
-        </Button>
+        </StickerButton>
         <Note>Free to apply · No follower minimum</Note>
       </PanelShell>
     );
@@ -182,9 +180,9 @@ export function ApplyPanel({
   if (!isCreator) {
     return (
       <PanelShell>
-        <Button disabled className="w-full" size="lg" variant="secondary">
+        <StickerButton disabled tone="white" size="lg" className="w-full">
           For creators
-        </Button>
+        </StickerButton>
         <Note>You’re signed in as a business. Switch to a creator account to apply.</Note>
       </PanelShell>
     );
@@ -195,9 +193,9 @@ export function ApplyPanel({
     const status = myApplication.status as ApplicationStatus;
     return (
       <PanelShell>
-        <Button disabled className="w-full" size="lg" variant="secondary">
+        <StickerButton disabled tone="white" size="lg" className="w-full">
           <Check className="h-4 w-4" /> Application submitted
-        </Button>
+        </StickerButton>
         <div className="mt-3 flex items-center justify-center gap-2 text-sm text-muted">
           Status <StatusBadge status={status} />
         </div>
@@ -209,9 +207,9 @@ export function ApplyPanel({
   if (!approved) {
     return (
       <PanelShell>
-        <Button disabled className="w-full" size="lg">
+        <StickerButton disabled tone="ink" size="lg" className="w-full">
           Apply now
-        </Button>
+        </StickerButton>
         <Note>Your creator account is under review. You can apply once it’s verified.</Note>
       </PanelShell>
     );
@@ -224,9 +222,9 @@ export function ApplyPanel({
       <p className="mt-1 text-[13px] text-muted">
         Send your pitch — the brand reviews it with your profile.
       </p>
-      <Button className="mt-4 w-full" size="pill" onClick={() => setOpen(true)}>
+      <StickerButton tone="brand" size="lg" className="mt-4 w-full" onClick={() => setOpen(true)}>
         Continue to apply
-      </Button>
+      </StickerButton>
       <Note>Free to apply · No follower minimum</Note>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -246,10 +244,14 @@ export function ApplyPanel({
             autoFocus
           />
           <DialogFooter>
-            <Button variant="ghost" onClick={() => setOpen(false)} disabled={apply.isPending}>
+            <StickerButton
+              tone="white"
+              onClick={() => setOpen(false)}
+              disabled={apply.isPending}
+            >
               Cancel
-            </Button>
-            <Button onClick={submit} disabled={apply.isPending}>
+            </StickerButton>
+            <StickerButton tone="brand" onClick={submit} disabled={apply.isPending}>
               {apply.isPending ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" /> Submitting…
@@ -257,7 +259,7 @@ export function ApplyPanel({
               ) : (
                 'Submit application'
               )}
-            </Button>
+            </StickerButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>

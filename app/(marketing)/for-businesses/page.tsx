@@ -18,7 +18,7 @@ const config: AudiencePageConfig = {
   eyebrow: 'For Businesses',
   title: (
     <>
-      Content that <span className="text-warm">converts.</span>
+      Content that <span className="text-coral">converts.</span>
     </>
   ),
   subtitle:

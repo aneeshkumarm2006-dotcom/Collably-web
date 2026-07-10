@@ -4,172 +4,175 @@
 
 /*
  * ============================================================
- * LocalShout — Design System tokens (Phase 1, the "blend")
+ * LocalShout — Design System tokens
  * ============================================================
- * Two coordinated token layers, both themed for light + dark:
+ * Light-only. There is no dark theme: the source designs define none, and the
+ * "dark" surfaces you see (rewards band, marquee, blue stats band) are
+ * intentional bands inside a light page, not a user-selectable theme.
  *
- *  1. shadcn/ui semantic tokens — HSL CHANNELS (no hsl() wrapper) so Tailwind
- *     can compose opacity, e.g. `bg-primary/50`. Consumed in tailwind.config.ts
- *     as `hsl(var(--background))`. These drive every generated shadcn primitive.
- *     Values = the app palette (Meta-blue `#1877F2`, FB-grey surfaces, FB-green).
+ * TWO SURFACES, ONE FILE. The designs speak two deliberate visual languages:
  *
- *  2. "Blend" tokens — the design reference's token NAMES (`--brand-primary`,
- *     `--money`, `--surface-*`, `--text-*`, `--success`, `--dark-sidebar`, …)
- *     mapped to APP COLORS as HEX/RGBA. They re-skin the reference component
- *     anatomy (assets/styles.css) onto the app palette and are consumed via
- *     `var(--token)` in tailwind.config.ts + component classes.
+ *  1. PUBLIC (`:root`) — "sticker" / neo-brutalist. Marketing, auth, onboarding,
+ *     public app views, error pages. Cream page, near-black ink, hard 2.5px
+ *     outlines, solid non-blurred offset shadows, Space Grotesk headings.
  *
- * The hairline `--border` is shared: it is BOTH shadcn's border channel AND the
- * design's hairline token (same value), so there is one source of truth for it.
+ *  2. APP (`.surface-app`) — Facebook-clean. Creator + business dashboards.
+ *     Grey page, white cards, hairline borders, soft blurred shadows,
+ *     system-ui throughout.
+ *
+ * Both share the brand blue and the money green; everything else diverges. The
+ * app surface re-points the same variable NAMES, so a component written against
+ * `bg-page` / `text-ink` / `shadow-card` renders correctly on either surface
+ * without branching. Put `.surface-app` on the dashboard layout wrapper.
+ *
+ * Unifying the two is a deliberate later pass — see REDESIGN-BRIEF.md.
  */
 
 @layer base {
   :root {
-    /* --- shadcn/ui semantic tokens (HSL channels) — LIGHT --- */
-    --background: 240 43% 99%; /* surface-base / page #FBFBFE */
-    --foreground: 216 58% 9%; /* text-primary / ink #0A1526 */
-    --card: 0 0% 100%; /* surface-card #FFFFFF */
-    --card-foreground: 216 58% 9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 216 58% 9%;
-    --primary: 213 100% 44%; /* brand LocalShout-blue #0064E0 */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 222 33% 95%; /* surface-muted #EEF1F8 */
-    --secondary-foreground: 216 58% 9%;
-    --muted: 222 33% 95%; /* surface-muted #EEF1F8 */
-    --muted-foreground: 217 21% 37%; /* text-secondary #4B5A72 */
-    --accent: 214 100% 95%; /* brand-soft #E7F0FF */
-    --accent-foreground: 213 100% 44%; /* brand */
-    --destructive: 0 71% 51%; /* error #DC2B2B */
-    --destructive-foreground: 0 0% 100%;
-    --border: 227 34% 95%; /* hairline #EDEFF6 (shared with blend `--border`) */
-    --input: 224 25% 90%; /* border-strong #DDE1EC (inputs read stronger) */
-    --ring: 213 100% 44%; /* brand focus ring */
-    --radius: 0.75rem; /* 12px — app "md" radius */
+    /* ========== Shared brand (identical on both surfaces) ========== */
+    --brand: #1877f2;
+    --brand-hover: #166fe5;
+    --brand-deep: #0f5fd6;
+    --brand-lift: #4a96f7;
+    --brand-soft: #eaf3ff;
+    --brand-soft-2: #e7f0fe;
 
-    /* --- Blend tokens (design-reference names → LocalShout palette) — LIGHT --- */
-    --brand-primary: #0064e0;
-    --brand-secondary: #7b61ff;
-    --brand-soft: #e7f0ff;
-    --money: #0fa57e;
-    --money-soft: #e4f8f2;
+    --money: #31a24c;
+    --money-ink: #1e7e34;
+    --money-soft: #e6f4ea;
 
-    /* Accent hues used across the marketing + app surfaces (orange / purple / mint). */
-    --accent-warm: #ff6a3d;
-    --accent-warm-soft: #ffebe3;
-    --accent-purple: #7b61ff;
-    --accent-purple-soft: #efebff;
-    --accent-mint: #16c79a;
-    --accent-mint-soft: #e4f8f2;
+    /* Accent hues shared by tinted chips, icon tiles and stat tiles. */
+    --accent-yellow: #ffc24b;
+    --accent-coral: #ff6b4a;
+    --accent-coral-lift: #ff8360;
+    --warn-ink: #c77700;
+    --warn-soft: #fff1de;
+    --danger: #fa383e;
+    --danger-ink: #c0392b;
+    --danger-soft: #fde7e7;
+    --grape-ink: #7a3fa0;
+    --grape-soft: #f3e8ff;
 
-    --surface-base: #fbfbfe;
+    /* Always-dark bands (rewards section, marquee). Same on both surfaces. */
+    --band-dark: #0c2418;
+    --band-dark-card: #12301f;
+    --band-dark-border: #1e4a30;
+    --band-dark-pill: #173c26;
+    --band-dark-money: #5fd37f;
+
+    /* ========== PUBLIC surface — sticker / neo-brutalist ========== */
+    --page: #fffdf8; /* warm cream */
     --surface-card: #ffffff;
-    --surface-elev: #f4f6fb;
-    --surface-muted: #eef1f8;
-    --surface-hover: #e7f0ff;
+    --surface-elev: #fbfaf6;
+    --surface-muted: #f5efe2;
 
-    --text-primary: #0a1526;
-    --text-secondary: #4b5a72;
-    --text-muted: #8494a8;
+    --ink: #14181f; /* near-black, warm */
+    --text-secondary: #5a6270;
+    --text-muted: #8a8272;
+    --text-body: #3a414b;
 
-    --border-strong: #dde1ec;
+    --hairline: #efe9dc; /* warm beige, not grey */
+    --hairline-strong: #e2dcce;
+    --divider: #e7e0d0;
 
-    --success: #0fa57e;
-    --success-bg: #e4f8f2;
-    --warning: #b57f00;
-    --warning-bg: #fff3da;
-    --error: #dc2b2b;
-    --error-bg: #fdecec;
-    --info: #0064e0;
-    --info-bg: #e7f0ff;
+    /* The signature: a hard 2.5px ink outline + solid, non-blurred offset shadow. */
+    --outline-w: 2.5px;
+    --outline: var(--outline-w) solid var(--ink);
+    --shadow-sticker: 5px 6px 0 var(--ink);
+    --shadow-sticker-lg: 8px 10px 0 var(--ink);
+    --shadow-sticker-hover: 7px 9px 0 var(--ink);
+    --shadow-sticker-active: 1px 1px 0 var(--ink);
+    --shadow-sticker-muted: 2px 2px 0 #c9c3b4;
 
-    /* Dark "chrome" — always-dark surfaces (sidebar/hero/footer), even in light mode */
-    --dark-sidebar: #0a1526;
-    --dark-panel: #16283f;
-    --dark-border: #22405f;
+    /* Kept for the few soft-shadow surfaces the public designs still use. */
+    --shadow-xs: 0 1px 2px rgba(20, 24, 31, 0.05);
+    --shadow-sm: 0 2px 6px rgba(20, 24, 31, 0.06);
+    --shadow-card: 0 10px 30px rgba(20, 24, 31, 0.04);
+    --shadow-card-hover: 0 24px 50px rgba(20, 24, 31, 0.13);
+    --shadow-md: 0 6px 18px rgba(20, 24, 31, 0.09);
+    --shadow-dropdown: 0 20px 50px rgba(20, 24, 31, 0.18);
+    --shadow-modal: 0 40px 80px -20px rgba(20, 24, 31, 0.5);
 
-    /* Soft ink shadows tuned to the editorial card look. */
-    --shadow-xs: 0 1px 2px rgba(10, 21, 38, 0.05);
-    --shadow-sm: 0 1px 3px rgba(10, 21, 38, 0.07), 0 1px 2px rgba(10, 21, 38, 0.04);
-    --shadow-card: 0 14px 34px -28px rgba(10, 21, 38, 0.4);
-    --shadow-card-hover: 0 26px 44px -24px rgba(10, 21, 38, 0.35);
-    --shadow-md: 0 6px 18px rgba(10, 21, 38, 0.09), 0 2px 5px rgba(10, 21, 38, 0.05);
-    --shadow-dropdown: 0 24px 50px -18px rgba(10, 21, 38, 0.3);
-    --shadow-modal: 0 40px 80px -20px rgba(10, 21, 38, 0.5);
+    --focus-ring: 0 0 0 4px rgba(24, 119, 242, 0.16);
 
-    --navbar-h: 64px;
+    --navbar-h: 68px;
+    --shell-max: 1220px;
   }
 
-  .dark {
-    /* --- shadcn/ui semantic tokens (HSL channels) — DARK --- */
-    --background: 216 45% 7%; /* deep navy #08111F */
-    --foreground: 220 30% 92%; /* #E4E9F1 */
-    --card: 214 40% 11%; /* #0F1D30 */
-    --card-foreground: 220 30% 92%;
-    --popover: 214 40% 11%;
-    --popover-foreground: 220 30% 92%;
-    --primary: 214 100% 60%; /* brighter blue for dark */
+  /*
+   * APP surface. Applied on the dashboard layout wrapper. Re-points the same
+   * token names at the Facebook-clean palette so shared components follow.
+   */
+  .surface-app {
+    --page: #f0f2f5;
+    --surface-card: #ffffff;
+    --surface-elev: #f7f8fa;
+    --surface-muted: #ebedf0;
+
+    --ink: #050505;
+    --text-secondary: #65676b;
+    --text-muted: #8a8d91;
+    --text-body: #3a414b;
+
+    --hairline: #e4e6eb;
+    --hairline-strong: #ced0d4;
+    --divider: #f0f2f5;
+
+    /* No sticker language on the app surface: outlines collapse to hairlines
+     * and offset shadows become soft blurred elevation. */
+    --outline-w: 1px;
+    --outline: 1px solid var(--hairline);
+    --shadow-sticker: 0 6px 18px rgba(0, 0, 0, 0.07);
+    --shadow-sticker-lg: 0 8px 22px rgba(0, 0, 0, 0.09);
+    --shadow-sticker-hover: 0 8px 22px rgba(0, 0, 0, 0.09);
+    --shadow-sticker-active: 0 1px 2px rgba(0, 0, 0, 0.07);
+    --shadow-sticker-muted: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+    --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.07);
+    --shadow-card-hover: 0 8px 22px rgba(0, 0, 0, 0.09);
+
+    --focus-ring: 0 0 0 3px rgba(24, 119, 242, 0.15);
+  }
+
+  /* ---- shadcn/ui semantic tokens (HSL channels, so `bg-primary/50` composes) ----
+   * Derived from the surface tokens above. Declared once; the app surface
+   * overrides only what actually differs. */
+  :root {
+    --background: 43 100% 99%; /* #FFFDF8 */
+    --foreground: 218 19% 10%; /* #14181F */
+    --card: 0 0% 100%;
+    --card-foreground: 218 19% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 218 19% 10%;
+    --primary: 214 89% 52%; /* #1877F2 */
     --primary-foreground: 0 0% 100%;
-    --secondary: 214 33% 17%;
-    --secondary-foreground: 220 30% 92%;
-    --muted: 214 33% 17%;
-    --muted-foreground: 216 18% 68%; /* #9DABBF */
-    --accent: 214 40% 18%;
-    --accent-foreground: 214 100% 78%;
-    --destructive: 0 72% 55%;
+    --secondary: 40 43% 93%; /* #F5EFE2 */
+    --secondary-foreground: 218 19% 10%;
+    --muted: 40 43% 93%;
+    --muted-foreground: 219 10% 40%; /* #5A6270 */
+    --accent: 214 100% 96%; /* #EAF3FF */
+    --accent-foreground: 214 89% 52%;
+    --destructive: 359 96% 60%; /* #FA383E */
     --destructive-foreground: 0 0% 100%;
-    --border: 214 30% 20%;
-    --input: 214 30% 22%;
-    --ring: 214 100% 60%;
+    --border: 40 39% 90%; /* #EFE9DC */
+    --input: 218 19% 10%; /* ink — public fields carry a 2px ink border */
+    --ring: 214 89% 52%;
+    --radius: 0.75rem; /* 12px — inputs & buttons */
+  }
 
-    /* --- Blend tokens — DARK --- */
-    --brand-primary: #3e8bff;
-    --brand-secondary: #a48cff;
-    --brand-soft: rgba(0, 100, 224, 0.22);
-    --money: #2fd6a6;
-    --money-soft: rgba(22, 199, 154, 0.18);
-
-    --accent-warm: #ff8c66;
-    --accent-warm-soft: rgba(255, 106, 61, 0.18);
-    --accent-purple: #a48cff;
-    --accent-purple-soft: rgba(123, 97, 255, 0.2);
-    --accent-mint: #2fd6a6;
-    --accent-mint-soft: rgba(22, 199, 154, 0.18);
-
-    --surface-base: #08111f;
-    --surface-card: #0f1d30;
-    --surface-elev: #142338;
-    --surface-muted: #1b2c44;
-    --surface-hover: rgba(0, 100, 224, 0.22);
-
-    --text-primary: #e4e9f1;
-    --text-secondary: #9dabbf;
-    --text-muted: #7688a0;
-
-    --border-strong: #2c405c;
-
-    --success: #2fd6a6;
-    --success-bg: rgba(22, 199, 154, 0.18);
-    --warning: #e7a53c;
-    --warning-bg: rgba(231, 165, 60, 0.18);
-    --error: #ff5c5c;
-    --error-bg: rgba(255, 92, 92, 0.16);
-    --info: #3e8bff;
-    --info-bg: rgba(0, 100, 224, 0.22);
-
-    /* Dark chrome — deepen so the always-dark sidebar still reads against the dark page */
-    --dark-sidebar: #060d18;
-    --dark-panel: #0f1d30;
-    --dark-border: #1b2c44;
-
-    /* Shadows on dark read through the border + a touch more black */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.45);
-    --shadow-card-hover: 0 14px 32px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5), 0 2px 5px rgba(0, 0, 0, 0.35);
-    --shadow-dropdown: 0 8px 28px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.4);
-    --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.7), 0 4px 16px rgba(0, 0, 0, 0.5);
+  .surface-app {
+    --background: 220 14% 96%; /* #F0F2F5 */
+    --foreground: 0 0% 2%; /* #050505 */
+    --card-foreground: 0 0% 2%;
+    --popover-foreground: 0 0% 2%;
+    --secondary: 220 13% 93%; /* #EBEDF0 */
+    --secondary-foreground: 0 0% 2%;
+    --muted: 220 13% 93%;
+    --muted-foreground: 220 4% 41%; /* #65676B */
+    --accent: 216 89% 95%; /* #E7F0FE */
+    --border: 220 14% 91%; /* #E4E6EB */
+    --input: 220 14% 91%; /* app fields use a hairline, not ink */
   }
 }
 
@@ -181,32 +184,97 @@
     @apply bg-page font-sans text-ink antialiased;
     text-rendering: optimizeLegibility;
   }
-  /* Headings use the display face (Bricolage Grotesque) with tight tracking,
-   * matching the design. Components can still override weight/size via classes. */
+  /* Public headings use Space Grotesk. The app surface is system-ui throughout,
+   * per the dashboard designs — so it opts back out. */
   h1,
   h2,
   h3,
   h4 {
-    font-family: var(--font-display), 'Bricolage Grotesque', system-ui, sans-serif;
+    font-family: var(--font-display), 'Space Grotesk', system-ui, sans-serif;
     letter-spacing: -0.03em;
   }
-  /* Visible, branded keyboard focus everywhere (Phase 12 a11y baseline). */
+  .surface-app h1,
+  .surface-app h2,
+  .surface-app h3,
+  .surface-app h4 {
+    font-family: inherit;
+    letter-spacing: -0.02em;
+  }
   :focus-visible {
     outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
   }
   ::selection {
-    background: var(--brand-primary);
+    background: var(--accent-yellow);
+    color: var(--ink);
+  }
+  .surface-app ::selection {
+    background: var(--brand);
     color: #fff;
   }
-  /* Mono numerals: tabular figures so stats/countdowns don't jitter. */
-  .font-mono {
+  /* Stats and countdowns must not jitter as digits change. */
+  .font-mono,
+  .num {
     font-variant-numeric: tabular-nums;
+  }
+  .num {
+    letter-spacing: -0.01em;
   }
 }
 
-/* Onboarding celebration confetti — falls + spins, then fades. Neutralized for
- * reduced-motion users by the media block below. */
+@layer components {
+  /*
+   * The sticker: hard ink outline + solid offset shadow. On `.surface-app` the
+   * underlying tokens collapse this to a hairline card with soft elevation, so
+   * the same class is safe to use on either surface.
+   */
+  .sticker {
+    border: var(--outline);
+    box-shadow: var(--shadow-sticker);
+  }
+
+  /*
+   * Press physics: hover pushes the shadow out and lifts the element; :active
+   * collapses both so the button appears pressed into the page.
+   */
+  .press {
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+  .press:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-sticker-hover);
+  }
+  .press:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-sticker-active);
+  }
+  /* The app surface has no press physics — dashboards lift gently instead. */
+  .surface-app .press:hover {
+    transform: translateY(-2px);
+  }
+  .surface-app .press:active {
+    transform: none;
+  }
+
+  .lift {
+    transition:
+      transform 0.16s ease,
+      box-shadow 0.16s ease;
+  }
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+}
+
+/* ============================================================
+ * Motion vocabulary
+ * Every keyframe below is neutralized by the reduced-motion block at the end.
+ * ============================================================ */
+
+/* Onboarding celebration confetti — falls + spins, then fades. */
 @keyframes confetti-fall {
   to {
     transform: translateY(110vh) rotate(540deg);
@@ -214,78 +282,20 @@
   }
 }
 
-/* Marketing motion vocabulary (mirrors the design's cb* keyframes). */
-@keyframes cb-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-}
-@keyframes cb-float-b {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(13px) rotate(8deg);
-  }
-}
-@keyframes cb-fill {
-  0% {
-    width: 14%;
-  }
-  46%,
-  58% {
-    width: 82%;
-  }
-  100% {
-    width: 14%;
-  }
-}
-@keyframes cb-unlock {
-  0%,
-  8% {
-    transform: scale(0.5) translateY(8px);
-    opacity: 0;
-  }
-  20% {
-    transform: scale(1.12) translateY(0);
-    opacity: 1;
-  }
-  78% {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
-  92%,
-  100% {
-    transform: scale(0.5) translateY(8px);
-    opacity: 0;
-  }
-}
-@keyframes cb-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  50% {
-    transform: scale(2);
-    opacity: 0;
-  }
-}
-@keyframes cb-marquee {
+/* Headline word-by-word rise. Applied with a per-word animation-delay. */
+@keyframes ls-word-up {
   from {
-    transform: translateX(0);
+    opacity: 0;
+    transform: translateY(0.9em);
   }
   to {
-    transform: translateX(-50%);
+    opacity: 1;
+    transform: none;
   }
 }
-/* Hero entrance: rise + fade. Applied with staggered animation-delay per element. */
-@keyframes cb-rise {
+
+/* Generic entrance: rise + fade, staggered via animation-delay. */
+@keyframes ls-rise {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -295,28 +305,200 @@
     transform: none;
   }
 }
-/* Vertical auto-scroll for the hero phone feed (masked, duplicated content). */
-@keyframes cb-scroll-y {
-  from {
+
+/* Floating hero cards / illustration parts. `-r` is the counter-phase pair. */
+@keyframes ls-float {
+  0%,
+  100% {
     transform: translateY(0);
   }
-  to {
-    transform: translateY(-50%);
+  50% {
+    transform: translateY(-14px);
   }
 }
-/* Continuous gradient shimmer for the highlighted hero word. */
-@keyframes cb-shine {
-  to {
-    background-position: -200% center;
+@keyframes ls-float-r {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(13px);
   }
 }
-.cb-text-shine {
-  background: linear-gradient(90deg, #0064e0, #7b61ff, #16c79a, #0064e0);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: cb-shine 4s linear infinite;
+
+/* Map pins bobbing in place. */
+@keyframes ls-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* "Live" status dots. */
+@keyframes ls-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Expanding sound-wave rings behind the logo mark. */
+@keyframes ls-ring {
+  from {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* Reward marquee: the track holds two identical halves, so -50% loops seamlessly. */
+@keyframes ls-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Decorative star accents (spotlight band, final CTA). */
+@keyframes ls-wiggle {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+/* Slow rotation for the concentric-circle accent on the rewards band. */
+@keyframes ls-spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Morphing gradient blob behind the hero. */
+@keyframes ls-blob {
+  0%,
+  100% {
+    border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+  }
+  50% {
+    border-radius: 63% 37% 41% 59% / 56% 63% 37% 44%;
+  }
+}
+
+/* Dashboard skeleton loaders. */
+@keyframes ls-shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+/*
+ * Scroll reveal. `.r` starts hidden and is switched on by adding `.in` from an
+ * IntersectionObserver; `.pop` is the spring variant used on sticker cards.
+ * Siblings get a computed transition-delay for stagger.
+ *
+ * CRITICAL: the hidden state is gated on `.js`, which the client bundle adds to
+ * <html> as soon as it boots (see app/providers.tsx). If the bundle never runs —
+ * CSP blocking it, a hydration crash, JS disabled — the class is absent and this
+ * content stays fully visible rather than a blank page waiting on a hook that
+ * will never fire. Reveal is an enhancement, never a precondition for seeing the
+ * page.
+ */
+/*
+ * Reveal uses the INDEPENDENT transform properties (translate/scale/rotate),
+ * not `transform`. That leaves `transform` free for the sticker `.tilt` hover
+ * and the JS cursor-tilt to use on the very same element — otherwise the reveal
+ * resting state (`transform: none`) would out-specify and cancel the hover lift.
+ */
+.js .r {
+  opacity: 0;
+  translate: 0 22px;
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    translate 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.js .pop {
+  opacity: 0;
+  scale: 0.85;
+  rotate: -3deg;
+  transition:
+    opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    rotate 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.js .r.in,
+.js .pop.in {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+  rotate: 0deg;
+}
+
+/* Marquee pauses on hover so the offers stay readable. */
+.mq-track {
+  animation: ls-marquee 26s linear infinite;
+}
+.mq:hover .mq-track {
+  animation-play-state: paused;
+}
+
+/*
+ * Sticker card tilt — ported from the v3 design.
+ *
+ * The signature hover is PURE CSS: the card lifts up-left, rotates -1deg, and
+ * its solid offset shadow grows. That fires on any `.tilt` element with no JS.
+ * `useTilt` then enhances it (fine pointers only) by writing an inline
+ * perspective transform that follows the cursor and moving the `--mx/--my`
+ * glare origin; on pointer-leave it clears the inline transform and the CSS
+ * hover state takes back over. The shadow growth is CSS-only, so it persists
+ * through the whole hover regardless of the JS tilt.
+ */
+.tilt {
+  position: relative;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.tilt:hover {
+  transform: translate(-3px, -4px) rotate(-1deg);
+  box-shadow: 9px 12px 0 var(--ink);
+}
+/* Cursor-following glare highlight. */
+.tilt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    150px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.34),
+    rgba(255, 255, 255, 0) 62%
+  );
+}
+.tilt:hover::before {
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -327,5 +509,18 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Reveal elements must not be left invisible when their transition is killed.
+     Matches the `.js`-gated specificity above so it always wins. */
+  .js .r,
+  .js .pop {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    rotate: 0deg;
+  }
+  .tilt,
+  .tilt:hover {
+    transform: none;
   }
 }

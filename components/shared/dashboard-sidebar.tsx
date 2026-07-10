@@ -29,9 +29,11 @@ export interface DashNavItem {
   href: string;
   icon: LucideIcon;
   badge?: number | string;
+  /** Filled blue badge rather than the muted grey default. */
+  badgeAccent?: boolean;
 }
 
-/** Default role-aware navigation (routes match TODO Phases 7 & 8). */
+/** Default role-aware navigation. */
 export const DASH_NAV: Record<'creator' | 'business', { main: DashNavItem[]; account: DashNavItem[] }> =
   {
     creator: {
@@ -40,7 +42,7 @@ export const DASH_NAV: Record<'creator' | 'business', { main: DashNavItem[]; acc
         { label: 'Explore', href: '/dashboard/creator/explore', icon: Compass },
         { label: 'My Applications', href: '/dashboard/creator/applications', icon: FileText },
         { label: 'Active Collabs', href: '/dashboard/creator/collabs', icon: Handshake },
-        { label: 'Messages', href: '/dashboard/creator/messages', icon: MessageSquare },
+        { label: 'Messages', href: '/dashboard/creator/messages', icon: MessageSquare, badgeAccent: true },
         { label: 'History', href: '/dashboard/creator/history', icon: History },
       ],
       account: [
@@ -52,7 +54,7 @@ export const DASH_NAV: Record<'creator' | 'business', { main: DashNavItem[]; acc
       main: [
         { label: 'Overview', href: '/dashboard/business', icon: LayoutDashboard },
         { label: 'My Campaigns', href: '/dashboard/business/campaigns', icon: Megaphone },
-        { label: 'Applications', href: '/dashboard/business/applications', icon: FileText },
+        { label: 'Applications', href: '/dashboard/business/applications', icon: FileText, badgeAccent: true },
         { label: 'Active Collabs', href: '/dashboard/business/collabs', icon: Handshake },
         { label: 'Submissions', href: '/dashboard/business/submissions', icon: Upload },
         { label: 'Messages', href: '/dashboard/business/messages', icon: MessageSquare },
@@ -71,6 +73,8 @@ export interface DashboardSidebarProps {
   accountItems?: DashNavItem[];
   onLogout?: () => void;
   defaultCollapsed?: boolean;
+  /** Card pinned above the profile chip — e.g. the creator's "Rewards earned". */
+  highlight?: React.ReactNode;
   className?: string;
 }
 
@@ -79,8 +83,6 @@ function useActive(rootHref: string) {
   return (href: string) =>
     href === rootHref ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
 }
-
-const ACTIVE_BG = 'bg-[linear-gradient(120deg,#0064E0,#7B61FF)]';
 
 function NavLink({
   item,
@@ -96,10 +98,10 @@ function NavLink({
       href={item.href}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors',
+        'group flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium transition-colors',
         active
-          ? cn('text-white', ACTIVE_BG)
-          : 'text-white/65 hover:bg-white/[0.06] hover:text-white',
+          ? 'bg-brand-soft-2 text-brand'
+          : 'text-[#4B4F56] hover:bg-elev hover:text-ink',
         collapsed && 'justify-center px-0',
       )}
     >
@@ -109,7 +111,7 @@ function NavLink({
         <span
           className={cn(
             'ml-auto rounded-full px-1.5 py-0.5 font-mono text-[11px] leading-none',
-            active ? 'bg-brand text-white' : 'bg-white/10 text-white',
+            item.badgeAccent ? 'bg-brand text-white' : 'bg-secondary text-muted',
           )}
         >
           {item.badge}
@@ -129,57 +131,75 @@ function NavLink({
   return link;
 }
 
+/** Initials for the avatar tile when the user has no uploaded image. */
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('');
+}
+
 /**
- * DashboardSidebar: always-dark, role-aware nav. Collapsible to an icon rail on
- * desktop (tooltips on hover); collapses to a bottom tab bar on mobile.
+ * DashboardSidebar: white, 244px, role-aware nav, per the dashboard designs.
+ *
+ * The designs show no collapsed state and no mobile layout, but the app has
+ * both and they are real behavior — so the icon rail (with tooltips) and the
+ * mobile bottom tab bar are kept, restyled rather than removed.
  */
 export function DashboardSidebar({
   role,
+  user,
   items,
   accountItems,
   defaultCollapsed = false,
+  highlight,
   className,
 }: DashboardSidebarProps) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const main = items ?? DASH_NAV[role].main;
   const account = accountItems ?? DASH_NAV[role].account;
   const isActive = useActive(main[0]?.href ?? '');
+  const profileHref = account[0]?.href ?? '/';
 
   return (
     <>
       {/* Desktop / tablet sidebar */}
       <aside
-        style={{
-          backgroundImage:
-            'radial-gradient(460px 200px at 24% 0%, rgba(123,97,255,.42), transparent 62%), radial-gradient(420px 240px at 92% 102%, rgba(0,100,224,.4), transparent 60%)',
-        }}
         className={cn(
-          'sticky top-0 hidden h-screen shrink-0 flex-col bg-dark-sidebar text-white md:flex',
+          'sticky top-0 hidden h-screen shrink-0 flex-col border-r border-hair bg-card md:flex',
           collapsed ? 'w-16' : 'w-[244px]',
           className,
         )}
       >
-        <div className={cn('flex h-16 items-center', collapsed ? 'justify-center' : 'px-5')}>
+        <div className={cn('flex h-16 items-center', collapsed ? 'justify-center' : 'px-4')}>
           {collapsed ? (
-            <span className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-sm bg-brand text-white">
-              <BrandGlyph />
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-sm bg-brand text-white">
+              <BrandGlyph className="h-[17px] w-[17px]" />
             </span>
           ) : (
-            <Link href={main[0]?.href ?? '/'}>
-              <BrandMark onDark />
+            <Link href={main[0]?.href ?? '/'} aria-label="LocalShout dashboard">
+              <BrandMark className="text-[18px]" />
             </Link>
           )}
         </div>
 
         <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
+          {!collapsed && (
+            <div className="px-3 pb-1.5 pt-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-faint">
+              {role === 'creator' ? 'Menu' : 'Business'}
+            </div>
+          )}
+
           {main.map((item) => (
             <NavLink key={item.href} item={item} active={isActive(item.href)} collapsed={collapsed} />
           ))}
 
           {collapsed ? (
-            <div className="my-2 h-px bg-dark-border" />
+            <div className="my-2 h-px bg-hair" />
           ) : (
-            <div className="px-3 pb-1.5 pt-4 text-[10px] font-bold uppercase tracking-wider text-white/30">
+            <div className="px-3 pb-1.5 pt-4 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-faint">
               Account
             </div>
           )}
@@ -189,12 +209,30 @@ export function DashboardSidebar({
           ))}
         </nav>
 
+        {!collapsed && (
+          <div className="space-y-2 px-3 pb-2">
+            {highlight}
+            <Link
+              href={profileHref}
+              className="flex items-center gap-2.5 rounded-sm px-2 py-2 transition-colors hover:bg-elev"
+            >
+              <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-warn-soft font-mono text-[11px] font-semibold text-warn">
+                {initials(user.name)}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[13px] font-semibold text-ink">{user.name}</span>
+                {user.role && <span className="block truncate text-[11px] text-muted">{user.role}</span>}
+              </span>
+            </Link>
+          </div>
+        )}
+
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className={cn(
-            'mx-3 mb-1 inline-flex items-center gap-2 rounded-md px-3 py-2 text-[13px] font-medium text-white/50 transition-colors hover:bg-dark-panel hover:text-white',
+            'mx-3 mb-2 inline-flex items-center gap-2 rounded-sm px-3 py-2 text-[13px] font-medium text-muted transition-colors hover:bg-elev hover:text-ink',
             collapsed && 'justify-center px-0',
           )}
         >

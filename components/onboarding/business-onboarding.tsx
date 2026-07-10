@@ -240,7 +240,7 @@ function SocialLinkInput({
   const id = `social-${label.toLowerCase()}`;
   return (
     <div className="flex items-center gap-3">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-secondary text-muted">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border-2 border-ink bg-elev text-ink">
         {icon}
       </span>
       <div className="flex-1 space-y-1.5">

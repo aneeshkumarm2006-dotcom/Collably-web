@@ -15,7 +15,7 @@ export default function BusinessCampaignsPage() {
         title="My Campaigns"
         subtitle="Create, manage, and track all your collab campaigns."
         action={
-          <Button asChild>
+          <Button asChild className="active:scale-[0.98]">
             <Link href="/dashboard/business/campaigns/new">
               <Plus className="h-4 w-4" /> New campaign
             </Link>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { serverApi } from '@/lib/api/server';
-import { DashboardContainer, PageHeader } from '@/components/dashboard/page-shell';
+import { DashboardContainer } from '@/components/dashboard/page-shell';
 import { AccountSettings } from '@/components/creator/account-settings';
 import { EmptyState } from '@/components/shared/empty-state';
 
@@ -12,7 +12,6 @@ export default async function CreatorSettingsPage() {
 
   return (
     <DashboardContainer>
-      <PageHeader title="Settings" subtitle="Manage your account, notifications, and appearance." />
       {me?.user ? (
         <AccountSettings user={me.user} />
       ) : (

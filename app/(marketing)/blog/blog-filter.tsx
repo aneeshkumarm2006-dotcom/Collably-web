@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { BlogPostMeta } from '@/lib/blog/types';
 import { PostCard } from '@/components/blog/post-card';
+import { Reveal } from '@/components/shared/reveal';
 
 const ALL = 'All';
 
@@ -36,10 +37,10 @@ export function BlogFilter({ posts }: { posts: BlogPostMeta[] }) {
               aria-selected={selected}
               onClick={() => setActive(cat)}
               className={cn(
-                'rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2',
+                'rounded-full border-outline border-ink px-4 py-1.5 font-mono text-[13px] font-semibold uppercase tracking-[0.06em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2',
                 selected
-                  ? 'border-brand bg-brand text-white'
-                  : 'border-hair-strong bg-card text-muted hover:border-brand hover:text-brand',
+                  ? 'bg-brand text-white'
+                  : 'bg-card text-muted hover:bg-yellow hover:text-ink',
               )}
             >
               {cat}
@@ -49,13 +50,18 @@ export function BlogFilter({ posts }: { posts: BlogPostMeta[] }) {
       </div>
 
       {visible.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        // Remount on filter change (`key`) so the reveal observer re-scans the new
+        // cards — each wrapper is a fresh `.r` target, and PostCard keeps its own
+        // hover-lift untouched inside.
+        <Reveal key={active} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((post) => (
-            <PostCard key={post.slug} post={post} />
+            <div key={post.slug} className="r">
+              <PostCard post={post} className="h-full" />
+            </div>
           ))}
-        </div>
+        </Reveal>
       ) : (
-        <p className="rounded-2xl border border-hair bg-card p-10 text-center text-muted">
+        <p className="sticker rounded-card bg-card p-10 text-center text-muted">
           No posts in this category yet.
         </p>
       )}
