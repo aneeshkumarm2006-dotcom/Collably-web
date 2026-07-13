@@ -47,7 +47,7 @@ const nextConfig = {
     const scriptSrc = [
       "script-src 'self' 'unsafe-inline'",
       isDev ? "'unsafe-eval'" : '',
-      'https://www.googletagmanager.com https://www.google-analytics.com https://plausible.io https://maps.googleapis.com https://maps.gstatic.com',
+      'https://www.googletagmanager.com https://www.google-analytics.com https://plausible.io https://maps.googleapis.com https://maps.gstatic.com https://accounts.google.com',
     ]
       .filter(Boolean)
       .join(' ');
@@ -57,9 +57,12 @@ const nextConfig = {
       "object-src 'none'",
       "frame-ancestors 'none'",
       "form-action 'self'",
+      // Google Identity Services renders its sign-in button + One Tap in an iframe
+      // served from accounts.google.com, so it must be allowed to frame us here.
+      "frame-src 'self' https://accounts.google.com",
       "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://cdn.pixabay.com https://maps.gstatic.com https://maps.googleapis.com",
       "font-src 'self' data: https://fonts.gstatic.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
       scriptSrc,
       "connect-src 'self' https: wss:",
     ].join('; ');
