@@ -35,15 +35,15 @@ export function ApplicationCard({
   const tone = statusTone(status);
   const accent =
     tone === 'success'
-      ? 'border-l-success'
+      ? 'border-l-money'
       : tone === 'danger'
         ? 'border-l-danger'
-        : 'border-l-hair';
+        : 'border-l-ink';
 
   return (
     <div
       className={cn(
-        'rounded-lg border border-hair border-l-4 bg-card p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover',
+        'sticker rounded-card border-l-[6px] bg-card p-5 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-sticker-lg',
         accent,
         status === 'Rejected' && 'opacity-65',
         className,
@@ -52,7 +52,7 @@ export function ApplicationCard({
       <div className="flex items-start gap-3.5">
         <Avatar name={creator.name} src={creator.avatar} size={54} />
         <div className="min-w-0 flex-1">
-          <h3 className="text-base font-bold text-ink">{creator.name}</h3>
+          <h3 className="font-display text-base font-bold text-ink">{creator.name}</h3>
           {(creator.handle || typeof creator.followers === 'number') && (
             <div className="text-[13px] text-muted">
               {creator.handle && <span>{creator.handle}</span>}
@@ -70,7 +70,7 @@ export function ApplicationCard({
       </div>
 
       {pitch && (
-        <blockquote className="mt-3 rounded-md bg-secondary px-3.5 py-3 text-sm italic leading-relaxed text-muted">
+        <blockquote className="mt-3 rounded-md border-2 border-ink/10 bg-secondary px-3.5 py-3 text-sm italic leading-relaxed text-muted">
           “{pitch}”
         </blockquote>
       )}
@@ -84,7 +84,7 @@ export function ApplicationCard({
               alt=""
               width={64}
               height={48}
-              className="h-12 w-16 rounded-sm object-cover"
+              className="h-12 w-16 rounded-sm border-2 border-ink object-cover"
             />
           ))}
         </div>

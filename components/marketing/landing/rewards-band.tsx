@@ -1,15 +1,18 @@
+import { Coffee, Dumbbell, Sparkles, UtensilsCrossed } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
 import { Eyebrow } from '@/components/shared/sticker';
 import { TiltCard } from './tilt-card';
 import { Reveal } from './reveal';
 
-type Reward = { icon: string; title: string; by: string; value: string };
+type Reward = { icon: LucideIcon; title: string; by: string; value: string };
 
 // The design's four sample rewards (perk → the local business → dollar value).
 const REWARDS: Reward[] = [
-  { icon: '☕', title: 'A month of free coffee', by: 'Bloom Coffee Co.', value: '$120' },
-  { icon: '🍽️', title: 'Dinner for two', by: 'Casa Verde', value: '$180' },
-  { icon: '💪', title: '3-month membership', by: 'RiverFit Studio', value: '$285' },
-  { icon: '💅', title: 'Full spa day', by: 'Lumen Beauty Bar', value: '$240' },
+  { icon: Coffee, title: 'A month of free coffee', by: 'Bloom Coffee Co.', value: '$120' },
+  { icon: UtensilsCrossed, title: 'Dinner for two', by: 'Casa Verde', value: '$180' },
+  { icon: Dumbbell, title: '3-month membership', by: 'RiverFit Studio', value: '$285' },
+  { icon: Sparkles, title: 'Full spa day', by: 'Lumen Beauty Bar', value: '$240' },
 ];
 
 /**
@@ -52,8 +55,8 @@ export function RewardsBand() {
               key={r.title}
               className="pop rounded-[18px] border-outline border-band-border bg-band-card p-[22px] shadow-[5px_6px_0_#061810]"
             >
-              <div className="text-3xl" aria-hidden>
-                {r.icon}
+              <div className="text-yellow" aria-hidden>
+                <r.icon size={30} strokeWidth={2} />
               </div>
               <div className="mt-3 font-display text-base font-bold text-white">{r.title}</div>
               <div className="mt-1 text-[13px] text-[#8FAE9C]">{r.by}</div>

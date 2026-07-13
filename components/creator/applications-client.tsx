@@ -111,10 +111,10 @@ export function CreatorApplicationsClient() {
             onClick={() => setTab(t)}
             aria-current={tab === t ? 'page' : undefined}
             className={cn(
-              'inline-flex items-center whitespace-nowrap rounded-sm border px-4 py-2 text-[13.5px] font-semibold transition-colors',
+              'inline-flex items-center whitespace-nowrap rounded-md border-2 border-ink px-4 py-1.5 font-display text-[13px] font-semibold transition-all',
               tab === t
-                ? 'border-ink bg-ink text-white'
-                : 'border-hair bg-card text-muted hover:text-ink',
+                ? 'bg-ink text-white shadow-[2px_2px_0_var(--ink)]'
+                : 'bg-card text-muted hover:-translate-y-px hover:text-ink hover:shadow-[2px_2px_0_var(--ink)]',
             )}
           >
             {t} ({counts[t]})
@@ -125,7 +125,7 @@ export function CreatorApplicationsClient() {
       {query.isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-[72px] w-full rounded-xl" />
+            <Skeleton key={i} className="h-[72px] w-full rounded-card" />
           ))}
         </div>
       ) : query.isError ? (
@@ -153,9 +153,9 @@ export function CreatorApplicationsClient() {
       ) : rows.length === 0 ? (
         <EmptyState icon={<FileText />} title={`No ${tab.toLowerCase()} applications`} />
       ) : (
-        <Reveal className="overflow-hidden rounded-lg border border-hair bg-card">
+        <Reveal className="sticker overflow-hidden rounded-card bg-card">
           {/* Header row */}
-          <div className="grid grid-cols-[minmax(0,2.4fr)_auto] gap-3 border-b border-hair px-[18px] py-3 text-[11px] font-bold uppercase tracking-[0.04em] text-faint sm:grid-cols-[minmax(0,2.4fr)_1fr_1fr_auto]">
+          <div className="grid grid-cols-[minmax(0,2.4fr)_auto] gap-3 border-b border-hair px-[18px] py-3 font-mono text-[10.5px] font-bold uppercase tracking-[0.08em] text-faint sm:grid-cols-[minmax(0,2.4fr)_1fr_1fr_auto]">
             <span>Campaign</span>
             <span className="hidden sm:block">Reward</span>
             <span className="hidden sm:block">Applied</span>

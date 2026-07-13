@@ -27,7 +27,7 @@ export default async function CreatorHistoryPage() {
   return (
     <DashboardContainer>
       {completed.length === 0 ? (
-        <div className="rounded-lg border border-hair bg-card">
+        <div className="sticker rounded-card bg-card">
           <EmptyState
             icon={<History />}
             title="No completed collabs yet"
@@ -40,8 +40,8 @@ export default async function CreatorHistoryPage() {
           />
         </div>
       ) : (
-        <Reveal className="overflow-hidden rounded-lg border border-hair bg-card">
-          <div className="grid grid-cols-[minmax(0,2.4fr)_auto] gap-3 border-b border-hair px-[18px] py-3 text-[11px] font-bold uppercase tracking-[0.04em] text-faint sm:grid-cols-[minmax(0,2.4fr)_1fr_1fr_auto]">
+        <Reveal className="sticker overflow-hidden rounded-card bg-card">
+          <div className="grid grid-cols-[minmax(0,2.4fr)_auto] gap-3 border-b border-hair px-[18px] py-3 font-mono text-[10.5px] font-bold uppercase tracking-[0.08em] text-faint sm:grid-cols-[minmax(0,2.4fr)_1fr_1fr_auto]">
             <span>Collab</span>
             <span className="hidden sm:block">Reward</span>
             <span className="hidden sm:block">Completed</span>

@@ -58,7 +58,7 @@ export function NotificationBell({
           type="button"
           aria-label={`Notifications${unread ? `, ${unread} unread` : ''}`}
           className={cn(
-            'relative inline-flex h-10 w-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-secondary hover:text-ink',
+            'relative inline-flex h-10 w-10 items-center justify-center rounded-md border-2 border-ink bg-card text-ink transition-all hover:-translate-y-px hover:shadow-[2px_2px_0_var(--ink)]',
             className,
           )}
         >
@@ -70,9 +70,9 @@ export function NotificationBell({
           )}
         </button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[340px] overflow-hidden p-0">
-        <div className="flex items-center justify-between border-b border-hair px-4 py-3.5">
-          <h4 className="font-semibold text-ink">Notifications</h4>
+      <PopoverContent align="end" className="w-[340px] overflow-hidden rounded-card border-2 border-ink p-0 shadow-sticker">
+        <div className="flex items-center justify-between border-b-2 border-ink/10 px-4 py-3.5">
+          <h4 className="font-display font-bold text-ink">Notifications</h4>
           {onMarkAllRead && (
             <button
               type="button"
@@ -118,7 +118,7 @@ export function NotificationBell({
           )}
         </div>
 
-        <div className="border-t border-hair p-3 text-center">
+        <div className="border-t-2 border-ink/10 p-3 text-center">
           <Link href={viewAllHref} className="text-[13px] font-semibold text-brand hover:underline">
             View all notifications →
           </Link>

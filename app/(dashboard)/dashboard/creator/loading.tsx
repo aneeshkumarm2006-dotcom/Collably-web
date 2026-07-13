@@ -11,8 +11,8 @@ export default function CreatorDashboardLoading() {
     <DashboardContainer>
       <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-lg border border-hair bg-card p-[18px]">
-            <Skeleton className="h-[38px] w-[38px] rounded-[10px]" />
+          <div key={i} className="sticker rounded-card bg-card p-[18px]">
+            <Skeleton className="h-[38px] w-[38px] rounded-[11px]" />
             <Skeleton className="mt-4 h-[26px] w-[55%]" />
             <Skeleton className="mt-2.5 h-3 w-[40%]" />
           </div>
@@ -20,13 +20,13 @@ export default function CreatorDashboardLoading() {
       </div>
 
       <div className="mt-[22px] grid gap-[18px] lg:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)]">
-        <div className="rounded-lg border border-hair bg-card p-[18px]">
+        <div className="sticker rounded-card bg-card p-[18px]">
           <Skeleton className="h-[18px] w-2/5" />
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton key={i} className="mt-3 h-14 w-full rounded-[10px]" />
           ))}
         </div>
-        <div className="rounded-lg border border-hair bg-card p-[18px]">
+        <div className="sticker rounded-card bg-card p-[18px]">
           <Skeleton className="h-[18px] w-1/2" />
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton key={i} className="mt-3 h-10 w-full rounded-[10px]" />

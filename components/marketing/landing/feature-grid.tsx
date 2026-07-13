@@ -1,44 +1,47 @@
+import { BarChart3, Gift, MapPin, MessageCircle, ShieldCheck, Zap } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
 import { Eyebrow } from '@/components/shared/sticker';
 import { TiltCard } from './tilt-card';
 import { Reveal } from './reveal';
 
-type Feature = { icon: string; tint: string; title: string; body: string };
+type Feature = { icon: LucideIcon; tint: string; title: string; body: string };
 
-// The design's six features (emoji + tinted tile). Its copy differs from
+// The design's six features (icon + tinted tile). Its copy differs from
 // lib/FEATURES, so the list lives here rather than editing the shared content.
 const FEATURES: Feature[] = [
   {
-    icon: '📍',
+    icon: MapPin,
     tint: 'bg-brand-soft',
     title: 'Hyper-local matching',
     body: 'Discovery is distance-first. Every campaign is someone within a few miles of you.',
   },
   {
-    icon: '💸',
+    icon: Gift,
     tint: 'bg-money-soft',
     title: 'Rewards, not invoices',
     body: 'Skip the paperwork. Perks and product swap hands the moment content is approved.',
   },
   {
-    icon: '💬',
+    icon: MessageCircle,
     tint: 'bg-warn-soft',
     title: 'Built-in messaging',
     body: 'Businesses and creators coordinate in real time, right inside every collab.',
   },
   {
-    icon: '🛡️',
+    icon: ShieldCheck,
     tint: 'bg-danger-soft',
     title: 'Verified both ways',
     body: 'Real businesses, real creators. Handles and locations are checked before you match.',
   },
   {
-    icon: '📊',
+    icon: BarChart3,
     tint: 'bg-brand-soft',
     title: 'Track every collab',
     body: 'Applications, active deals, and submissions — all in one clean dashboard.',
   },
   {
-    icon: '⚡',
+    icon: Zap,
     tint: 'bg-money-soft',
     title: 'Live in minutes',
     body: "No agency, no contracts. Post a campaign or apply and you're moving today.",
@@ -61,10 +64,10 @@ export function FeatureGrid() {
           {FEATURES.map((f) => (
             <TiltCard key={f.title} className="pop sticker rounded-[22px] bg-card p-[26px]">
               <span
-                className={`sticker flex h-14 w-14 -rotate-[4deg] items-center justify-center rounded-2xl text-[27px] shadow-[3px_3px_0_#14181F] ${f.tint}`}
+                className={`sticker flex h-14 w-14 -rotate-[4deg] items-center justify-center rounded-2xl text-ink shadow-[3px_3px_0_#14181F] ${f.tint}`}
                 aria-hidden
               >
-                {f.icon}
+                <f.icon size={26} strokeWidth={2.25} />
               </span>
               <h3 className="mt-5 font-display text-[19px] font-bold tracking-[-0.01em] text-ink">
                 {f.title}

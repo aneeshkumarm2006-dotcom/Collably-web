@@ -33,10 +33,10 @@ export function MessageBubble({
     >
       <div
         className={cn(
-          'max-w-[74%] px-3.5 py-2.5 shadow-[0_1px_1px_rgba(0,0,0,0.04)]',
+          'max-w-[74%] border-2 border-ink px-3.5 py-2.5 shadow-[2px_2px_0_var(--ink)]',
           mine
-            ? 'rounded-[14px_4px_14px_14px] bg-brand text-white'
-            : 'rounded-[4px_14px_14px_14px] bg-card text-ink',
+            ? 'rounded-[16px_5px_16px_16px] bg-brand text-white'
+            : 'rounded-[5px_16px_16px_16px] bg-card text-ink',
           animateIn && 'animate-ls-rise',
         )}
       >
@@ -66,7 +66,7 @@ export function MessageBubble({
 export function DateSeparator({ label }: { label: string }) {
   return (
     <div className="my-3 flex justify-center">
-      <span className="rounded-full bg-secondary px-3 py-1 text-[11.5px] font-semibold tracking-wide text-muted">
+      <span className="rounded-full border-2 border-ink bg-secondary px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-wide text-muted">
         {label}
       </span>
     </div>
@@ -77,7 +77,7 @@ export function DateSeparator({ label }: { label: string }) {
 export function TypingBubble() {
   return (
     <div className="flex justify-start px-3 pt-2.5">
-      <div className="flex items-center gap-1 rounded-[4px_14px_14px_14px] border border-hair bg-card px-3.5 py-3">
+      <div className="flex items-center gap-1 rounded-[5px_16px_16px_16px] border-2 border-ink bg-card px-3.5 py-3 shadow-[2px_2px_0_var(--ink)]">
         {[0, 1, 2].map((i) => (
           <span
             key={i}

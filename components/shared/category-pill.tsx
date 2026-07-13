@@ -18,10 +18,10 @@ export interface CategoryPillProps {
 
 export function CategoryPill({ category, count, active, onClick, className }: CategoryPillProps) {
   const classes = cn(
-    'inline-flex items-center gap-2 rounded-full border-[1.5px] px-[15px] py-[9px] text-[13.5px] font-bold transition-colors',
+    'inline-flex items-center gap-2 rounded-full border-2 border-ink px-[15px] py-[9px] font-display text-[13.5px] font-bold transition-all',
     active
-      ? 'border-brand bg-brand text-white'
-      : 'border-hair bg-card text-muted hover:border-brand hover:text-brand',
+      ? 'bg-brand text-white shadow-[2px_2px_0_var(--ink)]'
+      : 'bg-card text-ink hover:-translate-y-px hover:bg-secondary hover:shadow-[2px_2px_0_var(--ink)]',
     className,
   );
 

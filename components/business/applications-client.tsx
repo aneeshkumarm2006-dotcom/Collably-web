@@ -82,7 +82,7 @@ export function BusinessApplicationsClient({ campaignId }: { campaignId?: string
       {query.isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-[92px] w-full rounded-lg" />
+            <Skeleton key={i} className="h-[92px] w-full rounded-card" />
           ))}
         </div>
       ) : query.isError ? (
@@ -149,9 +149,9 @@ function ApplicantRow({
     .join(' · ');
 
   return (
-    <div className="r lift flex flex-col gap-4 rounded-lg border border-hair bg-card p-[18px] shadow-card sm:flex-row sm:items-start">
+    <div className="r lift flex flex-col gap-4 sticker rounded-card bg-card p-[18px] sm:flex-row sm:items-start">
       <span
-        className="flex h-[52px] w-[52px] shrink-0 items-center justify-center overflow-hidden rounded-full text-[16px] font-extrabold text-white"
+        className="flex h-[52px] w-[52px] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-ink text-[16px] font-extrabold text-white"
         style={view.avatar ? undefined : { background: categoryGradient(view.niche[0]) }}
       >
         {view.avatar ? (

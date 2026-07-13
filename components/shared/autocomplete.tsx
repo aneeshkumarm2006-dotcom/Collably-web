@@ -159,7 +159,7 @@ export function Autocomplete({
         <ul
           id={listId}
           role="listbox"
-          className="absolute z-50 mt-1.5 max-h-60 w-full overflow-auto rounded-md border border-hair bg-card p-1 shadow-dropdown"
+          className="absolute z-50 mt-1.5 max-h-60 w-full overflow-auto rounded-md border-2 border-ink bg-card p-1 shadow-sticker"
         >
           {matches.map((option, i) => (
             <li

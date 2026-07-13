@@ -20,18 +20,24 @@ export function DashboardContainer({
 export interface PageHeaderProps {
   title: string;
   subtitle?: string;
+  /** Uppercase coral mono label above the title (the sticker eyebrow). */
+  eyebrow?: string;
   action?: React.ReactNode;
   className?: string;
 }
 
-export function PageHeader({ title, subtitle, action, className }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, eyebrow, action, className }: PageHeaderProps) {
   return (
-    <div className={cn('mb-6 flex flex-wrap items-start justify-between gap-4', className)}>
+    <div className={cn('mb-6 flex flex-wrap items-end justify-between gap-4', className)}>
       <div className="min-w-0">
-        {/* System-ui, not font-display: the dashboard designs use the system
-            stack throughout. Space Grotesk belongs to the public surface. */}
-        <h1 className="text-[26px] font-bold tracking-tight text-ink">{title}</h1>
-        {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
+        {eyebrow && (
+          <p className="mb-1 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-coral">
+            {eyebrow}
+          </p>
+        )}
+        {/* Space Grotesk display title — unified with the marketing surface. */}
+        <h1 className="font-display text-[28px] font-bold tracking-[-0.02em] text-ink">{title}</h1>
+        {subtitle && <p className="mt-1.5 text-[15px] text-muted">{subtitle}</p>}
       </div>
       {action && <div className="flex shrink-0 items-center gap-2">{action}</div>}
     </div>

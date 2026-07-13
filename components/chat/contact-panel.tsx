@@ -62,10 +62,10 @@ export function ContactPanel({
   return (
     <aside
       aria-label="Contact info"
-      className="absolute inset-y-0 right-0 z-10 w-full overflow-y-auto border-l border-hair bg-card p-[18px] shadow-[-8px_0_24px_rgba(0,0,0,0.06)] sm:w-[340px]"
+      className="absolute inset-y-0 right-0 z-10 w-full overflow-y-auto border-l-2 border-ink bg-card p-[18px] shadow-[-8px_0_24px_rgba(0,0,0,0.06)] sm:w-[340px]"
     >
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-bold uppercase tracking-[0.04em] text-faint">
+        <span className="font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-coral">
           Contact info
         </span>
         <button
@@ -83,7 +83,7 @@ export function ContactPanel({
         <div className="mx-auto w-fit">
           <Avatar name={name} src={other?.avatar} size={76} shape="square" />
         </div>
-        <div className="mt-3 text-[17px] font-bold text-ink">{name}</div>
+        <div className="mt-3 font-display text-[17px] font-bold text-ink">{name}</div>
         <div className="text-[12.5px] capitalize text-faint">{kind}</div>
       </div>
 
@@ -92,7 +92,7 @@ export function ContactPanel({
         <button
           type="button"
           onClick={onClose}
-          className="flex flex-col items-center gap-1.5 rounded-[10px] border border-hair bg-card px-1 py-2.5 text-[11.5px] font-semibold text-brand transition-colors hover:bg-elev"
+          className="flex flex-col items-center gap-1.5 rounded-[11px] border-2 border-ink bg-card px-1 py-2.5 text-[11.5px] font-semibold text-brand transition-all hover:-translate-y-px hover:shadow-[2px_2px_0_var(--ink)]"
         >
           <UploadCloud className="h-[18px] w-[18px]" />
           Back to chat
@@ -101,7 +101,7 @@ export function ContactPanel({
           type="button"
           disabled
           title="Coming soon"
-          className="flex cursor-not-allowed flex-col items-center gap-1.5 rounded-[10px] border border-hair bg-card px-1 py-2.5 text-[11.5px] font-semibold text-faint opacity-70"
+          className="flex cursor-not-allowed flex-col items-center gap-1.5 rounded-[11px] border-2 border-ink/30 bg-card px-1 py-2.5 text-[11.5px] font-semibold text-faint opacity-70"
         >
           <BellOff className="h-[18px] w-[18px]" />
           Mute
@@ -110,17 +110,17 @@ export function ContactPanel({
 
       {/* Current campaign */}
       {conversation.campaignTitle && (
-        <div className="mt-4 rounded-xl border border-hair bg-card p-3.5">
-          <div className="text-[11px] font-bold uppercase tracking-[0.04em] text-faint">
+        <div className="sticker mt-4 rounded-card bg-card p-3.5">
+          <div className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-coral">
             Current campaign
           </div>
-          <div className="mt-1 text-[14px] font-semibold text-ink">
+          <div className="mt-1 font-display text-[14px] font-bold text-ink">
             {conversation.campaignTitle}
           </div>
           {role === 'creator' && conversation.applicationId && (
             <Link
               href={`/dashboard/creator/collabs/${conversation.applicationId}/submit`}
-              className="mt-3 inline-flex w-full items-center justify-center rounded-sm bg-brand px-3 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-brand-hover"
+              className="mt-3 inline-flex w-full items-center justify-center rounded-md border-2 border-ink bg-brand px-3 py-2.5 font-display text-[14px] font-semibold text-white shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_var(--ink)] active:translate-y-0 active:shadow-[1px_1px_0_var(--ink)]"
             >
               Submit content
             </Link>

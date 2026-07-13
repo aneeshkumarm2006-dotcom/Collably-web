@@ -20,7 +20,7 @@ export default async function CreatorCollabsPage() {
   return (
     <DashboardContainer>
       {collabs.length === 0 ? (
-        <div className="rounded-lg border border-hair bg-card">
+        <div className="sticker rounded-card bg-card">
           <EmptyState
             icon={<Handshake />}
             title="No active collabs"

@@ -26,16 +26,20 @@ export default async function CreatorDashboardLayout({
   const collabs = profile?.totalCollabsCompleted ?? 0;
 
   const highlight = (
-    <div className="rounded-[12px] bg-page p-3.5">
-      <div className="text-[11px] font-semibold uppercase tracking-[0.03em] text-muted">
+    <div className="relative overflow-hidden rounded-[12px] border-2 border-ink bg-band p-3.5 shadow-[3px_3px_0_var(--ink)]">
+      <div className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-band-money">
         Rewards earned
       </div>
-      <div className="num mt-0.5 text-[24px] font-bold text-money-ink">
+      <div className="num mt-1 font-display text-[24px] font-bold leading-none text-white">
         {formatCurrency(rewards)}
       </div>
-      <div className="text-[12px] text-muted">
+      <div className="mt-1 text-[12px] font-medium text-white/60">
         across {collabs} {collabs === 1 ? 'collab' : 'collabs'}
       </div>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -right-5 -top-6 h-16 w-16 rounded-full bg-band-money/20"
+      />
     </div>
   );
 

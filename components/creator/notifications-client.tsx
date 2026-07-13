@@ -39,7 +39,7 @@ export function NotificationsClient({ role }: { role: 'creator' | 'business' }) 
       {query.isLoading ? (
         <div className="space-y-2">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full rounded-lg" />
+            <Skeleton key={i} className="h-16 w-full rounded-card" />
           ))}
         </div>
       ) : query.isError ? (
@@ -61,7 +61,7 @@ export function NotificationsClient({ role }: { role: 'creator' | 'business' }) 
         />
       ) : (
         <>
-          <Reveal as="ul" className="overflow-hidden rounded-lg border border-hair bg-card">
+          <Reveal as="ul" className="sticker overflow-hidden rounded-card bg-card">
             {notifications.map((n) => {
               const { icon: Icon, dot } = notificationVisual(n.type);
               return (
@@ -76,12 +76,12 @@ export function NotificationsClient({ role }: { role: 'creator' | 'business' }) 
                     href={notificationHref(n.deepLinkPath, role)}
                     className={cn(
                       'flex items-center gap-3.5 px-5 py-4 transition-colors hover:bg-elev',
-                      !n.isRead && 'bg-[#F0F5FF]',
+                      !n.isRead && 'bg-brand-soft',
                     )}
                   >
                     <span
                       className={cn(
-                        'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[11px] [&_svg]:h-[18px] [&_svg]:w-[18px]',
+                        'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[11px] border-2 border-ink [&_svg]:h-[18px] [&_svg]:w-[18px]',
                         NOTIF_CHIP_CLASS[dot],
                       )}
                     >

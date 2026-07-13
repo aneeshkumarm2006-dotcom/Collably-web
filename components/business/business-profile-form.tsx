@@ -38,8 +38,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-lg border border-hair bg-card p-5 shadow-card sm:p-6">
-      <h2 className="text-base font-bold text-ink">{title}</h2>
+    <section className="sticker rounded-card bg-card p-5 sm:p-6">
+      <h2 className="font-display text-base font-bold text-ink">{title}</h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
     </section>
@@ -88,9 +88,9 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
   return (
     <div className="space-y-5">
       {/* Profile header */}
-      <div className="flex items-center gap-4 rounded-lg border border-hair bg-card p-5 shadow-card sm:p-6">
+      <div className="flex items-center gap-4 sticker rounded-card bg-card p-5 sm:p-6">
         <span
-          className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg text-[24px] font-extrabold text-white"
+          className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[14px] border-2 border-ink text-[24px] font-extrabold text-white"
           style={
             form.logo
               ? undefined
@@ -217,7 +217,7 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
         <button
           type="button"
           onClick={() => void logout()}
-          className="inline-flex items-center gap-2 rounded-sm bg-danger-soft px-4 py-2.5 text-sm font-bold text-danger transition-opacity hover:opacity-80"
+          className="inline-flex items-center gap-2 rounded-md border-2 border-ink bg-danger-soft px-4 py-2.5 text-sm font-bold text-danger transition-opacity hover:opacity-80"
         >
           <LogOut className="h-4 w-4" /> Log out
         </button>
@@ -226,7 +226,7 @@ export function BusinessProfileForm({ profile }: { profile: BusinessProfile }) {
       {error && <ErrorBanner message={error} />}
 
       {/* Sticky save bar */}
-      <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-end gap-3 border-t border-hair bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-end gap-3 border-t-2 border-ink/10 bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
         <Button size="lg" className="flex-1" onClick={save} disabled={saving}>
           {saving ? (
             <>
@@ -257,7 +257,7 @@ function SocialLinkInput({
   const id = `social-${label.toLowerCase()}`;
   return (
     <div className="flex items-center gap-3">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-secondary text-muted">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] border-2 border-ink bg-secondary text-muted">
         {icon}
       </span>
       <div className="flex-1 space-y-1.5">

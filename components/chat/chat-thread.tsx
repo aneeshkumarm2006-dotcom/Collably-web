@@ -134,7 +134,7 @@ export function ChatThread({
   return (
     <div className="relative flex h-full flex-col overflow-hidden bg-page">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-hair bg-card px-4 py-3">
+      <div className="flex items-center gap-3 border-b-2 border-ink bg-card px-4 py-3">
         <Link
           href={`/dashboard/${role}/messages`}
           aria-label="Back to messages"
@@ -158,7 +158,7 @@ export function ChatThread({
             >
               <Avatar name={other?.name ?? 'Chat'} src={other?.avatar} size={40} />
               <div className="min-w-0">
-                <div className="truncate font-semibold text-ink">
+                <div className="truncate font-display font-bold text-ink">
                   {other?.name ?? 'Conversation'}
                 </div>
                 <div className="truncate text-[12px] text-muted">

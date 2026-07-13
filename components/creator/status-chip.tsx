@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils';
 
 /**
- * StatusChip: the soft rectangular status pill used across the creator
- * dashboard (Overview, Collabs, Applications, Messages), per the design. Unlike
- * the shared `StatusBadge` (uppercase mono + dot, sticker anatomy), this is a
- * quiet sentence-case pill tuned to the Facebook-clean surface.
+ * StatusChip: the compact status pill used across the creator dashboard
+ * (Overview, Collabs, Applications, Messages). Unified with the marketing
+ * surface's pill language — uppercase mono on a soft tint — so it reads the same
+ * as the shared `StatusBadge` without the leading dot.
  */
 type Tone = 'money' | 'brand' | 'warn' | 'danger' | 'neutral';
 
@@ -55,7 +55,7 @@ export function StatusChip({
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-[6px] px-2.5 py-1 text-[11px] font-semibold leading-none',
+        'inline-flex items-center rounded-full px-2.5 py-1 font-mono text-[10.5px] font-bold uppercase leading-none tracking-[0.06em]',
         TONE_CLASS[tone ?? statusChipTone(status)],
         className,
       )}

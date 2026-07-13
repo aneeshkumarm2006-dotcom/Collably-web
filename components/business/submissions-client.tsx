@@ -40,7 +40,7 @@ export function BusinessSubmissionsClient() {
       {query.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2">
           {Array.from({ length: 2 }).map((_, i) => (
-            <Skeleton key={i} className="h-72 w-full rounded-lg" />
+            <Skeleton key={i} className="h-72 w-full rounded-card" />
           ))}
         </div>
       ) : query.isError ? (
@@ -74,7 +74,7 @@ export function BusinessSubmissionsClient() {
             <DialogTitle>Proof screenshot</DialogTitle>
           </DialogHeader>
           {proof && (
-            <div className="relative max-h-[70vh] overflow-auto rounded-md border border-hair">
+            <div className="relative max-h-[70vh] overflow-auto rounded-md border-2 border-ink">
               {/* eslint-disable-next-line @next/next/no-img-element -- full-size proof view */}
               <img src={proof} alt="Submission proof" className="h-auto w-full" />
             </div>
@@ -120,13 +120,13 @@ function SubmissionCard({
   const gradientKey = app.campaign?.category;
 
   return (
-    <div className="r lift flex flex-col overflow-hidden rounded-lg border border-hair bg-card shadow-card">
+    <div className="r lift flex flex-col overflow-hidden sticker rounded-card bg-card">
       {/* Preview */}
       <button
         type="button"
         onClick={() => app.submissionProof && onViewProof(app.submissionProof)}
         disabled={!app.submissionProof}
-        className="group relative block h-[150px] w-full overflow-hidden text-left"
+        className="group relative block h-[150px] w-full overflow-hidden border-b-2 border-ink text-left"
         style={{ background: categoryGradient(gradientKey) }}
         aria-label={app.submissionProof ? 'View submission proof' : 'Submission preview'}
       >
@@ -140,11 +140,11 @@ function SubmissionCard({
           />
         ) : null}
         <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/85 text-ink shadow-sm [&_svg]:h-5 [&_svg]:w-5">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-ink bg-white/85 text-ink shadow-[2px_2px_0_var(--ink)] [&_svg]:h-5 [&_svg]:w-5">
             <Play className="translate-x-px fill-current" />
           </span>
         </span>
-        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wide text-ink">
+        <span className="absolute left-3 top-3 rounded-sm border-2 border-ink bg-card px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wide text-ink shadow-[2px_2px_0_var(--ink)]">
           {contentType}
         </span>
         <span className="absolute right-3 top-3">
@@ -180,7 +180,7 @@ function SubmissionCard({
         )}
 
         {app.submissionNote && (
-          <div className="mt-3 rounded-md bg-secondary px-3.5 py-3 text-sm text-muted">
+          <div className="mt-3 rounded-md border-2 border-ink/10 bg-secondary px-3.5 py-3 text-sm text-muted">
             <span className="font-semibold text-ink">Creator note: </span>
             {app.submissionNote}
           </div>
@@ -188,7 +188,7 @@ function SubmissionCard({
 
         {/* Revision box */}
         {revisionOpen && (
-          <div className="mt-3 rounded-md border border-warn/30 bg-warn-soft p-3.5">
+          <div className="mt-3 rounded-md border-2 border-warn/40 bg-warn-soft p-3.5">
             <Textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}

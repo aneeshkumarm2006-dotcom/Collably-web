@@ -4,25 +4,32 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Button — sticker / neo-brutalist vocabulary, unified with the marketing site's
+ * `StickerButton`: hard ink outline, solid offset shadow, press physics (hover
+ * lifts up-left and grows the shadow; :active presses it into the page). The
+ * solid tones carry `sticker press`; the quiet `ghost` / `link` variants opt out
+ * so they stay borderless.
+ */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  'inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-md font-display font-semibold transition-[transform,box-shadow,background-color,color] disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default:
-          'bg-primary text-primary-foreground shadow-[0_10px_22px_-8px_rgba(0,100,224,0.5)] hover:bg-[#0052BD] hover:shadow-[0_16px_30px_-8px_rgba(0,100,224,0.55)]',
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline:
-          'border-[1.5px] border-hair-strong bg-card text-ink hover:border-brand hover:text-ink',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'text-muted hover:bg-secondary hover:text-ink',
+        default: 'sticker press bg-brand text-white',
+        destructive: 'sticker press bg-danger text-white',
+        outline: 'sticker press bg-card text-ink hover:bg-secondary',
+        secondary: 'sticker press bg-secondary text-ink',
+        ghost: 'text-muted transition-colors hover:bg-secondary hover:text-ink',
         link: 'text-brand underline-offset-4 hover:underline',
-        money: 'bg-money text-white hover:bg-money/90',
+        money: 'sticker press bg-money text-white',
+        ink: 'sticker press bg-ink text-white',
+        yellow: 'sticker press bg-yellow text-ink',
       },
       size: {
-        default: 'h-10 px-5 py-2',
-        sm: 'h-9 rounded-sm px-3 text-[13px]',
-        lg: 'h-12 rounded-md px-7 text-base',
+        default: 'h-10 px-5 py-2 text-sm',
+        sm: 'h-9 px-3.5 text-[13px]',
+        lg: 'h-12 px-7 text-base',
         pill: 'h-12 rounded-full px-7 text-[15px]',
         'pill-sm': 'h-10 rounded-full px-5 text-sm',
         icon: 'h-10 w-10',

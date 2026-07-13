@@ -29,10 +29,10 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <div className={cn('flex flex-col items-center px-6 py-16 text-center', className)}>
-      <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-danger-soft text-danger [&_svg]:h-6 [&_svg]:w-6">
+      <div className="mb-4 inline-flex h-16 w-16 -rotate-3 items-center justify-center rounded-[18px] border-2 border-ink bg-danger-soft text-danger shadow-[3px_3px_0_var(--ink)] [&_svg]:h-7 [&_svg]:w-7">
         <AlertTriangle aria-hidden />
       </div>
-      <h3 className="text-lg font-bold text-ink">{title}</h3>
+      <h3 className="font-display text-lg font-bold text-ink">{title}</h3>
       {description && <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted">{description}</p>}
       <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
         {onRetry && (

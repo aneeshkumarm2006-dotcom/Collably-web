@@ -53,22 +53,22 @@ function StatTile({
   delta?: { text: string; className: string };
 }) {
   return (
-    <div className="r rounded-lg border border-hair bg-card p-[18px] shadow-card lift">
+    <div className="sticker lift r rounded-card bg-card p-[18px]">
       <div className="flex items-start justify-between gap-2">
         <div
-          className={`inline-flex h-[38px] w-[38px] items-center justify-center rounded-md ${glyph.tile} [&_svg]:h-5 [&_svg]:w-5`}
+          className={`inline-flex h-[38px] w-[38px] items-center justify-center rounded-[11px] border-2 border-ink ${glyph.tile} [&_svg]:h-5 [&_svg]:w-5`}
         >
           {icon}
         </div>
         {delta && (
           <span
-            className={`num inline-flex items-center rounded-[6px] px-2 py-1 font-mono text-[12px] font-semibold ${delta.className}`}
+            className={`num inline-flex items-center rounded-full px-2 py-[3px] font-mono text-[11px] font-bold uppercase tracking-wide ${delta.className}`}
           >
             {delta.text}
           </span>
         )}
       </div>
-      <div className="num mt-3.5 font-mono text-[28px] font-bold leading-none tracking-tight text-ink">
+      <div className="num mt-3.5 font-display text-[28px] font-bold leading-none tracking-tight text-ink">
         {value}
       </div>
       <div className="mt-1 text-[13px] text-muted">{label}</div>
@@ -94,11 +94,11 @@ function RewardBudgetCard({
 }) {
   const pct = budget && budget > 0 ? Math.min(100, Math.round((given / budget) * 100)) : null;
   return (
-    <div className="r lift rounded-lg border border-brand/15 bg-brand-soft p-[18px]">
-      <div className="font-mono text-[11px] font-semibold uppercase tracking-wide text-brand">
+    <div className="sticker lift r rounded-card bg-brand-soft p-[18px]">
+      <div className="font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-coral">
         Reward value given
       </div>
-      <div className="num mt-1.5 font-mono text-[24px] font-bold leading-none text-ink">
+      <div className="num mt-1.5 font-display text-[24px] font-bold leading-none text-ink">
         {formatCompactCurrency(given)}
         {budget && budget > 0 && (
           <span className="ml-1 text-[14px] font-semibold text-muted">
@@ -108,7 +108,7 @@ function RewardBudgetCard({
       </div>
       {pct !== null && (
         <div
-          className="mt-3 h-2.5 overflow-hidden rounded-full bg-card"
+          className="mt-3 h-2.5 overflow-hidden rounded-full bg-ink/10"
           role="progressbar"
           aria-valuenow={given}
           aria-valuemin={0}
@@ -178,6 +178,7 @@ export default async function BusinessHomePage() {
   return (
     <DashboardContainer>
       <PageHeader
+        eyebrow="Overview"
         title={`${greeting()}, ${businessName}`}
         subtitle={subtitle}
         action={
@@ -229,9 +230,9 @@ export default async function BusinessHomePage() {
 
       <Reveal className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)]">
         {/* Active campaigns */}
-        <section className="r rounded-lg border border-hair bg-card p-[18px] shadow-card">
+        <section className="sticker r rounded-card bg-card p-[18px]">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-ink">Active campaigns</h2>
+            <h2 className="font-display text-lg font-bold text-ink">Active campaigns</h2>
             <Link
               href="/dashboard/business/campaigns"
               className="text-[13px] font-bold text-brand hover:underline"
@@ -258,10 +259,10 @@ export default async function BusinessHomePage() {
                 <li key={c._id}>
                   <Link
                     href={`/dashboard/business/campaigns/${c._id}/applications`}
-                    className="flex items-center gap-3.5 rounded-md border border-hair p-3 transition-colors hover:bg-secondary"
+                    className="flex items-center gap-3.5 rounded-md border-2 border-ink/10 p-3 transition-colors hover:bg-secondary"
                   >
                     <span
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-[15px] font-extrabold text-white"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[11px] border-2 border-ink text-[15px] font-extrabold text-white"
                       style={{ background: categoryGradient(c.category) }}
                     >
                       {initials(c.title)}
@@ -290,9 +291,9 @@ export default async function BusinessHomePage() {
 
         {/* Right rail: recent applicants + reward budget */}
         <div className="flex flex-col gap-6">
-        <section className="r rounded-lg border border-hair bg-card p-[18px] shadow-card">
+        <section className="sticker r rounded-card bg-card p-[18px]">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-ink">New applications</h2>
+            <h2 className="font-display text-lg font-bold text-ink">New applications</h2>
             <Link
               href="/dashboard/business/applications"
               className="text-[13px] font-bold text-brand hover:underline"
@@ -309,10 +310,10 @@ export default async function BusinessHomePage() {
                 return (
                   <li
                     key={app._id}
-                    className="flex items-center gap-3.5 rounded-md border border-hair p-3"
+                    className="flex items-center gap-3.5 rounded-md border-2 border-ink/10 p-3"
                   >
                     <span
-                      className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full text-[14px] font-extrabold text-white"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-ink text-[14px] font-extrabold text-white"
                       style={view.avatar ? undefined : { background: categoryGradient(view.niche[0]) }}
                     >
                       {view.avatar ? (
@@ -350,7 +351,7 @@ export default async function BusinessHomePage() {
           {pending.length > 0 && (
             <Link
               href="/dashboard/business/applications"
-              className="mt-4 flex items-center justify-between rounded-md bg-brand-soft px-3.5 py-2.5 text-[13px] font-bold text-brand transition-opacity hover:opacity-80"
+              className="mt-4 flex items-center justify-between rounded-md border-2 border-ink bg-brand-soft px-3.5 py-2.5 text-[13px] font-bold text-brand transition-opacity hover:opacity-80"
             >
               <span className="inline-flex items-center gap-2">
                 <BadgeCheck className="h-4 w-4" />

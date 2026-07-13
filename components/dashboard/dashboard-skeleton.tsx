@@ -19,14 +19,14 @@ export function DashboardSkeleton() {
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-[116px] w-full rounded-lg" />
+          <Skeleton key={i} className="h-[116px] w-full rounded-card border-2 border-ink/10" />
         ))}
       </div>
 
       {/* Content rows */}
       <div className="mt-5 space-y-3">
         {Array.from({ length: 5 }).map((_, i) => (
-          <Skeleton key={i} className="h-16 w-full rounded-lg" />
+          <Skeleton key={i} className="h-16 w-full rounded-card border-2 border-ink/10" />
         ))}
       </div>
     </DashboardContainer>

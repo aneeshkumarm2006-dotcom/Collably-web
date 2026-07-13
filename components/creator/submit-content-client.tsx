@@ -62,8 +62,8 @@ function StatePanel({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-hair bg-card p-8 text-center">
-      <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-success-soft text-success animate-in zoom-in-50 [&_svg]:h-8 [&_svg]:w-8">
+    <div className="sticker rounded-card bg-card p-8 text-center">
+      <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full border-2 border-ink bg-success-soft text-success animate-in zoom-in-50 [&_svg]:h-8 [&_svg]:w-8">
         {icon}
       </div>
       <h1 className="text-xl font-bold text-ink">{title}</h1>
@@ -142,11 +142,11 @@ export function SubmitContentClient({ application }: { application: PublicApplic
 
         <div className="grid items-start gap-5 md:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)]">
           {/* Submitted content */}
-          <div className="overflow-hidden rounded-lg border border-hair bg-card">
+          <div className="sticker overflow-hidden rounded-card bg-card">
             <div className="flex items-center gap-3 border-b border-divider px-5 py-4">
               <CategoryTile category={campaign?.category} size={42} radius={11} />
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[16px] font-bold text-ink">{businessName}</div>
+                <div className="truncate font-display text-[16px] font-bold text-ink">{businessName}</div>
                 <div className="truncate text-[12px] text-faint">
                   {deliverableText}
                   {submittedAt ? ` · submitted ${formatDate(submittedAt)}` : ''}
@@ -155,11 +155,11 @@ export function SubmitContentClient({ application }: { application: PublicApplic
               <StatusChip status="In review" />
             </div>
             <div className="p-5">
-              <p className="text-[11px] font-bold uppercase tracking-[0.04em] text-faint">
+              <p className="font-mono text-[10.5px] font-bold uppercase tracking-[0.08em] text-faint">
                 Submitted content
               </p>
               {proofOrSubmissionImage(application) ? (
-                <div className="mt-3 overflow-hidden rounded-xl border border-hair bg-elev">
+                <div className="mt-3 overflow-hidden rounded-card border-2 border-ink/10 bg-elev">
                   {/* eslint-disable-next-line @next/next/no-img-element -- submission proof */}
                   <img
                     src={proofOrSubmissionImage(application)!}
@@ -168,7 +168,7 @@ export function SubmitContentClient({ application }: { application: PublicApplic
                   />
                 </div>
               ) : (
-                <div className="mt-3 flex h-[180px] items-center justify-center rounded-xl bg-page text-faint">
+                <div className="mt-3 flex h-[180px] items-center justify-center rounded-card border-2 border-ink/10 bg-page text-faint">
                   <UploadCloud className="h-8 w-8" />
                 </div>
               )}
@@ -198,15 +198,15 @@ export function SubmitContentClient({ application }: { application: PublicApplic
 
           {/* Review status + reward */}
           <div className="flex flex-col gap-4">
-            <div className="rounded-lg border border-hair bg-card p-5">
+            <div className="sticker rounded-card bg-card p-5">
               <h2 className="mb-4 text-[15px] font-bold text-ink">Review status</h2>
               <SubmissionStepper application={application} />
             </div>
-            <div className="rounded-lg border border-hair bg-card p-5">
-              <p className="text-[11px] font-bold uppercase tracking-[0.04em] text-faint">
+            <div className="sticker rounded-card bg-card p-5">
+              <p className="font-mono text-[10.5px] font-bold uppercase tracking-[0.08em] text-faint">
                 Reward on approval
               </p>
-              <div className="num mt-1 text-[28px] font-bold text-money-ink">
+              <div className="num mt-1 font-display text-[28px] font-bold text-money-ink">
                 {rewardValue ?? reward?.description ?? reward?.type ?? '—'}
               </div>
               {rewardValue && reward?.description && (
@@ -266,13 +266,13 @@ export function SubmitContentClient({ application }: { application: PublicApplic
       </div>
 
       {/* Context panel */}
-      <div className="rounded-lg border border-hair bg-card p-5">
+      <div className="sticker rounded-card bg-card p-5">
         <h2 className="text-[16px] font-bold text-ink">{campaign?.title ?? 'Campaign'}</h2>
         <p className="text-[13px] text-muted">{campaign?.business?.businessName}</p>
 
         {deliverables.length > 0 && (
-          <div className="mt-4 rounded-lg bg-brand-soft p-4">
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.08em] text-brand">
+          <div className="mt-4 rounded-card border-2 border-ink/10 bg-brand-soft p-4">
+            <p className="mb-2 font-mono text-[10.5px] font-bold uppercase tracking-[0.08em] text-brand">
               The brief · deliverables to submit
             </p>
             <ul className="space-y-1.5">
@@ -289,7 +289,7 @@ export function SubmitContentClient({ application }: { application: PublicApplic
         {campaign?.deadline && (
           <div
             className={cn(
-              'mt-4 flex items-center gap-2 rounded-md px-3 py-2.5 text-[13px] font-medium',
+              'mt-4 flex items-center gap-2 rounded-md border-2 border-ink/10 px-3 py-2.5 text-[13px] font-medium',
               urgency === 'danger'
                 ? 'bg-danger-soft text-danger'
                 : urgency === 'warn'
@@ -304,7 +304,7 @@ export function SubmitContentClient({ application }: { application: PublicApplic
       </div>
 
       {/* Form */}
-      <div className="rounded-lg border border-hair bg-card p-5">
+      <div className="sticker rounded-card bg-card p-5">
         <div className="space-y-1.5">
           <Label htmlFor="submission-link">Live post link</Label>
           <div className="relative">
@@ -334,13 +334,13 @@ export function SubmitContentClient({ application }: { application: PublicApplic
               <img
                 src={proofUrl}
                 alt="Submission proof"
-                className="h-32 w-auto rounded-md border border-hair object-cover"
+                className="h-32 w-auto rounded-md border-2 border-ink object-cover"
               />
               <button
                 type="button"
                 onClick={() => setProofUrl(null)}
                 aria-label="Remove screenshot"
-                className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[rgba(19,26,46,0.7)] text-white"
+                className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-ink bg-ink text-white"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -348,11 +348,11 @@ export function SubmitContentClient({ application }: { application: PublicApplic
           ) : (
             <label
               className={cn(
-                'flex cursor-pointer flex-col items-center rounded-lg border-2 border-dashed border-hair-strong bg-elev p-8 text-center transition-colors hover:border-brand',
+                'flex cursor-pointer flex-col items-center rounded-card border-2 border-dashed border-ink/25 bg-elev p-8 text-center transition-colors hover:border-brand',
                 proofUploading && 'pointer-events-none opacity-60',
               )}
             >
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-sm bg-brand-soft text-brand">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-[11px] border-2 border-ink bg-brand-soft text-brand">
                 {proofUploading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
@@ -391,7 +391,7 @@ export function SubmitContentClient({ application }: { application: PublicApplic
           />
         </div>
 
-        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-md bg-secondary p-3.5">
+        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-md border-2 border-ink/10 bg-secondary p-3.5">
           <Checkbox
             checked={confirmed}
             onCheckedChange={(c) => setConfirmed(c === true)}

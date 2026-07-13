@@ -137,7 +137,7 @@ export function BusinessCampaignsClient() {
     <>
       {/* View toggle + status pills */}
       <div className="mb-5 flex flex-wrap items-center gap-3">
-        <div className="inline-flex rounded-[11px] bg-secondary p-[3px]">
+        <div className="inline-flex rounded-[11px] border-2 border-ink bg-secondary p-[3px]">
           {(['list', 'map'] as const).map((v) => (
             <button
               key={v}
@@ -146,7 +146,7 @@ export function BusinessCampaignsClient() {
               aria-pressed={view === v}
               className={cn(
                 'rounded-lg px-4 py-1.5 text-[13px] font-bold capitalize transition-colors',
-                view === v ? 'bg-card text-ink shadow-xs' : 'text-muted hover:text-ink',
+                view === v ? 'bg-card text-ink shadow-[1px_1px_0_var(--ink)]' : 'text-muted hover:text-ink',
               )}
             >
               {v}
@@ -202,7 +202,7 @@ export function BusinessCampaignsClient() {
       {query.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-[260px] w-full rounded-lg" />
+            <Skeleton key={i} className="h-[260px] w-full rounded-card" />
           ))}
         </div>
       ) : query.isError ? (
@@ -328,9 +328,9 @@ function CampaignRow({
   const filledPct = spots ? Math.round((filled / spots) * 100) : 0;
 
   return (
-    <div className="r group flex flex-col overflow-hidden rounded-lg border border-hair bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
+    <div className="sticker r group flex flex-col overflow-hidden rounded-card bg-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sticker-lg">
       {/* Gradient header */}
-      <Link href={appsHref} className="relative block h-[88px]" style={{ background: categoryGradient(c.category) }}>
+      <Link href={appsHref} className="relative block h-[88px] border-b-2 border-ink" style={{ background: categoryGradient(c.category) }}>
         {c.coverImage ? (
           <Image src={c.coverImage} alt="" fill sizes="360px" className="object-cover" />
         ) : (
@@ -340,7 +340,7 @@ function CampaignRow({
         )}
         <span
           className={cn(
-            'absolute left-3 top-3 inline-flex items-center rounded-[6px] bg-white px-2 py-0.5 text-[10px] font-bold shadow-xs',
+            'absolute left-3 top-3 inline-flex items-center rounded-sm border-2 border-ink bg-card px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wide shadow-[2px_2px_0_var(--ink)]',
             pill.text,
           )}
         >
@@ -350,14 +350,14 @@ function CampaignRow({
 
       {/* Body */}
       <div className="flex flex-1 flex-col p-[18px]">
-        <Link href={appsHref} className="line-clamp-2 text-[17px] font-bold leading-snug text-ink hover:text-brand">
+        <Link href={appsHref} className="line-clamp-2 font-display text-[17px] font-bold leading-snug text-ink hover:text-brand">
           {c.title}
         </Link>
         <p className="mt-1.5 text-[13px] font-bold text-brand">
           {rewardValue ? `${c.reward.description || c.reward.type} · ${rewardValue}` : c.reward?.description || c.reward?.type}
         </p>
 
-        <div className="mt-3 border-t border-hair pt-3">
+        <div className="mt-3 border-t-2 border-dashed border-ink/15 pt-3">
           <div className="flex items-center justify-between text-[12.5px] text-muted">
             <span>
               <b className="num text-ink">{c.applicationsCount}</b> applicant
@@ -372,7 +372,7 @@ function CampaignRow({
           </div>
           {spots != null && (
             <div
-              className="mt-2 h-1.5 overflow-hidden rounded-full bg-secondary"
+              className="mt-2 h-1.5 overflow-hidden rounded-full bg-ink/10"
               role="progressbar"
               aria-valuenow={filled}
               aria-valuemin={0}

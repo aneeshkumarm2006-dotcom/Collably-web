@@ -67,16 +67,16 @@ function CardShell({
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-xs border border-hair px-2 py-1 font-mono text-[11px] font-medium tracking-wide">
+    <span className="inline-flex items-center gap-1 rounded-sm border-2 border-ink bg-card px-2 py-1 font-mono text-[11px] font-semibold tracking-wide">
       {children}
     </span>
   );
 }
 
 const APPLIED_OVERLAY = {
-  applied: { label: 'Applied', className: 'bg-success text-white' },
+  applied: { label: 'Applied', className: 'bg-money text-white' },
   accepted: { label: 'Accepted', className: 'bg-brand text-white' },
-  rejected: { label: 'Not selected', className: 'bg-muted text-white' },
+  rejected: { label: 'Not selected', className: 'bg-ink text-white' },
 } as const;
 
 function Cover({ campaign, compact }: { campaign: CampaignCardData; compact?: boolean }) {
@@ -108,13 +108,13 @@ function Cover({ campaign, compact }: { campaign: CampaignCardData; compact?: bo
 
       {!compact && (
         <div className="pointer-events-none absolute inset-0 flex items-start justify-between p-3">
-          <span className="inline-flex items-center gap-1 rounded-xs border border-hair bg-card px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wide text-ink">
+          <span className="inline-flex items-center gap-1 rounded-sm border-2 border-ink bg-card px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wide text-ink shadow-[2px_2px_0_var(--ink)]">
             <CategoryIcon className="h-3 w-3" /> {campaign.category}
           </span>
           {typeof campaign.spotsLeft === 'number' && (
             <span
               className={cn(
-                'rounded-xs border border-hair bg-card px-2.5 py-1 font-mono text-[11px] font-medium',
+                'rounded-sm border-2 border-ink bg-card px-2.5 py-1 font-mono text-[11px] font-bold shadow-[2px_2px_0_var(--ink)]',
                 campaign.spotsLeft <= 3 ? 'text-danger' : 'text-ink',
               )}
             >
@@ -126,7 +126,7 @@ function Cover({ campaign, compact }: { campaign: CampaignCardData; compact?: bo
 
       {campaign.closed && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="rounded-full bg-[rgba(19,26,46,0.82)] px-4 py-2 text-[13px] font-semibold text-white">
+          <span className="rounded-full border-2 border-ink bg-ink px-4 py-2 text-[13px] font-bold text-white">
             Campaign Closed
           </span>
         </div>
@@ -148,7 +148,7 @@ export function CampaignCard({ campaign, variant = 'full', href, className, deco
         decorative={decorative}
         href={link}
         className={cn(
-          'group flex items-center gap-3.5 rounded-lg border border-hair bg-card p-3 shadow-xs transition-shadow hover:shadow-card',
+          'sticker group flex items-center gap-3.5 rounded-card bg-card p-3 transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-sticker-lg',
           className,
         )}
       >
@@ -172,14 +172,14 @@ export function CampaignCard({ campaign, variant = 'full', href, className, deco
       decorative={decorative}
       href={link}
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-lg border border-hair bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-hair-strong hover:shadow-card-hover',
+        'sticker group relative flex flex-col overflow-hidden rounded-card bg-card transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-sticker-lg',
         className,
       )}
     >
       {overlay && (
         <span
           className={cn(
-            'absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-xs px-2.5 py-1 font-mono text-[11px] font-medium shadow-sm',
+            'absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-sm border-2 border-ink px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wide shadow-[2px_2px_0_var(--ink)]',
             overlay.className,
           )}
         >
@@ -221,7 +221,7 @@ export function CampaignCard({ campaign, variant = 'full', href, className, deco
           )}
         </div>
 
-        <div className="mt-auto flex items-center justify-between border-t border-dashed border-hair-strong pt-3 font-mono text-[11px] text-muted">
+        <div className="mt-auto flex items-center justify-between border-t-2 border-dashed border-ink/15 pt-3 font-mono text-[11px] text-muted">
           {typeof campaign.applicationsCount === 'number' && (
             <span>
               <b className="text-ink">{campaign.applicationsCount}</b> applied

@@ -35,11 +35,11 @@ export interface DashboardTopBarProps {
 }
 
 /**
- * DashboardTopBar. Translucent over the grey page with a blur, per the designs.
- *
- * Supports either a breadcrumb trail (deep routes) or the design's eyebrow +
- * page-title pair. Breadcrumbs stay rendered for assistive tech even when a
- * title is shown, so the route's position in the hierarchy is never lost.
+ * DashboardTopBar — sticker language: a solid cream bar with a hard ink
+ * underline (never a translucent blur), a Space Grotesk page title, and a coral
+ * mono eyebrow. Supports either a breadcrumb trail (deep routes) or the
+ * eyebrow + title pair; breadcrumbs stay in the DOM for assistive tech even when
+ * a title is shown.
  */
 export function DashboardTopBar({
   breadcrumbs,
@@ -59,7 +59,7 @@ export function DashboardTopBar({
     <nav
       aria-label="Breadcrumb"
       className={cn(
-        'flex min-w-0 items-center gap-2 text-sm text-muted',
+        'flex min-w-0 items-center gap-2 font-mono text-[12px] font-medium text-muted',
         title && 'sr-only',
       )}
     >
@@ -68,13 +68,13 @@ export function DashboardTopBar({
         return (
           <span key={`${c.label}-${i}`} className="flex min-w-0 items-center gap-2">
             {c.href && !last ? (
-              <Link href={c.href} className="truncate transition-colors hover:text-ink">
+              <Link href={c.href} className="truncate transition-colors hover:text-brand">
                 {c.label}
               </Link>
             ) : (
-              <span className={cn('truncate', last && 'font-semibold text-ink')}>{c.label}</span>
+              <span className={cn('truncate', last && 'font-bold text-ink')}>{c.label}</span>
             )}
-            {!last && <ChevronRight className="h-3.5 w-3.5 shrink-0 text-faint" />}
+            {!last && <ChevronRight className="h-3.5 w-3.5 shrink-0 text-ink/30" />}
           </span>
         );
       })}
@@ -84,7 +84,7 @@ export function DashboardTopBar({
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-hair bg-page/85 px-5 py-3.5 backdrop-blur-[10px] sm:px-7',
+        'sticky top-0 z-20 flex items-center justify-between gap-4 border-b-[2.5px] border-ink bg-page px-5 py-3 sm:px-7',
         className,
       )}
     >
@@ -93,16 +93,18 @@ export function DashboardTopBar({
         {title && (
           <>
             {eyebrow && (
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-faint">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-coral">
                 {eyebrow}
               </p>
             )}
-            <h1 className="truncate text-[20px] font-bold text-ink">{title}</h1>
+            <h1 className="truncate font-display text-[22px] font-bold tracking-[-0.02em] text-ink">
+              {title}
+            </h1>
           </>
         )}
       </div>
 
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2">
         {search}
         <NotificationBell
           notifications={notifications}

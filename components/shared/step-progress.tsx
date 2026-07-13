@@ -27,7 +27,7 @@ export function StepProgress({ steps, current, className }: StepProgressProps) {
             {current + 1}/{steps.length}
           </span>
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+        <div className="h-2 w-full overflow-hidden rounded-full border-2 border-ink bg-card">
           <div
             className="h-full rounded-full bg-brand transition-all duration-300"
             style={{ width: `${pct}%` }}
@@ -45,12 +45,12 @@ export function StepProgress({ steps, current, className }: StepProgressProps) {
               <div className="flex items-center gap-2">
                 <span
                   className={cn(
-                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 font-mono text-[13px] font-semibold transition-colors',
+                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-ink font-mono text-[13px] font-bold transition-colors',
                     done
-                      ? 'border-brand bg-brand text-white'
+                      ? 'bg-brand text-white shadow-[2px_2px_0_var(--ink)]'
                       : active
-                        ? 'border-brand text-brand'
-                        : 'border-hair-strong text-faint',
+                        ? 'bg-yellow text-ink shadow-[2px_2px_0_var(--ink)]'
+                        : 'border-ink/25 bg-card text-faint',
                   )}
                 >
                   {done ? <Check className="h-4 w-4" strokeWidth={3} /> : i + 1}
@@ -65,7 +65,7 @@ export function StepProgress({ steps, current, className }: StepProgressProps) {
                 </span>
               </div>
               {i < steps.length - 1 && (
-                <span className={cn('mx-3 h-0.5 flex-1 rounded-full', done ? 'bg-brand' : 'bg-hair')} />
+                <span className={cn('mx-3 h-1 flex-1 rounded-full', done ? 'bg-brand' : 'bg-ink/15')} />
               )}
             </li>
           );

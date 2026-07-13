@@ -58,7 +58,7 @@ export function ChatComposer({
   }
 
   return (
-    <div className="border-t border-hair bg-card px-3 py-2.5">
+    <div className="border-t-2 border-ink bg-card px-3 py-2.5">
       {quickReplies && quickReplies.length > 0 && (
         <div className="mb-2.5 flex flex-wrap gap-2">
           {quickReplies.map((q) => (
@@ -67,7 +67,7 @@ export function ChatComposer({
               type="button"
               onClick={() => prefill(q)}
               disabled={disabled}
-              className="rounded-full bg-brand-soft px-3 py-1.5 text-[12.5px] font-semibold text-brand transition-colors hover:bg-brand-soft-2 disabled:opacity-50"
+              className="rounded-full border-2 border-ink bg-brand-soft px-3 py-1.5 text-[12.5px] font-semibold text-brand transition-all hover:-translate-y-px hover:shadow-[2px_2px_0_var(--ink)] disabled:opacity-50"
             >
               {q}
             </button>
@@ -92,7 +92,7 @@ export function ChatComposer({
           }}
           placeholder="Message…"
           aria-label="Message"
-          className="max-h-[140px] flex-1 resize-none rounded-[20px] border border-hair bg-page px-4 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-faint focus:border-brand focus:bg-card"
+          className="max-h-[140px] flex-1 resize-none rounded-[18px] border-2 border-ink bg-page px-4 py-2.5 text-sm text-ink outline-none transition-shadow placeholder:text-faint focus-visible:shadow-focus focus:bg-card"
         />
         <button
           type="button"
@@ -100,7 +100,7 @@ export function ChatComposer({
           disabled={!trimmed || disabled}
           aria-label="Send message"
           className={cn(
-            'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand text-white shadow-sm transition-colors hover:bg-brand-hover',
+            'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-brand text-white shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_var(--ink)] active:translate-y-0 active:shadow-[1px_1px_0_var(--ink)]',
             (!trimmed || disabled) && 'opacity-50',
           )}
         >

@@ -47,9 +47,9 @@ export default async function CampaignApplicationsPage({
       />
 
       {/* Campaign banner */}
-      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-lg border border-hair bg-card p-4 shadow-sm">
+      <div className="mb-6 flex flex-wrap items-center gap-4 sticker rounded-card bg-card p-4">
         <div
-          className="relative h-[56px] w-[80px] shrink-0 overflow-hidden rounded-md bg-secondary"
+          className="relative h-[56px] w-[80px] shrink-0 overflow-hidden rounded-md border-2 border-ink bg-secondary"
           style={{ background: categoryGradient(c.category) }}
         >
           {c.coverImage ? (
@@ -75,7 +75,7 @@ export default async function CampaignApplicationsPage({
           </div>
         </div>
         <div className="shrink-0 text-right">
-          <div className="font-mono text-2xl font-semibold text-ink">{c.applicationsCount}</div>
+          <div className="num font-display text-2xl font-bold text-ink">{c.applicationsCount}</div>
           <div className="text-[12px] text-muted">application{c.applicationsCount === 1 ? '' : 's'}</div>
         </div>
       </div>

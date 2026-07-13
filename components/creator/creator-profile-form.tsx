@@ -43,7 +43,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-lg border border-hair bg-card p-5 sm:p-6">
+    <section className="sticker rounded-card bg-card p-5 sm:p-6">
       <h2 className="text-[16px] font-bold text-ink">{title}</h2>
       {description && <p className="mt-0.5 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
@@ -96,17 +96,17 @@ export function CreatorProfileForm({
   return (
     <div className="space-y-5">
       {/* Profile hero header */}
-      <section className="flex flex-wrap items-center gap-4 rounded-lg border border-hair bg-card p-5 sm:p-6">
+      <section className="sticker flex flex-wrap items-center gap-4 rounded-card bg-card p-5 sm:p-6">
         {avatar ? (
           // eslint-disable-next-line @next/next/no-img-element -- avatar preview
           <img
             src={avatar}
             alt=""
-            className="h-20 w-20 shrink-0 rounded-full object-cover"
+            className="h-20 w-20 shrink-0 rounded-full border-2 border-ink object-cover"
           />
         ) : (
           <span
-            className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-warn-soft text-3xl font-bold text-warn"
+            className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-warn-soft font-display text-3xl font-bold text-warn"
             aria-hidden
           >
             {initial}
@@ -119,7 +119,7 @@ export function CreatorProfileForm({
               {form.niche.slice(0, 5).map((n) => (
                 <span
                   key={n}
-                  className="rounded-full bg-brand-soft px-2.5 py-1 text-[12px] font-bold text-brand"
+                  className="rounded-full bg-brand-soft px-2.5 py-1 font-mono text-[10.5px] font-bold uppercase tracking-[0.06em] text-brand"
                 >
                   {n}
                 </span>
@@ -201,7 +201,7 @@ export function CreatorProfileForm({
       {error && <ErrorBanner message={error} />}
 
       {/* Sticky save bar */}
-      <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-end gap-3 border-t border-hair bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-end gap-3 border-t-2 border-ink bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
         <Button size="lg" onClick={save} disabled={saving}>
           {saving ? (
             <>
@@ -218,7 +218,7 @@ export function CreatorProfileForm({
         <button
           type="button"
           onClick={() => void logout()}
-          className="inline-flex items-center gap-2 rounded-sm bg-danger-soft px-4 py-2.5 text-sm font-semibold text-danger transition-colors hover:brightness-95"
+          className="inline-flex items-center gap-2 rounded-md border-2 border-ink bg-danger-soft px-4 py-2.5 font-display text-sm font-semibold text-danger shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_var(--ink)] active:translate-y-0 active:shadow-[1px_1px_0_var(--ink)]"
         >
           <LogOut className="h-4 w-4" /> Log out
         </button>

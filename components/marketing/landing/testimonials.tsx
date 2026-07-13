@@ -1,3 +1,5 @@
+import { Star } from 'lucide-react';
+
 import { Eyebrow } from '@/components/shared/sticker';
 import { Reveal } from './reveal';
 
@@ -59,8 +61,10 @@ export function Testimonials() {
         <Reveal className="mt-10 grid gap-6 md:grid-cols-3">
           {TESTIMONIALS.map((t) => (
             <figure key={t.name} className="pop sticker flex flex-col rounded-[22px] bg-card p-7">
-              <div className="text-[17px] text-yellow" aria-hidden>
-                ★★★★★
+              <div className="flex gap-0.5 text-yellow" aria-label="Rated 5 out of 5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} size={17} strokeWidth={0} fill="currentColor" aria-hidden />
+                ))}
               </div>
               <blockquote className="my-4 flex-1 text-[17px] leading-relaxed text-[#2A303A]">
                 &ldquo;{t.quote}&rdquo;

@@ -26,11 +26,11 @@ export function CreatorNicheRail({
     <section className="mb-6">
       <div className="mb-3.5 flex items-end justify-between">
         <div>
-          <div className="flex items-center gap-1.5 text-[12px] font-semibold text-brand">
+          <div className="flex items-center gap-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-coral">
             <span className="h-[7px] w-[7px] animate-ls-pulse rounded-full bg-money" />
             Matching your niche
           </div>
-          <h2 className="mt-1 text-[19px] font-bold tracking-[-0.02em] text-ink">
+          <h2 className="mt-1 font-display text-[20px] font-bold tracking-[-0.02em] text-ink">
             Hand-picked for {nicheText}
           </h2>
         </div>

@@ -101,38 +101,25 @@
   }
 
   /*
-   * APP surface. Applied on the dashboard layout wrapper. Re-points the same
-   * token names at the Facebook-clean palette so shared components follow.
+   * APP surface. Applied on the dashboard layout wrapper.
+   *
+   * UNIFIED (2026 redesign): the dashboards now speak the SAME sticker /
+   * neo-brutalist language as the marketing site — cream page, warm surfaces,
+   * hard ink outlines, solid offset shadows, Space Grotesk headings. This block
+   * used to re-point every token at a separate "Facebook-clean" palette; it now
+   * only carries the handful of dashboard-appropriate density tweaks and inherits
+   * everything else from `:root`. Keeping the class (rather than deleting it)
+   * preserves the single hook that scopes those tweaks and marks the app tree.
    */
   .surface-app {
-    --page: #f0f2f5;
-    --surface-card: #ffffff;
-    --surface-elev: #f7f8fa;
-    --surface-muted: #ebedf0;
-
-    --ink: #050505;
-    --text-secondary: #65676b;
-    --text-muted: #8a8d91;
-    --text-body: #3a414b;
-
-    --hairline: #e4e6eb;
-    --hairline-strong: #ced0d4;
-    --divider: #f0f2f5;
-
-    /* No sticker language on the app surface: outlines collapse to hairlines
-     * and offset shadows become soft blurred elevation. */
-    --outline-w: 1px;
-    --outline: 1px solid var(--hairline);
-    --shadow-sticker: 0 6px 18px rgba(0, 0, 0, 0.07);
-    --shadow-sticker-lg: 0 8px 22px rgba(0, 0, 0, 0.09);
-    --shadow-sticker-hover: 0 8px 22px rgba(0, 0, 0, 0.09);
-    --shadow-sticker-active: 0 1px 2px rgba(0, 0, 0, 0.07);
-    --shadow-sticker-muted: 0 1px 2px rgba(0, 0, 0, 0.05);
-
-    --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.07);
-    --shadow-card-hover: 0 8px 22px rgba(0, 0, 0, 0.09);
-
-    --focus-ring: 0 0 0 3px rgba(24, 119, 242, 0.15);
+    /* Dashboards are dense: soften the two big marketing shadows one notch so
+     * stacked cards in tight grids don't read as heavy, while keeping the solid
+     * offset (never a blur) that defines the language. */
+    --shadow-sticker: 4px 5px 0 var(--ink);
+    --shadow-sticker-lg: 6px 7px 0 var(--ink);
+    --shadow-sticker-hover: 6px 7px 0 var(--ink);
+    --shadow-card: 4px 5px 0 var(--ink);
+    --shadow-card-hover: 6px 7px 0 var(--ink);
   }
 
   /* ---- shadcn/ui semantic tokens (HSL channels, so `bg-primary/50` composes) ----
@@ -161,19 +148,9 @@
     --radius: 0.75rem; /* 12px — inputs & buttons */
   }
 
-  .surface-app {
-    --background: 220 14% 96%; /* #F0F2F5 */
-    --foreground: 0 0% 2%; /* #050505 */
-    --card-foreground: 0 0% 2%;
-    --popover-foreground: 0 0% 2%;
-    --secondary: 220 13% 93%; /* #EBEDF0 */
-    --secondary-foreground: 0 0% 2%;
-    --muted: 220 13% 93%;
-    --muted-foreground: 220 4% 41%; /* #65676B */
-    --accent: 216 89% 95%; /* #E7F0FE */
-    --border: 220 14% 91%; /* #E4E6EB */
-    --input: 220 14% 91%; /* app fields use a hairline, not ink */
-  }
+  /* The app surface now inherits the cream sticker shadcn tokens from `:root`
+   * (ink-bordered inputs, cream background, warm-beige secondary) — the redesign
+   * unified the two surfaces, so there is nothing left to override here. */
 }
 
 @layer base {
@@ -193,11 +170,13 @@
     font-family: var(--font-display), 'Space Grotesk', system-ui, sans-serif;
     letter-spacing: -0.03em;
   }
+  /* The app surface uses Space Grotesk display headings too now (unified). Its
+   * dense dashboard titles want slightly less negative tracking than the giant
+   * marketing headlines, so it keeps a gentler letter-spacing only. */
   .surface-app h1,
   .surface-app h2,
   .surface-app h3,
   .surface-app h4 {
-    font-family: inherit;
     letter-spacing: -0.02em;
   }
   :focus-visible {
@@ -207,10 +186,6 @@
   ::selection {
     background: var(--accent-yellow);
     color: var(--ink);
-  }
-  .surface-app ::selection {
-    background: var(--brand);
-    color: #fff;
   }
   /* Stats and countdowns must not jitter as digits change. */
   .font-mono,
@@ -249,13 +224,6 @@
   .press:active {
     transform: translate(2px, 2px);
     box-shadow: var(--shadow-sticker-active);
-  }
-  /* The app surface has no press physics — dashboards lift gently instead. */
-  .surface-app .press:hover {
-    transform: translateY(-2px);
-  }
-  .surface-app .press:active {
-    transform: none;
   }
 
   .lift {

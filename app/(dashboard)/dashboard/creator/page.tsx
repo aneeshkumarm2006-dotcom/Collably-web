@@ -23,7 +23,7 @@ function collabProgress(a: PublicApplication): { status: string; pct: number; ba
   if (a.submittedAt) return { status: 'In review', pct: 80, bar: 'bg-brand' };
   if (a.status === 'Overdue' || (a.campaign?.deadline && isOverdue(a.campaign.deadline)))
     return { status: 'Overdue', pct: 40, bar: 'bg-danger' };
-  return { status: 'Content due', pct: 40, bar: 'bg-[#FFC24B]' };
+  return { status: 'Content due', pct: 40, bar: 'bg-yellow' };
 }
 
 export default async function CreatorHomePage() {
@@ -110,20 +110,20 @@ export default async function CreatorHomePage() {
       {/* Stat row */}
       <Reveal className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
         {stats.map((s) => (
-          <div key={s.label} className="lift r rounded-lg border border-hair bg-card p-[18px]">
+          <div key={s.label} className="sticker lift r rounded-card bg-card p-[18px]">
             <div className="flex items-center justify-between">
               <span
-                className={`inline-flex h-[38px] w-[38px] items-center justify-center rounded-[10px] ${s.tile} ${s.ink} [&_svg]:h-[20px] [&_svg]:w-[20px]`}
+                className={`inline-flex h-[38px] w-[38px] items-center justify-center rounded-[11px] border-2 border-ink ${s.tile} ${s.ink} [&_svg]:h-[20px] [&_svg]:w-[20px]`}
               >
                 {s.icon}
               </span>
               <span
-                className={`num rounded-[6px] px-2 py-[3px] text-[12px] font-semibold ${s.deltaClass}`}
+                className={`num rounded-full px-2 py-[3px] font-mono text-[11px] font-bold uppercase tracking-wide ${s.deltaClass}`}
               >
                 {s.delta}
               </span>
             </div>
-            <div className="num mt-3.5 text-[28px] font-bold leading-none text-ink">
+            <div className="num mt-3.5 font-display text-[28px] font-bold leading-none text-ink">
               <StatValue value={s.value} currency={s.currency} />
             </div>
             <div className="mt-1 text-[13px] text-muted">{s.label}</div>
@@ -138,11 +138,11 @@ export default async function CreatorHomePage() {
             <section>
               <div className="mb-3.5 flex items-end justify-between">
                 <div>
-                  <div className="flex items-center gap-1.5 text-[12px] font-semibold text-brand">
+                  <div className="flex items-center gap-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-coral">
                     <span className="h-[7px] w-[7px] animate-ls-pulse rounded-full bg-money" />
                     Near you
                   </div>
-                  <h2 className="mt-1 text-[19px] font-bold tracking-[-0.02em] text-ink">
+                  <h2 className="mt-1 font-display text-[20px] font-bold tracking-[-0.02em] text-ink">
                     Campaigns you&apos;d be great for
                   </h2>
                 </div>
@@ -163,7 +163,7 @@ export default async function CreatorHomePage() {
 
           <section>
             <div className="mb-3.5 flex items-center justify-between">
-              <h2 className="text-[19px] font-bold tracking-[-0.02em] text-ink">Active collabs</h2>
+              <h2 className="font-display text-[20px] font-bold tracking-[-0.02em] text-ink">Active collabs</h2>
               <Link
                 href="/dashboard/creator/collabs"
                 className="text-[14px] font-semibold text-brand hover:underline"
@@ -172,8 +172,8 @@ export default async function CreatorHomePage() {
               </Link>
             </div>
             {activeCollabs.length === 0 ? (
-              <div className="rounded-lg border border-hair bg-card p-6 text-center">
-                <p className="text-sm font-semibold text-ink">No active collabs yet</p>
+              <div className="sticker rounded-card bg-card p-6 text-center">
+                <p className="font-display text-sm font-bold text-ink">No active collabs yet</p>
                 <p className="mx-auto mt-1 max-w-sm text-[13px] text-muted">
                   Apply to campaigns that match your niche — accepted collabs show up here.
                 </p>
@@ -185,7 +185,7 @@ export default async function CreatorHomePage() {
                 </Link>
               </div>
             ) : (
-              <Reveal className="overflow-hidden rounded-lg border border-hair bg-card">
+              <Reveal className="overflow-hidden rounded-card border-2 border-ink bg-card shadow-sticker">
                 {activeCollabs.slice(0, 4).map((a) => {
                   const biz = a.campaign?.business ?? a.business;
                   const { status, pct, bar } = collabProgress(a);
@@ -207,7 +207,7 @@ export default async function CreatorHomePage() {
                         <p className="mt-0.5 truncate text-[13px] text-muted">
                           {biz?.businessName}
                         </p>
-                        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#EBEDF0]">
+                        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-ink/10">
                           <div
                             className={`h-full rounded-full ${bar}`}
                             style={{ width: `${pct}%` }}
@@ -228,9 +228,9 @@ export default async function CreatorHomePage() {
 
         {/* Right column */}
         <div className="flex flex-col gap-[18px]">
-          <div className="rounded-lg border border-hair bg-card p-[18px]">
+          <div className="sticker rounded-card bg-card p-[18px]">
             <div className="flex items-center justify-between">
-              <h3 className="text-[16px] font-bold text-ink">Your applications</h3>
+              <h3 className="font-display text-[16px] font-bold text-ink">Your applications</h3>
               <Link
                 href="/dashboard/creator/applications"
                 className="text-[13px] font-semibold text-brand hover:underline"
@@ -262,8 +262,8 @@ export default async function CreatorHomePage() {
             )}
           </div>
 
-          <div className="rounded-lg border border-hair bg-card p-[18px]">
-            <h3 className="mb-2 text-[16px] font-bold text-ink">Recent activity</h3>
+          <div className="sticker rounded-card bg-card p-[18px]">
+            <h3 className="mb-2 font-display text-[16px] font-bold text-ink">Recent activity</h3>
             {notifications.length === 0 ? (
               <p className="py-4 text-center text-sm text-muted">You&apos;re all caught up.</p>
             ) : (
@@ -277,7 +277,7 @@ export default async function CreatorHomePage() {
                         className="flex items-start gap-3 border-t border-divider py-2.5 first:border-t-0"
                       >
                         <span
-                          className={`inline-flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-lg ${NOTIF_CHIP_CLASS[dot]} [&_svg]:h-4 [&_svg]:w-4`}
+                          className={`inline-flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[9px] border-2 border-ink ${NOTIF_CHIP_CLASS[dot]} [&_svg]:h-4 [&_svg]:w-4`}
                         >
                           <Icon />
                         </span>

@@ -50,7 +50,7 @@ function progress(app: PublicApplication): { status: string; pct: number; bar: s
   return {
     status: 'Content due',
     pct: 40,
-    bar: 'bg-[#FFC24B]',
+    bar: 'bg-yellow',
     task: 'Create and post your content, then submit it for approval.',
   };
 }
@@ -58,10 +58,10 @@ function progress(app: PublicApplication): { status: string; pct: number; bar: s
 function Meta({ label, value, money }: { label: string; value: string; money?: boolean }) {
   return (
     <div>
-      <div className="text-[11px] font-semibold uppercase tracking-[0.03em] text-faint">{label}</div>
+      <div className="font-mono text-[10.5px] font-bold uppercase tracking-[0.08em] text-faint">{label}</div>
       <div
         className={cn(
-          'mt-0.5 text-[15px] font-bold',
+          'mt-0.5 font-display text-[15px] font-bold',
           money ? 'num text-money-ink' : 'text-ink',
         )}
       >
@@ -111,8 +111,8 @@ export function CreatorCollabCard({
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          'inline-flex w-full items-center justify-center gap-1.5 rounded-sm px-3 py-2.5 text-[14px] font-semibold text-white transition-colors active:scale-[0.98]',
-          status === 'Approved' ? 'bg-money hover:bg-money-ink' : 'bg-brand hover:bg-brand-hover',
+          'inline-flex w-full items-center justify-center gap-1.5 rounded-md border-2 border-ink px-3 py-2.5 font-display text-[14px] font-semibold text-white shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_var(--ink)] active:translate-y-0 active:shadow-[1px_1px_0_var(--ink)]',
+          status === 'Approved' ? 'bg-money' : 'bg-brand',
         )}
       >
         <ExternalLink className="h-4 w-4" /> View submission
@@ -120,14 +120,14 @@ export function CreatorCollabCard({
     ) : submitted ? (
       <Link
         href={submitHref}
-        className="inline-flex w-full items-center justify-center rounded-sm bg-brand px-3 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-brand-hover active:scale-[0.98]"
+        className="inline-flex w-full items-center justify-center rounded-md border-2 border-ink bg-brand px-3 py-2.5 font-display text-[14px] font-semibold text-white shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_var(--ink)] active:translate-y-0 active:shadow-[1px_1px_0_var(--ink)]"
       >
         View submission
       </Link>
     ) : (
       <Link
         href={submitHref}
-        className="inline-flex w-full items-center justify-center rounded-sm bg-brand px-3 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-brand-hover active:scale-[0.98]"
+        className="inline-flex w-full items-center justify-center rounded-md border-2 border-ink bg-brand px-3 py-2.5 font-display text-[14px] font-semibold text-white shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_var(--ink)] active:translate-y-0 active:shadow-[1px_1px_0_var(--ink)]"
       >
         Submit content
       </Link>
@@ -136,7 +136,7 @@ export function CreatorCollabCard({
   const messageBtn = application.conversationId ? (
     <Link
       href={`/dashboard/creator/messages/${application.conversationId}`}
-      className="inline-flex w-full items-center justify-center gap-1.5 rounded-sm bg-page px-3 py-2.5 text-[14px] font-semibold text-ink transition-colors hover:bg-secondary active:scale-[0.98]"
+      className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border-2 border-ink bg-secondary px-3 py-2.5 font-display text-[14px] font-semibold text-ink shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_var(--ink)] active:translate-y-0 active:shadow-[1px_1px_0_var(--ink)]"
     >
       <MessageSquare className="h-4 w-4" /> Message
     </Link>
@@ -146,7 +146,7 @@ export function CreatorCollabCard({
     return (
       <div
         className={cn(
-          'lift flex items-center gap-3.5 rounded-lg border border-hair bg-card p-3.5',
+          'sticker lift flex items-center gap-3.5 rounded-card bg-card p-3.5',
           className,
         )}
       >
@@ -168,7 +168,7 @@ export function CreatorCollabCard({
   return (
     <div
       className={cn(
-        'lift grid gap-6 rounded-lg border border-hair bg-card p-5 md:grid-cols-[minmax(0,1fr)_220px]',
+        'sticker lift grid gap-6 rounded-card bg-card p-5 md:grid-cols-[minmax(0,1fr)_220px]',
         className,
       )}
     >
@@ -196,9 +196,9 @@ export function CreatorCollabCard({
         <div>
           <div className="mb-1.5 flex items-center justify-between text-[12px] text-muted">
             <span>Progress</span>
-            <span className="num font-bold text-ink">{pct}%</span>
+            <span className="num font-display font-bold text-ink">{pct}%</span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-[#EBEDF0]">
+          <div className="h-2 overflow-hidden rounded-full bg-ink/10">
             <div className={cn('h-full rounded-full', bar)} style={{ width: `${pct}%` }} />
           </div>
         </div>

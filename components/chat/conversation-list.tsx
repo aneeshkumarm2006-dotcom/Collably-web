@@ -50,7 +50,7 @@ export function ConversationList({ role, meId }: { role: 'creator' | 'business';
     return (
       <div className="space-y-2">
         {Array.from({ length: 5 }).map((_, i) => (
-          <Skeleton key={i} className="h-[68px] w-full rounded-lg" />
+          <Skeleton key={i} className="h-[68px] w-full rounded-card" />
         ))}
       </div>
     );
@@ -81,7 +81,7 @@ export function ConversationList({ role, meId }: { role: 'creator' | 'business';
           onChange={(e) => setText(e.target.value)}
           placeholder="Search chats"
           aria-label="Search chats"
-          className="h-11 w-full rounded-lg border border-hair bg-card pl-10 pr-10 text-sm text-ink outline-none transition-colors placeholder:text-faint focus:border-brand"
+          className="h-11 w-full rounded-md border-2 border-ink bg-card pl-10 pr-10 text-sm text-ink outline-none transition-shadow placeholder:text-faint focus-visible:shadow-focus"
         />
         {text && (
           <button
@@ -116,7 +116,7 @@ export function ConversationList({ role, meId }: { role: 'creator' | 'business';
           />
         )
       ) : (
-        <ul className="overflow-hidden rounded-lg border border-hair bg-card">
+        <ul className="sticker overflow-hidden rounded-card bg-card">
           {shown.map((c) => (
             <ConversationRow key={c._id} conversation={c} meId={meId} role={role} />
           ))}
@@ -141,10 +141,10 @@ function FilterPill({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        'rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors',
+        'rounded-full border-2 border-ink px-3.5 py-1.5 font-display text-[13px] font-semibold transition-all',
         active
-          ? 'border-brand bg-brand-soft text-brand'
-          : 'border-hair bg-card text-muted hover:text-ink',
+          ? 'bg-brand text-white shadow-[2px_2px_0_var(--ink)]'
+          : 'bg-card text-ink hover:bg-secondary',
       )}
     >
       {label}
@@ -176,14 +176,14 @@ function ConversationRow({
       <Link
         href={href}
         className={cn(
-          'flex items-center gap-3 border-l-[3px] px-4 py-3.5 transition-colors hover:bg-elev',
-          active ? 'border-l-brand bg-[#F0F5FF]' : 'border-l-transparent',
+          'flex items-center gap-3 border-l-[4px] px-4 py-3.5 transition-colors hover:bg-elev',
+          active ? 'border-l-brand bg-brand-soft' : 'border-l-transparent',
         )}
       >
         <Avatar name={other?.name ?? 'Chat'} src={other?.avatar} size={48} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <span className="truncate font-semibold text-ink">{other?.name ?? 'Conversation'}</span>
+            <span className="truncate font-display font-bold text-ink">{other?.name ?? 'Conversation'}</span>
             {c.lastMessageAt && (
               <span className="shrink-0 text-[11px] text-faint">
                 {formatRelativeTime(c.lastMessageAt)}
@@ -200,7 +200,7 @@ function ConversationRow({
               {preview}
             </span>
             {unread > 0 && (
-              <span className="inline-flex h-5 min-w-[20px] shrink-0 items-center justify-center rounded-full bg-brand px-1.5 font-mono text-[11px] font-bold leading-none text-white">
+              <span className="inline-flex h-5 min-w-[20px] shrink-0 items-center justify-center rounded-full border-2 border-ink bg-brand px-1.5 font-mono text-[11px] font-bold leading-none text-white">
                 {unread}
               </span>
             )}

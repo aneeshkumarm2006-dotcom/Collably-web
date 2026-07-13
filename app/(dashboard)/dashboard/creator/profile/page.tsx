@@ -21,7 +21,7 @@ export default async function CreatorProfilePage() {
   if (!profile) {
     return (
       <DashboardContainer>
-        <div className="rounded-lg border border-hair bg-card">
+        <div className="sticker rounded-card bg-card">
           <EmptyState
             title="Finish setting up your profile"
             description="Complete onboarding to create your creator profile."
@@ -47,7 +47,7 @@ export default async function CreatorProfilePage() {
       </div>
 
       {session && !session.approved && (
-        <div className="mb-5 flex items-center gap-3 rounded-lg border border-warn/30 bg-warn-soft px-4 py-3 text-sm text-ink">
+        <div className="mb-5 flex items-center gap-3 rounded-card border-2 border-ink bg-warn-soft px-4 py-3 text-sm text-ink shadow-[2px_2px_0_var(--ink)]">
           <Clock className="h-4 w-4 shrink-0 text-warn" />
           Your creator account is under review. You can edit your profile now; applying unlocks once
           an admin verifies you.

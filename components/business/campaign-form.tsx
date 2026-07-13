@@ -63,7 +63,7 @@ const LocationPicker = dynamic(
   () => import('@/components/maps/location-picker').then((m) => m.LocationPicker),
   {
     ssr: false,
-    loading: () => <Skeleton className="h-64 w-full rounded-md" />,
+    loading: () => <Skeleton className="h-64 w-full rounded-card" />,
   },
 );
 
@@ -80,12 +80,12 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-lg border border-hair bg-card p-5 shadow-card sm:p-6">
+    <section className="sticker rounded-card bg-card p-5 sm:p-6">
       <div className="flex items-baseline gap-2.5">
-        <span className="font-mono text-[12px] font-semibold text-faint">
+        <span className="font-mono text-[12px] font-bold uppercase tracking-[0.14em] text-coral">
           {String(index).padStart(2, '0')}
         </span>
-        <h2 className="text-base font-bold text-ink">{title}</h2>
+        <h2 className="font-display text-base font-bold text-ink">{title}</h2>
       </div>
       {description && <p className="mt-0.5 pl-7 text-[13px] text-muted">{description}</p>}
       <div className="mt-4">{children}</div>
@@ -112,11 +112,11 @@ function LivePreview({ form }: { form: CampaignFormModel }) {
       : null;
 
   return (
-    <div className="lift rounded-lg border border-hair bg-card p-[18px] shadow-card">
-      <div className="mb-3 font-mono text-[11px] font-bold uppercase tracking-wide text-faint">
+    <div className="sticker lift rounded-card bg-card p-[18px]">
+      <div className="mb-3 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-coral">
         Live preview
       </div>
-      <div className="overflow-hidden rounded-[14px] border border-hair">
+      <div className="overflow-hidden rounded-[14px] border-2 border-ink">
         <div
           className="relative flex h-20 items-center justify-center overflow-hidden bg-secondary"
           style={form.category ? { background: categoryGradient(form.category) } : undefined}
@@ -144,7 +144,7 @@ function LivePreview({ form }: { form: CampaignFormModel }) {
             <span className="num min-w-0 truncate font-mono text-[15px] font-bold text-money">
               {rewardValue ?? (form.reward.description.trim() || 'Reward')}
             </span>
-            <span className="shrink-0 rounded-sm bg-brand px-3 py-1.5 text-[12px] font-semibold text-white">
+            <span className="shrink-0 rounded-sm border-2 border-ink bg-brand px-3 py-1.5 text-[12px] font-semibold text-white">
               Apply
             </span>
           </div>
@@ -290,14 +290,14 @@ export function CampaignForm({
 
       {/* 03: Location */}
       <Section index={3} title="Location" description="Where the collab happens.">
-        <div className="inline-flex rounded-lg border border-hair p-1">
+        <div className="inline-flex rounded-lg border-2 border-ink p-1">
           <button
             type="button"
             onClick={() => patch({ isRemote: false })}
             aria-pressed={!form.isRemote}
             className={cn(
               'inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium transition-colors',
-              !form.isRemote ? 'bg-brand text-white' : 'text-muted hover:text-ink',
+              !form.isRemote ? 'bg-brand text-white shadow-[1px_1px_0_var(--ink)]' : 'text-muted hover:text-ink',
             )}
           >
             <MapPin className="h-4 w-4" /> In-person
@@ -308,7 +308,7 @@ export function CampaignForm({
             aria-pressed={form.isRemote}
             className={cn(
               'inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium transition-colors',
-              form.isRemote ? 'bg-brand text-white' : 'text-muted hover:text-ink',
+              form.isRemote ? 'bg-brand text-white shadow-[1px_1px_0_var(--ink)]' : 'text-muted hover:text-ink',
             )}
           >
             <Globe className="h-4 w-4" /> Remote / Online
@@ -322,7 +322,7 @@ export function CampaignForm({
               <p className="mb-3 mt-0.5 text-[13px] text-muted">
                 Accepted creators see the precise address; everyone else sees an approximate area.
               </p>
-              <div className="overflow-hidden rounded-[14px] border border-hair">
+              <div className="overflow-hidden rounded-[14px] border-2 border-ink">
                 <LocationPicker
                   value={form.locationPin}
                   onChange={(locationPin) => patch({ locationPin })}
@@ -450,7 +450,7 @@ export function CampaignForm({
       </div>
 
       {/* Sticky action bar */}
-      <div className="sticky bottom-0 z-10 -mx-5 border-t border-hair bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="sticky bottom-0 z-10 -mx-5 border-t-2 border-ink/10 bg-card/90 px-5 py-3.5 backdrop-blur sm:-mx-6 sm:px-6">
         {mode === 'create' && !canPublish && (
           <p className="mb-3 inline-flex items-center gap-1.5 text-[13px] text-muted">
             <Clock className="h-3.5 w-3.5 text-warn" /> Publishing unlocks once an admin verifies your
@@ -535,7 +535,7 @@ function CoverUploader({
   if (value) {
     return (
       <div className="space-y-3">
-        <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg border border-hair bg-secondary">
+        <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-card border-2 border-ink bg-secondary">
           {/* eslint-disable-next-line @next/next/no-img-element -- user-supplied cover preview */}
           <img src={value} alt="Campaign cover" className="h-full w-full object-cover" />
         </div>
@@ -564,11 +564,11 @@ function CoverUploader({
   return (
     <label
       className={cn(
-        'flex aspect-video w-full max-w-md cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-hair-strong bg-secondary text-center transition-colors hover:border-brand',
+        'flex aspect-video w-full max-w-md cursor-pointer flex-col items-center justify-center rounded-card border-2 border-dashed border-ink/25 bg-secondary text-center transition-colors hover:border-brand',
         uploading && 'pointer-events-none opacity-60',
       )}
     >
-      <span className="mb-2 inline-flex h-11 w-11 items-center justify-center rounded-full bg-card text-brand shadow-xs">
+      <span className="mb-2 inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-ink bg-card text-brand">
         {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ImagePlus className="h-5 w-5" />}
       </span>
       <span className="text-sm font-semibold text-ink">
@@ -603,7 +603,7 @@ function DeliverableEditor({
   onRemove: () => void;
 }) {
   return (
-    <div className="rounded-lg border border-hair bg-secondary/40 p-4">
+    <div className="rounded-md border-2 border-ink/10 bg-secondary/40 p-4">
       <div className="mb-3 flex items-center justify-between">
         <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-faint">
           Deliverable {index + 1}

@@ -56,25 +56,25 @@ export function CreatorCampaignCard({
   return (
     <div
       className={cn(
-        'lift flex flex-col overflow-hidden rounded-lg border border-hair bg-card',
+        'sticker lift flex flex-col overflow-hidden rounded-card bg-card',
         className,
       )}
     >
       {/* Tinted cover band */}
       <div
-        className="relative flex h-[92px] items-center justify-center"
+        className="relative flex h-[96px] items-center justify-center border-b-2 border-ink"
         style={{ background: tint }}
       >
-        <span className="flex h-12 w-12 items-center justify-center rounded-[13px] bg-card">
-          <Icon style={{ width: 26, height: 26, color: ink }} strokeWidth={1.9} aria-hidden />
+        <span className="flex h-12 w-12 items-center justify-center rounded-[13px] border-2 border-ink bg-card shadow-[2px_2px_0_var(--ink)]">
+          <Icon style={{ width: 26, height: 26, color: ink }} strokeWidth={2} aria-hidden />
         </span>
         {applicationStatus ? (
-          <span className="absolute left-2.5 top-2.5 rounded-[6px] bg-card px-2 py-[3px] text-[10px] font-semibold text-brand">
+          <span className="absolute left-2.5 top-2.5 rounded-[7px] border-2 border-ink bg-card px-2 py-[3px] font-mono text-[10px] font-bold uppercase tracking-wide text-brand">
             {APPLIED_LABEL[applicationStatus]}
           </span>
         ) : (
-          <span className="absolute left-2.5 top-2.5 rounded-[6px] bg-card px-2 py-[3px] text-[10px] font-semibold text-money-ink">
-            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-money align-middle" />
+          <span className="absolute left-2.5 top-2.5 inline-flex items-center gap-1 rounded-[7px] border-2 border-ink bg-card px-2 py-[3px] font-mono text-[10px] font-bold uppercase tracking-wide text-money-ink">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-money align-middle animate-ls-pulse" />
             Live
           </span>
         )}
@@ -84,7 +84,7 @@ export function CreatorCampaignCard({
         <div className="flex items-center gap-2.5">
           <span
             aria-hidden
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[7px] text-[11px] font-bold"
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[7px] border-2 border-ink text-[11px] font-bold"
             style={{ background: tint, color: ink }}
           >
             {initials(business?.businessName)}
@@ -112,7 +112,7 @@ export function CreatorCampaignCard({
           </div>
           <Link
             href={`/campaign/${campaign._id}`}
-            className="shrink-0 rounded-xs bg-brand px-3.5 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-brand-hover active:scale-[0.98]"
+            className="shrink-0 rounded-md border-2 border-ink bg-brand px-3.5 py-1.5 font-display text-[13px] font-semibold text-white shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px hover:shadow-[3px_3px_0_var(--ink)] active:translate-x-0 active:translate-y-0 active:shadow-[1px_1px_0_var(--ink)]"
           >
             {applicationStatus ? 'View' : 'Apply'}
           </Link>

@@ -22,7 +22,7 @@ export default async function BusinessProfilePage() {
     return (
       <DashboardContainer>
         <PageHeader title="Business profile" />
-        <div className="rounded-lg border border-hair bg-card">
+        <div className="sticker rounded-card bg-card">
           <EmptyState
             title="Finish setting up your profile"
             description="Complete onboarding to create your business profile."
@@ -52,7 +52,7 @@ export default async function BusinessProfilePage() {
       />
 
       {session && !session.approved && (
-        <div className="mb-5 flex items-center gap-3 rounded-lg border border-warn/30 bg-warn-soft px-4 py-3 text-sm text-ink">
+        <div className="mb-5 flex items-center gap-3 rounded-card border-2 border-ink bg-warn-soft px-4 py-3 text-sm text-ink">
           <Clock className="h-4 w-4 shrink-0 text-warn" />
           Your business is under review. You can edit your profile now; publishing campaigns unlocks
           once an admin verifies you.

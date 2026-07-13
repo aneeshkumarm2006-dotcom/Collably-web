@@ -37,8 +37,8 @@ function SettingsSection({
   return (
     <section
       className={cn(
-        'rounded-lg border bg-card p-5 sm:p-6',
-        danger ? 'border-danger/30' : 'border-hair',
+        'sticker rounded-card bg-card p-5 sm:p-6',
+        danger && 'bg-danger-soft',
       )}
     >
       <h2 className={cn('text-[16px] font-bold', danger ? 'text-danger' : 'text-ink')}>

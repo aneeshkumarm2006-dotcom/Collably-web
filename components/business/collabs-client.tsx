@@ -110,7 +110,7 @@ export function BusinessCollabsClient() {
       {query.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-[188px] w-full rounded-lg" />
+            <Skeleton key={i} className="h-[188px] w-full rounded-card" />
           ))}
         </div>
       ) : query.isError ? (
@@ -168,13 +168,13 @@ function CollabRow({
   return (
     <div
       className={cn(
-        'r lift flex flex-col rounded-lg border border-hair bg-card p-[18px] shadow-card',
+        'r lift flex flex-col sticker rounded-card bg-card p-[18px]',
         overdue && 'border-l-4 border-l-danger',
       )}
     >
       <div className="flex items-start gap-3.5">
         <span
-          className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg text-[15px] font-extrabold text-white"
+          className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[11px] border-2 border-ink text-[15px] font-extrabold text-white"
           style={view.avatar ? undefined : { background: categoryGradient(view.niche[0]) }}
         >
           {view.avatar ? (

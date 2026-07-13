@@ -84,6 +84,12 @@ function useActive(rootHref: string) {
     href === rootHref ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
 }
 
+/**
+ * Sticker nav item. Active = an ink-outlined brand pill with a solid offset
+ * shadow (the marketing language's signature); inactive = quiet ink text that
+ * warms to a beige tint on hover. The whole row nudges right on hover so the
+ * rail feels tactile.
+ */
 function NavLink({
   item,
   active,
@@ -98,20 +104,24 @@ function NavLink({
       href={item.href}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium transition-colors',
+        'group relative flex items-center gap-3 rounded-[11px] px-3 py-2.5 text-[14px] font-semibold transition-all duration-150',
         active
-          ? 'bg-brand-soft-2 text-brand'
-          : 'text-[#4B4F56] hover:bg-elev hover:text-ink',
+          ? 'border-2 border-ink bg-brand text-white shadow-[2px_2px_0_var(--ink)]'
+          : 'border-2 border-transparent text-ink/70 hover:-translate-y-px hover:bg-secondary hover:text-ink',
         collapsed && 'justify-center px-0',
       )}
     >
-      <item.icon className="h-[18px] w-[18px] shrink-0" />
+      <item.icon className="h-[18px] w-[18px] shrink-0" strokeWidth={active ? 2.4 : 2.1} />
       {!collapsed && <span className="flex-1 truncate">{item.label}</span>}
       {!collapsed && item.badge != null && (
         <span
           className={cn(
-            'ml-auto rounded-full px-1.5 py-0.5 font-mono text-[11px] leading-none',
-            item.badgeAccent ? 'bg-brand text-white' : 'bg-secondary text-muted',
+            'ml-auto inline-flex min-w-[20px] items-center justify-center rounded-full border-2 border-ink px-1.5 py-0.5 font-mono text-[11px] font-bold leading-none',
+            active
+              ? 'bg-white text-brand'
+              : item.badgeAccent
+                ? 'bg-brand text-white'
+                : 'bg-yellow text-ink',
           )}
         >
           {item.badge}
@@ -142,11 +152,10 @@ function initials(name: string) {
 }
 
 /**
- * DashboardSidebar: white, 244px, role-aware nav, per the dashboard designs.
- *
- * The designs show no collapsed state and no mobile layout, but the app has
- * both and they are real behavior — so the icon rail (with tooltips) and the
- * mobile bottom tab bar are kept, restyled rather than removed.
+ * DashboardSidebar — sticker / neo-brutalist rail, unified with the marketing
+ * site: cream page, a hard ink right edge, Space Grotesk wordmark, coral mono
+ * section labels, and ink-outlined active pills. Collapses to an icon rail
+ * (tooltips) on tablet and a bottom tab bar on mobile.
  */
 export function DashboardSidebar({
   role,
@@ -168,27 +177,27 @@ export function DashboardSidebar({
       {/* Desktop / tablet sidebar */}
       <aside
         className={cn(
-          'sticky top-0 hidden h-screen shrink-0 flex-col border-r border-hair bg-card md:flex',
-          collapsed ? 'w-16' : 'w-[244px]',
+          'sticky top-0 hidden h-screen shrink-0 flex-col border-r-[2.5px] border-ink bg-page md:flex',
+          collapsed ? 'w-[68px]' : 'w-[256px]',
           className,
         )}
       >
-        <div className={cn('flex h-16 items-center', collapsed ? 'justify-center' : 'px-4')}>
+        <div className={cn('flex h-[68px] items-center', collapsed ? 'justify-center' : 'px-5')}>
           {collapsed ? (
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-sm bg-brand text-white">
-              <BrandGlyph className="h-[17px] w-[17px]" />
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-[10px] border-2 border-ink bg-brand text-white shadow-[2px_2px_0_var(--ink)]">
+              <BrandGlyph className="h-[18px] w-[18px]" />
             </span>
           ) : (
             <Link href={main[0]?.href ?? '/'} aria-label="LocalShout dashboard">
-              <BrandMark className="text-[18px]" />
+              <BrandMark className="text-[20px]" />
             </Link>
           )}
         </div>
 
-        <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
+        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 pb-2 pt-1">
           {!collapsed && (
-            <div className="px-3 pb-1.5 pt-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-faint">
-              {role === 'creator' ? 'Menu' : 'Business'}
+            <div className="px-2 pb-1.5 pt-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-coral">
+              {role === 'creator' ? 'Creator' : 'Business'}
             </div>
           )}
 
@@ -197,9 +206,9 @@ export function DashboardSidebar({
           ))}
 
           {collapsed ? (
-            <div className="my-2 h-px bg-hair" />
+            <div className="mx-auto my-2 h-0.5 w-6 rounded-full bg-ink/15" />
           ) : (
-            <div className="px-3 pb-1.5 pt-4 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-faint">
+            <div className="px-2 pb-1.5 pt-4 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-coral">
               Account
             </div>
           )}
@@ -210,18 +219,29 @@ export function DashboardSidebar({
         </nav>
 
         {!collapsed && (
-          <div className="space-y-2 px-3 pb-2">
+          <div className="space-y-2.5 px-3 pb-3">
             {highlight}
             <Link
               href={profileHref}
-              className="flex items-center gap-2.5 rounded-sm px-2 py-2 transition-colors hover:bg-elev"
+              className="press flex items-center gap-2.5 rounded-[12px] border-2 border-ink bg-card p-2 shadow-[3px_3px_0_var(--ink)]"
             >
-              <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-warn-soft font-mono text-[11px] font-semibold text-warn">
-                {initials(user.name)}
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-[9px] border-2 border-ink bg-yellow font-display text-[13px] font-bold text-ink">
+                {user.avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- small avatar tile
+                  <img src={user.avatar} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  initials(user.name)
+                )}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[13px] font-semibold text-ink">{user.name}</span>
-                {user.role && <span className="block truncate text-[11px] text-muted">{user.role}</span>}
+                <span className="block truncate font-display text-[13.5px] font-bold text-ink">
+                  {user.name}
+                </span>
+                {user.role && (
+                  <span className="block truncate text-[11px] font-medium text-muted">
+                    {user.role}
+                  </span>
+                )}
               </span>
             </Link>
           </div>
@@ -232,7 +252,7 @@ export function DashboardSidebar({
           onClick={() => setCollapsed((c) => !c)}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className={cn(
-            'mx-3 mb-2 inline-flex items-center gap-2 rounded-sm px-3 py-2 text-[13px] font-medium text-muted transition-colors hover:bg-elev hover:text-ink',
+            'mx-3 mb-3 inline-flex items-center gap-2 rounded-[10px] border-2 border-transparent px-3 py-2 text-[13px] font-semibold text-muted transition-colors hover:border-ink hover:bg-secondary hover:text-ink',
             collapsed && 'justify-center px-0',
           )}
         >
@@ -248,7 +268,7 @@ export function DashboardSidebar({
       </aside>
 
       {/* Mobile bottom tab bar */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-hair bg-card md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t-[2.5px] border-ink bg-page md:hidden">
         {main.slice(0, 5).map((item) => {
           const active = isActive(item.href);
           return (
@@ -257,14 +277,17 @@ export function DashboardSidebar({
               href={item.href}
               aria-current={active ? 'page' : undefined}
               className={cn(
-                'relative flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors',
+                'relative flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-bold transition-colors',
                 active ? 'text-brand' : 'text-muted',
               )}
             >
-              <item.icon className="h-5 w-5" />
+              {active && (
+                <span className="absolute inset-x-4 top-0 h-[3px] rounded-b-full bg-brand" aria-hidden />
+              )}
+              <item.icon className="h-5 w-5" strokeWidth={active ? 2.5 : 2} />
               <span className="max-w-full truncate px-0.5">{item.label}</span>
               {item.badge != null && (
-                <span className="absolute right-1/4 top-1.5 h-1.5 w-1.5 rounded-full bg-danger" />
+                <span className="absolute right-1/4 top-1.5 h-2 w-2 rounded-full border border-ink bg-coral" />
               )}
             </Link>
           );

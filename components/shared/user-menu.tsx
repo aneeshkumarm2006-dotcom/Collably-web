@@ -38,17 +38,17 @@ export function UserMenu({ user, onLogout, className }: UserMenuProps) {
           type="button"
           aria-label="Account menu"
           className={cn(
-            'flex items-center gap-2 rounded-full p-1 pr-2 transition-colors hover:bg-secondary',
+            'flex items-center gap-2 rounded-full border-2 border-ink bg-card p-1 pr-2 transition-all hover:-translate-y-px hover:shadow-[2px_2px_0_var(--ink)]',
             className,
           )}
         >
-          <Avatar name={user.name} src={user.avatar} size={34} />
-          <ChevronDown className="h-4 w-4 text-faint" />
+          <Avatar name={user.name} src={user.avatar} size={30} />
+          <ChevronDown className="h-4 w-4 text-ink" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-56 rounded-card border-2 border-ink shadow-sticker">
         <DropdownMenuLabel className="font-normal">
-          <div className="font-semibold text-ink">{user.name}</div>
+          <div className="font-display font-bold text-ink">{user.name}</div>
           {user.email && <div className="truncate text-xs font-normal text-muted">{user.email}</div>}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

@@ -72,15 +72,15 @@ export function SubmissionStepper({
             <div className="flex flex-col items-center" aria-hidden>
               <span
                 className={cn(
-                  'h-[22px] w-[22px] shrink-0 rounded-full',
+                  'h-[22px] w-[22px] shrink-0 rounded-full border-2 border-ink',
                   step.state === 'done' && 'bg-money',
                   step.state === 'current' && 'bg-brand ring-4 ring-brand-soft',
-                  step.state === 'pending' && 'border-2 border-hair bg-card',
+                  step.state === 'pending' && 'bg-card',
                 )}
               />
               {!last && (
                 <span
-                  className={cn('w-0.5 flex-1', connectorDone ? 'bg-money' : 'bg-hair')}
+                  className={cn('w-0.5 flex-1', connectorDone ? 'bg-money' : 'bg-ink/15')}
                 />
               )}
             </div>

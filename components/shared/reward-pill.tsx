@@ -22,7 +22,7 @@ export function RewardPill({ reward, size = 'sm', className }: RewardPillProps) 
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-2 rounded-sm border border-hair bg-secondary font-semibold text-ink',
+        'inline-flex items-center gap-2 rounded-sm border-2 border-ink bg-money-soft font-semibold text-ink',
         size === 'sm' ? 'px-2.5 py-1.5 text-[13px]' : 'w-full rounded-md px-4 py-3 text-[15px]',
         className,
       )}
@@ -31,7 +31,7 @@ export function RewardPill({ reward, size = 'sm', className }: RewardPillProps) 
 
       <span className="min-w-0 truncate">{label}</span>
       {hasValue && (
-        <span className="font-mono font-semibold text-money">
+        <span className="font-mono font-bold text-money-ink">
           · {formatCurrency(reward.estimatedValue as number)}
         </span>
       )}

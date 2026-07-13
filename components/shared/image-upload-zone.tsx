@@ -160,12 +160,12 @@ export function ImageUploadZone({
           addFiles(e.dataTransfer.files);
         }}
         className={cn(
-          'flex w-full flex-col items-center rounded-lg border-2 border-dashed bg-secondary px-6 py-8 text-center transition-colors',
-          dragging ? 'border-brand bg-brand-soft' : 'border-hair-strong hover:border-brand',
-          (disabled || reachedMax || busy) && 'cursor-not-allowed opacity-60 hover:border-hair-strong',
+          'flex w-full flex-col items-center rounded-card border-2 border-dashed bg-secondary px-6 py-8 text-center transition-colors',
+          dragging ? 'border-brand bg-brand-soft' : 'border-ink/30 hover:border-brand',
+          (disabled || reachedMax || busy) && 'cursor-not-allowed opacity-60 hover:border-ink/30',
         )}
       >
-        <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-card text-brand shadow-xs">
+        <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-[12px] border-2 border-ink bg-card text-brand">
           {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : <UploadCloud className="h-5 w-5" />}
         </span>
         <span className="text-sm font-semibold text-ink">
@@ -193,14 +193,14 @@ export function ImageUploadZone({
       {total > 0 && (
         <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
           {existing.map((src, i) => (
-            <li key={`existing-${i}`} className="group relative aspect-square overflow-hidden rounded-md border border-hair">
+            <li key={`existing-${i}`} className="group relative aspect-square overflow-hidden rounded-md border-2 border-ink">
               {/* eslint-disable-next-line @next/next/no-img-element -- preview thumbnail */}
               <img src={src} alt="" className="h-full w-full object-cover" />
               {onRemoveExisting && (
                 <button
                   type="button"
                   onClick={() => onRemoveExisting(i)}
-                  className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[rgba(19,26,46,0.7)] text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-ink bg-ink text-white opacity-0 transition-opacity group-hover:opacity-100"
                   aria-label="Remove image"
                 >
                   <X className="h-3.5 w-3.5" />
@@ -213,19 +213,19 @@ export function ImageUploadZone({
             ? Array.from({ length: uploadingCount }).map((_, i) => (
                 <li
                   key={`uploading-${i}`}
-                  className="flex aspect-square items-center justify-center rounded-md border border-hair bg-secondary text-faint"
+                  className="flex aspect-square items-center justify-center rounded-md border-2 border-ink bg-secondary text-faint"
                 >
                   <Loader2 className="h-5 w-5 animate-spin" />
                 </li>
               ))
             : picked.map((p, i) => (
-                <li key={`picked-${i}`} className="group relative aspect-square overflow-hidden rounded-md border border-hair">
+                <li key={`picked-${i}`} className="group relative aspect-square overflow-hidden rounded-md border-2 border-ink">
                   {/* eslint-disable-next-line @next/next/no-img-element -- local blob preview */}
                   <img src={p.url} alt="" className="h-full w-full object-cover" />
                   <button
                     type="button"
                     onClick={() => removePicked(i)}
-                    className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[rgba(19,26,46,0.7)] text-white opacity-0 transition-opacity group-hover:opacity-100"
+                    className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-ink bg-ink text-white opacity-0 transition-opacity group-hover:opacity-100"
                     aria-label="Remove image"
                   >
                     <X className="h-3.5 w-3.5" />
@@ -237,7 +237,7 @@ export function ImageUploadZone({
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                className="flex aspect-square w-full items-center justify-center rounded-md border-2 border-dashed border-hair-strong text-faint transition-colors hover:border-brand hover:text-brand"
+                className="flex aspect-square w-full items-center justify-center rounded-md border-2 border-dashed border-ink/30 text-faint transition-colors hover:border-brand hover:text-brand"
                 aria-label="Add more images"
               >
                 <ImagePlus className="h-5 w-5" />

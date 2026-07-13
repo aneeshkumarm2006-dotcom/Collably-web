@@ -30,10 +30,10 @@ export function CategoryTile({
   return (
     <span
       aria-hidden
-      className={cn('inline-flex shrink-0 items-center justify-center', className)}
+      className={cn('inline-flex shrink-0 items-center justify-center border-2 border-ink', className)}
       style={{ width: size, height: size, borderRadius: radius, background: tint }}
     >
-      <Icon style={{ width: glyph, height: glyph, color: ink }} strokeWidth={1.9} />
+      <Icon style={{ width: glyph, height: glyph, color: ink }} strokeWidth={2} />
     </span>
   );
 }

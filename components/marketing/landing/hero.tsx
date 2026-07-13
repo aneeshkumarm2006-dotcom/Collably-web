@@ -1,15 +1,17 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { Sparkles, Store } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 import { HeroCta } from '@/components/marketing/hero-cta';
 import { cn } from '@/lib/utils';
 
 type SceneKey = 'creator' | 'business';
 
-const SCENES: { key: SceneKey; label: string; emoji: string }[] = [
-  { key: 'creator', label: 'For creators', emoji: '✨' },
-  { key: 'business', label: 'For businesses', emoji: '🏪' },
+const SCENES: { key: SceneKey; label: string; icon: LucideIcon }[] = [
+  { key: 'creator', label: 'For creators', icon: Sparkles },
+  { key: 'business', label: 'For businesses', icon: Store },
 ];
 
 const ADVANCE_MS = 4200;
@@ -146,7 +148,7 @@ export function Hero() {
                     isActive ? 'bg-ink text-white' : 'bg-card text-ink',
                   )}
                 >
-                  <span aria-hidden>{s.emoji}</span>
+                  <s.icon size={15} strokeWidth={2.25} aria-hidden />
                   {s.label}
                 </button>
               );
@@ -280,9 +282,20 @@ function CreatorScene() {
       <g className="animate-ls-float">
         <rect x="92" y="354" width="162" height="46" rx="23" fill="#fff" stroke="#14181F" strokeWidth="3" />
         <circle cx="118" cy="377" r="15" fill="#FDE7E7" stroke="#14181F" strokeWidth="2" />
-        <text x="118" y="383" fontSize="15" textAnchor="middle">
-          ☕
-        </text>
+        {/* Coffee cup (Lucide "coffee" glyph), centered in the reward chip. */}
+        <g
+          transform="translate(109.5 368.5) scale(0.71)"
+          fill="none"
+          stroke="#14181F"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M10 2v2" />
+          <path d="M14 2v2" />
+          <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" />
+          <path d="M6 2v2" />
+        </g>
         <text x="144" y="383" fontSize="15" fill="#1E7E34" fontWeight="700" className="font-display">
           Earned $120
         </text>

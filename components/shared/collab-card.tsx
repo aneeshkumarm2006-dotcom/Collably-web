@@ -66,21 +66,21 @@ export function CollabCard({
   return (
     <div
       className={cn(
-        'rounded-lg border border-hair bg-card p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-hair-strong hover:shadow-card-hover',
-        overdue && 'border-l-4 border-l-danger bg-danger-soft',
+        'sticker rounded-card bg-card p-5 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-sticker-lg',
+        overdue && 'border-l-[6px] border-l-danger bg-danger-soft',
         className,
       )}
     >
       <div className="flex items-center gap-3">
         <Avatar name={counterparty.name} src={counterparty.avatar} size={40} />
         <div className="min-w-0 flex-1">
-          <div className="truncate font-semibold text-ink">{counterparty.name}</div>
+          <div className="truncate font-display font-bold text-ink">{counterparty.name}</div>
           {counterparty.role && <div className="text-[13px] text-muted">{counterparty.role}</div>}
         </div>
         {status && <StatusBadge status={status} />}
       </div>
 
-      <h3 className="mt-3 font-semibold leading-snug text-ink">{title}</h3>
+      <h3 className="mt-3 font-display font-bold leading-snug text-ink">{title}</h3>
 
       {deliverables && deliverables.length > 0 && (
         <ul className="mt-3 space-y-1.5">
@@ -88,8 +88,8 @@ export function CollabCard({
             <li key={i} className="flex items-center gap-2 text-sm text-muted">
               <span
                 className={cn(
-                  'flex h-4 w-4 items-center justify-center rounded-xs border text-[10px]',
-                  d.done ? 'border-success bg-success text-white' : 'border-hair-strong',
+                  'flex h-4 w-4 items-center justify-center rounded-xs border-2 text-[10px]',
+                  d.done ? 'border-ink bg-money text-white' : 'border-ink/30',
                 )}
               >
                 {d.done && <Check className="h-3 w-3" />}
