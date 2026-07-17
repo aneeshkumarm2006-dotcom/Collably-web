@@ -93,6 +93,8 @@ export const handlers = [
       role: body.role,
       avatar: null,
       isVerified: false,
+      isPhoneVerified: false,
+      phone: null,
       isOnboarded: false,
       isBanned: false,
       pushToken: null,
@@ -162,6 +164,44 @@ export const handlers = [
     return ok({ user });
   }),
   http.delete(u('/auth/me'), () => ok({ deleted: true })),
+
+  // --- Account verification (OTP). Mock returns a fixed devCode and accepts any
+  // 6-digit code, so the whole gate is exercisable without Resend/Twilio. ---
+  http.post(u('/auth/verify/email/send'), ({ request }) => {
+    const id = viewerId(request);
+    if (!id) return err(401, 'Authentication required');
+    const user = getDb().users.find((x) => x._id === id);
+    if (user?.isVerified) return ok({ alreadyVerified: true });
+    return ok({ sent: true, expiresInMinutes: 10, devCode: '123456' });
+  }),
+  http.post(u('/auth/verify/email/confirm'), async ({ request }) => {
+    const id = viewerId(request);
+    if (!id) return err(401, 'Authentication required');
+    const user = getDb().users.find((x) => x._id === id)!;
+    const { code } = (await request.json()) as { code: string };
+    if (!/^\d{6}$/.test(code)) return err(400, 'Enter the 6-digit code');
+    user.isVerified = true;
+    return ok({ user });
+  }),
+  http.post(u('/auth/verify/phone/send'), async ({ request }) => {
+    const id = viewerId(request);
+    if (!id) return err(401, 'Authentication required');
+    const { phone } = (await request.json()) as { phone: string };
+    if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
+      return err(400, 'Enter a valid phone number with country code');
+    }
+    return ok({ sent: true, expiresInMinutes: 10, devCode: '123456' });
+  }),
+  http.post(u('/auth/verify/phone/confirm'), async ({ request }) => {
+    const id = viewerId(request);
+    if (!id) return err(401, 'Authentication required');
+    const user = getDb().users.find((x) => x._id === id)!;
+    const { phone, code } = (await request.json()) as { phone: string; code: string };
+    if (!/^\d{6}$/.test(code)) return err(400, 'Enter the 6-digit code');
+    user.phone = phone;
+    user.isPhoneVerified = true;
+    return ok({ user });
+  }),
 
   // ===== Profiles =====
   http.get(u('/profile/business'), ({ request }) => {

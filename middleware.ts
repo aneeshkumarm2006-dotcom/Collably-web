@@ -51,5 +51,5 @@ export const config = {
   // (marketing, public app, auth pages, API routes, Next internals) passes
   // through untouched. `/api/seoteam/*` is intentionally NOT matched here —
   // those routes enforce auth in-handler and return 401 (not a redirect).
-  matcher: ['/dashboard/:path*', '/onboarding/:path*', '/seoteam/:path*'],
+  matcher: ['/dashboard/:path*', '/onboarding/:path*', '/verify/:path*', '/seoteam/:path*'],
 };

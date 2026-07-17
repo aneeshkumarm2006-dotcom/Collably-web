@@ -2,10 +2,12 @@ import { describe, expect, it } from 'vitest';
 import type { PublicUser } from '@/lib/shared';
 import {
   canTakeGatedAction,
+  needsVerification,
   onboardingPath,
   postAuthPath,
   roleHome,
   toSessionUser,
+  VERIFY_PATH,
   type SessionUser,
 } from '@/lib/auth/user';
 
@@ -18,11 +20,21 @@ function makeUser(overrides: Partial<PublicUser> = {}): PublicUser {
     role: 'creator',
     avatar: 'https://cdn.example.com/maya.png',
     isVerified: true,
+    isPhoneVerified: true,
+    phone: '+14165550199',
     isOnboarded: true,
     isBanned: false,
     createdAt: '2026-06-01T12:00:00.000Z',
     ...overrides,
   };
+}
+
+/** A fully-verified session shape for postAuthPath cases (verification passes). */
+function verified(over: Partial<SessionUser> = {}): Pick<
+  SessionUser,
+  'role' | 'isOnboarded' | 'emailVerified' | 'phoneVerified'
+> {
+  return { role: 'creator', isOnboarded: true, emailVerified: true, phoneVerified: true, ...over };
 }
 
 describe('toSessionUser', () => {
@@ -35,6 +47,8 @@ describe('toSessionUser', () => {
       role: 'creator',
       avatar: 'https://cdn.example.com/maya.png',
       emailVerified: true,
+      phoneVerified: true,
+      phone: '+14165550199',
       isOnboarded: true,
       approved: true,
     });
@@ -87,14 +101,38 @@ describe('onboardingPath', () => {
 });
 
 describe('postAuthPath', () => {
-  it('routes an onboarded user to their role home', () => {
-    expect(postAuthPath({ role: 'creator', isOnboarded: true })).toBe('/dashboard/creator');
-    expect(postAuthPath({ role: 'business', isOnboarded: true })).toBe('/dashboard/business');
+  it('routes a verified, onboarded user to their role home', () => {
+    expect(postAuthPath(verified({ role: 'creator' }))).toBe('/dashboard/creator');
+    expect(postAuthPath(verified({ role: 'business' }))).toBe('/dashboard/business');
   });
 
-  it('routes a not-yet-onboarded user to onboarding', () => {
-    expect(postAuthPath({ role: 'creator', isOnboarded: false })).toBe('/onboarding/creator');
-    expect(postAuthPath({ role: 'business', isOnboarded: false })).toBe('/onboarding/business');
+  it('routes a verified, not-yet-onboarded user to onboarding', () => {
+    expect(postAuthPath(verified({ role: 'creator', isOnboarded: false }))).toBe(
+      '/onboarding/creator',
+    );
+    expect(postAuthPath(verified({ role: 'business', isOnboarded: false }))).toBe(
+      '/onboarding/business',
+    );
+  });
+
+  it('routes an unverified user to the verification gate first (before onboarding)', () => {
+    expect(postAuthPath(verified({ emailVerified: false }))).toBe(VERIFY_PATH);
+    expect(postAuthPath(verified({ phoneVerified: false }))).toBe(VERIFY_PATH);
+    // Even an onboarded account is gated until both channels are confirmed.
+    expect(postAuthPath(verified({ isOnboarded: true, phoneVerified: false }))).toBe(VERIFY_PATH);
+  });
+});
+
+describe('needsVerification', () => {
+  it('is true until BOTH email and phone are verified', () => {
+    expect(needsVerification({ role: 'creator', emailVerified: false, phoneVerified: false })).toBe(true);
+    expect(needsVerification({ role: 'creator', emailVerified: true, phoneVerified: false })).toBe(true);
+    expect(needsVerification({ role: 'creator', emailVerified: false, phoneVerified: true })).toBe(true);
+    expect(needsVerification({ role: 'creator', emailVerified: true, phoneVerified: true })).toBe(false);
+  });
+
+  it('exempts admins (they use the separate admin app)', () => {
+    expect(needsVerification({ role: 'admin', emailVerified: false, phoneVerified: false })).toBe(false);
   });
 });
 

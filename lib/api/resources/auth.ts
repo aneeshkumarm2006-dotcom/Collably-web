@@ -68,7 +68,36 @@ export function createAuthApi(http: HttpClient) {
     /** DELETE /auth/me: permanently delete the account and its data. */
     deleteAccount: (password?: string) =>
       http.delete<{ deleted: true }>('/auth/me', password ? { password } : undefined),
+
+    // --- Account verification (OTP: email + phone) ---
+    // Backend hands `devCode` back only in non-prod when EXPOSE_DEV_OTP is on, so
+    // the whole flow is testable before Resend/Twilio credentials exist.
+
+    /** POST /auth/verify/email/send: email the signed-in user a 6-digit code. */
+    sendEmailCode: () =>
+      http.post<VerifySendResponse>('/auth/verify/email/send', {}),
+
+    /** POST /auth/verify/email/confirm: check the code, mark email verified. */
+    confirmEmailCode: (code: string) =>
+      http.post<{ user: AuthResponse['user'] }>('/auth/verify/email/confirm', { code }),
+
+    /** POST /auth/verify/phone/send: SMS the given E.164 number a 6-digit code. */
+    sendPhoneCode: (phone: string) =>
+      http.post<VerifySendResponse>('/auth/verify/phone/send', { phone }),
+
+    /** POST /auth/verify/phone/confirm: check the code, store the verified number. */
+    confirmPhoneCode: (phone: string, code: string) =>
+      http.post<{ user: AuthResponse['user'] }>('/auth/verify/phone/confirm', { phone, code }),
   };
+}
+
+/** Shared shape of the two verification "send code" responses (email + phone). */
+export interface VerifySendResponse {
+  sent: boolean;
+  expiresInMinutes?: number;
+  alreadyVerified?: boolean;
+  /** Dev-only: present when EXPOSE_DEV_OTP is on in a non-prod backend. */
+  devCode?: string;
 }
 
 export type AuthApi = ReturnType<typeof createAuthApi>;

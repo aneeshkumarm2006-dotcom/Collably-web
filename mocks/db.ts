@@ -186,6 +186,8 @@ function build(): Db {
     role: u.role,
     avatar: u.avatar ?? null,
     isVerified: true,
+    isPhoneVerified: true,
+    phone: null,
     isOnboarded: true,
     isBanned: false,
     pushToken: null,

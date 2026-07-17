@@ -13,8 +13,12 @@ export interface SessionUser {
   email: string;
   role: UserRole;
   avatar: string | null;
-  /** Email verified (Google sign-in or email confirmation). */
+  /** Email verified (Google/Apple sign-in, or an emailed OTP). */
   emailVerified: boolean;
+  /** Phone confirmed by an SMS OTP. */
+  phoneVerified: boolean;
+  /** The verified E.164 number, once confirmed. */
+  phone: string | null;
   /** Whether the role profile (creator/business onboarding) is complete. */
   isOnboarded: boolean;
   /**
@@ -35,9 +39,25 @@ export function toSessionUser(user: PublicUser, approved: boolean): SessionUser 
     role: user.role,
     avatar: user.avatar ?? null,
     emailVerified: user.isVerified,
+    phoneVerified: user.isPhoneVerified,
+    phone: user.phone ?? null,
     isOnboarded: user.isOnboarded,
     approved,
   };
+}
+
+/** The verification gate path (email → phone). */
+export const VERIFY_PATH = '/verify';
+
+/**
+ * True while a creator/business still owes us an email or phone confirmation.
+ * Admins are exempt — they live in the separate admin app.
+ */
+export function needsVerification(
+  user: Pick<SessionUser, 'role' | 'emailVerified' | 'phoneVerified'>,
+): boolean {
+  if (user.role === 'admin') return false;
+  return !user.emailVerified || !user.phoneVerified;
 }
 
 /** The dashboard home for a role (admins live in the separate admin app). */
@@ -52,8 +72,15 @@ export function onboardingPath(role: UserRole): string {
   return role === 'creator' ? '/onboarding/creator' : '/onboarding/business';
 }
 
-/** Where to send a user right after auth: onboarding if incomplete, else their home. */
-export function postAuthPath(user: Pick<SessionUser, 'role' | 'isOnboarded'>): string {
+/**
+ * Where to send a user right after auth. Gate order mirrors the mobile app:
+ * verification → onboarding → role home, so a new account confirms email + phone
+ * before it can reach anything.
+ */
+export function postAuthPath(
+  user: Pick<SessionUser, 'role' | 'isOnboarded' | 'emailVerified' | 'phoneVerified'>,
+): string {
+  if (needsVerification(user)) return VERIFY_PATH;
   return user.isOnboarded ? roleHome(user.role) : onboardingPath(user.role);
 }
 
