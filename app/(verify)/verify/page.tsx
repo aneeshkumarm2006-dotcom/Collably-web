@@ -5,7 +5,7 @@ import { VerifyFlow } from '@/components/verify/verify-flow';
 
 export const metadata: Metadata = {
   title: 'Verify your account',
-  description: 'Confirm your email and phone number to secure your LocalShout account.',
+  description: 'Confirm your email and phone number to secure your Local Creator Crew account.',
   robots: { index: false, follow: false },
 };
 
@@ -24,7 +24,7 @@ export default function VerifyPage() {
         <VerifyFlow />
       </div>
       <p className="mx-auto mt-10 max-w-[420px] text-center text-[12.5px] leading-relaxed text-faint">
-        We verify email and phone so businesses and creators on LocalShout are real
+        We verify email and phone so businesses and creators on Local Creator Crew are real
         people. Standard message rates may apply.
       </p>
     </main>

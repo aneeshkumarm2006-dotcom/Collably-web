@@ -280,7 +280,7 @@ function UsersNote() {
         <Users className="h-4 w-4" />
         <p className="text-[13px] font-medium">Users unavailable</p>
       </div>
-      <p className="mt-1 text-xs text-faint">Signups live in the LocalShout backend, not this hub.</p>
+      <p className="mt-1 text-xs text-faint">Signups live in the Local Creator Crew backend, not this hub.</p>
     </div>
   );
 }
@@ -293,7 +293,7 @@ function SignupsStrip() {
         <h3 className="font-display text-sm font-bold text-ink">Recent signups</h3>
       </div>
       <p className="text-sm text-muted">
-        User analytics aren&apos;t part of this dashboard — signups live in the LocalShout backend.
+        User analytics aren&apos;t part of this dashboard — signups live in the Local Creator Crew backend.
       </p>
       <Link
         href="/analyticshub/users"

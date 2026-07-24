@@ -27,7 +27,7 @@ const config: AudiencePageConfig = {
   secondaryCta: { label: 'Browse campaigns', href: '/explore' },
   highlights: ['Free to join', 'No follower minimums', 'UGC creators welcome'],
   heroCard: { label: 'Reward unlocked', title: 'Brunch for 2', sub: 'Maple & Oat · $65 value' },
-  benefitsLabel: 'Why creators choose LocalShout',
+  benefitsLabel: 'Why creators choose Local Creator Crew',
   benefitsTitle: 'Built for creators at every size',
   benefits: [
     {

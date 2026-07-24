@@ -15,7 +15,7 @@ export const metadata = {
 export default function NotFound() {
   return (
     <main className="flex min-h-[80vh] flex-col items-center justify-center bg-page px-6 text-center">
-      <Link href="/" className="mb-8" aria-label="LocalShout home">
+      <Link href="/" className="mb-8" aria-label="Local Creator Crew home">
         <BrandMark />
       </Link>
       <div className="sticker w-full max-w-md rounded-xl bg-card px-8 py-10">

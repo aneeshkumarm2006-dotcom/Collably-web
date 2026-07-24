@@ -29,7 +29,7 @@ export function AppPromo() {
               <LiveDot /> Coming soon
             </span>
             <h2 className="mt-5 text-balance font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
-              LocalShout in your pocket.
+              Local Creator Crew in your pocket.
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-pretty text-base leading-relaxed text-white/70">
               Apply to collabs in a tap, chat with brands, and get push alerts for new local

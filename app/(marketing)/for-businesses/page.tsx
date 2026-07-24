@@ -27,7 +27,7 @@ const config: AudiencePageConfig = {
   secondaryCta: { label: 'See pricing', href: '/pricing' },
   highlights: ['Free to post', 'No agency retainers', 'Verified submissions'],
   heroCard: { label: 'Verified content', title: '32 new applicants', sub: 'Ready to collab this week' },
-  benefitsLabel: 'Why brands choose LocalShout',
+  benefitsLabel: 'Why brands choose Local Creator Crew',
   benefitsTitle: 'Marketing that pays for itself',
   benefits: [
     {

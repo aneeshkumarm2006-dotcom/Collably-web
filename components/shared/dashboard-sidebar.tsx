@@ -188,7 +188,7 @@ export function DashboardSidebar({
               <BrandGlyph className="h-[18px] w-[18px]" />
             </span>
           ) : (
-            <Link href={main[0]?.href ?? '/'} aria-label="LocalShout dashboard">
+            <Link href={main[0]?.href ?? '/'} aria-label="Local Creator Crew dashboard">
               <BrandMark className="text-[20px]" />
             </Link>
           )}

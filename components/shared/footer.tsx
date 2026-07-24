@@ -85,7 +85,7 @@ export function Footer({ className }: { className?: string }) {
         </div>
 
         <div className="mt-12 flex flex-wrap justify-between gap-3 border-t border-white/10 pt-6 text-[13px]">
-          <span>© {new Date().getFullYear()} LocalShout. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Local Creator Crew. All rights reserved.</span>
           <span>Toronto · Vancouver · Montreal</span>
         </div>
       </div>

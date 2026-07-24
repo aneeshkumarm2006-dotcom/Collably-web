@@ -54,7 +54,7 @@ const getDbPosts = unstable_cache(
           description: doc.excerpt || doc.metaTitle || doc.title,
           category: doc.category || 'Guides',
           tags: doc.tags ?? [],
-          author: { name: doc.author?.name || 'LocalShout Team', role: doc.author?.role || undefined },
+          author: { name: doc.author?.name || 'Local Creator Crew Team', role: doc.author?.role || undefined },
           date: new Date(published).toISOString(),
           updated: new Date(updated).toISOString(),
           readingMinutes: readingMinutes(doc.body || ''),

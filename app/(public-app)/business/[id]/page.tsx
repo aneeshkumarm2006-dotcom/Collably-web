@@ -48,7 +48,7 @@ export async function generateMetadata({
     title: profile.businessName,
     description:
       profile.description?.slice(0, 180) ??
-      `${profile.businessName} runs creator collabs on LocalShout.`,
+      `${profile.businessName} runs creator collabs on Local Creator Crew.`,
     path: `/business/${id}`,
     image: profile.logo ?? undefined,
     ogEyebrow: `${profile.category} · Business`,

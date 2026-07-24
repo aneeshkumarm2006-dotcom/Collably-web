@@ -15,6 +15,7 @@ import { createNotificationsApi } from './notifications';
 import { createUploadApi } from './upload';
 import { createGeocodingApi } from './geocoding';
 import { createReportsApi } from './reports';
+import { createBlocksApi } from './blocks';
 
 export function createResources(http: HttpClient) {
   return {
@@ -27,6 +28,7 @@ export function createResources(http: HttpClient) {
     upload: createUploadApi(http),
     geocoding: createGeocodingApi(http),
     reports: createReportsApi(http),
+    blocks: createBlocksApi(http),
   };
 }
 
@@ -36,3 +38,4 @@ export type { CampaignInput } from './campaigns';
 export type { BusinessProfileInput, CreatorProfileInput } from './profiles';
 export type { NotificationListParams } from './notifications';
 export type { RegisterInput, LoginInput } from './auth';
+export type { BlockedAccount } from './blocks';

@@ -37,10 +37,10 @@ export const postInputSchema = z.object({
   linkAllOccurrences: z.boolean().default(false),
   author: z
     .object({
-      name: z.string().trim().min(1).default('LocalShout Team'),
+      name: z.string().trim().min(1).default('Local Creator Crew Team'),
       role: z.string().trim().default(''),
     })
-    .default({ name: 'LocalShout Team', role: '' }),
+    .default({ name: 'Local Creator Crew Team', role: '' }),
   status: z.enum(POST_STATUSES).default('draft'),
 });
 

@@ -151,7 +151,7 @@ export function LoginForm({ next }: { next?: string }) {
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
-        New to LocalShout?{' '}
+        New to Local Creator Crew?{' '}
         <Link
           href={target ? `/signup?next=${encodeURIComponent(target)}` : '/signup'}
           className="font-semibold text-brand hover:underline"

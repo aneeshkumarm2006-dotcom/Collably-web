@@ -23,12 +23,12 @@ const fontMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'LocalShout: Influencer ↔ Brand Collabs & Gifting',
-    template: '%s · LocalShout',
+    default: 'Local Creator Crew: Influencer ↔ Brand Collabs & Gifting',
+    template: '%s · Local Creator Crew',
   },
   description:
-    'LocalShout connects local businesses with creators for gifting campaigns and collabs. Post a campaign, get matched with creators, and grow.',
-  metadataBase: new URL('https://localshout.app'),
+    'Local Creator Crew connects local businesses with creators for gifting campaigns and collabs. Post a campaign, get matched with creators, and grow.',
+  metadataBase: new URL('https://www.localcreatorcrew.com'),
 };
 
 // Light-only: the designs define no dark theme, so the browser chrome is pinned

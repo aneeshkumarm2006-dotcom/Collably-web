@@ -26,7 +26,7 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     quote:
-      "Free membership for a few Reels I'd post anyway? LocalShout basically pays my gym bill now.",
+      "Free membership for a few Reels I'd post anyway? Local Creator Crew basically pays my gym bill now.",
     initials: 'DK',
     bg: '#4FC3F7',
     ink: '#04425F',

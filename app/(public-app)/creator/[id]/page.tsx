@@ -57,7 +57,7 @@ export async function generateMetadata({
     title: name,
     description:
       res.profile.bio?.slice(0, 180) ??
-      `${name} is a creator on LocalShout${res.profile.niche.length ? `: ${res.profile.niche.join(', ')}.` : '.'}`,
+      `${name} is a creator on Local Creator Crew${res.profile.niche.length ? `: ${res.profile.niche.join(', ')}.` : '.'}`,
     path: `/creator/${id}`,
     image: res.user?.avatar ?? undefined,
     ogEyebrow: 'Creator',

@@ -123,7 +123,7 @@ export function Hero() {
             className="relative aspect-[52/47] w-full"
             role="group"
             aria-roledescription="carousel"
-            aria-label="What LocalShout looks like"
+            aria-label="What Local Creator Crew looks like"
           >
             <SceneLayer active={scene === 'creator'}>
               <CreatorScene />

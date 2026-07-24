@@ -11,7 +11,7 @@ import { StickerCard } from '@/components/shared/sticker';
 export const metadata: Metadata = buildMetadata({
   title: 'Contact',
   description:
-    'Get in touch with the LocalShout team about creator collabs, running campaigns, press, or support. We usually reply within one business day.',
+    'Get in touch with the Local Creator Crew team about creator collabs, running campaigns, press, or support. We usually reply within one business day.',
   path: '/contact',
   ogEyebrow: 'Contact',
 });
@@ -20,15 +20,15 @@ const CHANNELS = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'hello@localshout.ca',
-    href: 'mailto:hello@localshout.ca',
+    value: 'hello@localcreatorcrew.com',
+    href: 'mailto:hello@localcreatorcrew.com',
     tone: 'bg-brand-soft text-brand',
   },
   {
     icon: MessageSquare,
     label: 'Support',
-    value: 'support@localshout.ca',
-    href: 'mailto:support@localshout.ca',
+    value: 'support@localcreatorcrew.com',
+    href: 'mailto:support@localcreatorcrew.com',
     tone: 'bg-coral text-white',
   },
   { icon: MapPin, label: 'HQ', value: 'Toronto · Vancouver', tone: 'bg-grape-soft text-grape' },

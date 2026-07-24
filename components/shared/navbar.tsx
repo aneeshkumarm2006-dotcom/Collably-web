@@ -60,7 +60,7 @@ export function Navbar({ onDark }: { onDark?: boolean }) {
     >
       <div className="mx-auto flex h-full max-w-shell items-center justify-between gap-4 px-6 lg:px-10">
         <div className="flex items-center gap-8">
-          <Link href={homeHref} aria-label={user ? 'LocalShout dashboard' : 'LocalShout home'}>
+          <Link href={homeHref} aria-label={user ? 'Local Creator Crew dashboard' : 'Local Creator Crew home'}>
             <BrandMark onDark={onDark} />
           </Link>
           <div className="hidden items-center gap-7 md:flex">

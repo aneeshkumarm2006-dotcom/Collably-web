@@ -5,7 +5,7 @@ import { LegalPage } from '@/components/marketing/legal-page';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Terms of Service',
-  description: 'The terms that govern your use of the LocalShout marketplace.',
+  description: 'The terms that govern your use of the Local Creator Crew marketplace.',
   path: '/terms',
   ogEyebrow: 'Legal',
 });
@@ -15,11 +15,11 @@ export default function TermsPage() {
     <LegalPage
       title="Terms of Service"
       lastUpdated="28 June 2026"
-      intro="These Terms of Service govern your access to and use of LocalShout. By creating an account or using the platform, you agree to these terms."
+      intro="These Terms of Service govern your access to and use of Local Creator Crew. By creating an account or using the platform, you agree to these terms."
     >
       <h2>1. The service</h2>
       <p>
-        LocalShout is a marketplace that connects businesses running gifting/collab campaigns with
+        Local Creator Crew is a marketplace that connects businesses running gifting/collab campaigns with
         creators. We provide the platform; the agreement for any specific collaboration is between the
         business and the creator.
       </p>
@@ -27,14 +27,14 @@ export default function TermsPage() {
       <h2>2. Accounts</h2>
       <p>
         You must provide accurate information and keep your credentials secure. You are responsible
-        for activity under your account. You must be at least 16 years old to use LocalShout.
+        for activity under your account. You must be at least 16 years old to use Local Creator Crew.
       </p>
 
       <h2>3. Campaigns, applications & rewards</h2>
       <ul>
         <li>Businesses are responsible for the accuracy of their campaigns and for providing the stated reward to creators whose verified work meets the campaign requirements.</li>
         <li>Creators are responsible for producing the agreed deliverables and submitting truthful proof.</li>
-        <li>Rewards are provided directly by the business to the creator; LocalShout is not a party to that exchange and does not hold funds.</li>
+        <li>Rewards are provided directly by the business to the creator; Local Creator Crew is not a party to that exchange and does not hold funds.</li>
       </ul>
 
       <h2>4. Acceptable use</h2>
@@ -48,7 +48,7 @@ export default function TermsPage() {
 
       <h2>5. Content & licence</h2>
       <p>
-        You retain ownership of content you create. By posting on LocalShout you grant us a limited
+        You retain ownership of content you create. By posting on Local Creator Crew you grant us a limited
         licence to host and display that content for the purpose of operating the service. Licences
         between a business and a creator for campaign deliverables are set in the campaign terms.
       </p>
@@ -68,14 +68,14 @@ export default function TermsPage() {
 
       <h2>8. Limitation of liability</h2>
       <p>
-        To the maximum extent permitted by law, LocalShout is not liable for indirect, incidental, or
+        To the maximum extent permitted by law, Local Creator Crew is not liable for indirect, incidental, or
         consequential damages, or for disputes between businesses and creators arising from a
         collaboration.
       </p>
 
       <h2>9. Termination</h2>
       <p>
-        You may stop using LocalShout at any time. We may suspend or terminate access for violations of
+        You may stop using Local Creator Crew at any time. We may suspend or terminate access for violations of
         these terms. Some provisions survive termination, including content licences granted to other
         users and limitations of liability.
       </p>
@@ -83,7 +83,7 @@ export default function TermsPage() {
       <h2>10. Changes & contact</h2>
       <p>
         We may update these terms; continued use after changes constitutes acceptance. Questions?
-        Email <a href="mailto:legal@localshout.app">legal@localshout.app</a> or use our{' '}
+        Email <a href="mailto:legal@localcreatorcrew.com">legal@localcreatorcrew.com</a> or use our{' '}
         <a href="/contact">contact form</a>.
       </p>
     </LegalPage>

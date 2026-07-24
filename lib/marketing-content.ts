@@ -49,7 +49,7 @@ export const HOW_IT_WORKS = {
   ],
 } as const;
 
-/** "Why LocalShout" feature grid (lucide icon name + accent tone resolved in the page). */
+/** "Why Local Creator Crew" feature grid (lucide icon name + accent tone resolved in the page). */
 export const FEATURES = [
   {
     icon: 'gift',
@@ -92,7 +92,7 @@ export const TESTIMONIALS = [
     name: 'Aanya Patel',
     role: 'Creator · @toronto.eats',
     quote:
-      'As a nano creator I kept getting ignored by agencies. On LocalShout I landed three restaurant collabs in my first month — all in Toronto, all genuinely fun.',
+      'As a nano creator I kept getting ignored by agencies. On Local Creator Crew I landed three restaurant collabs in my first month — all in Toronto, all genuinely fun.',
   },
   {
     initials: 'DR',
@@ -112,7 +112,7 @@ export const TESTIMONIALS = [
 
 export const GENERAL_FAQS: FaqItem[] = [
   {
-    q: 'Is LocalShout free to join?',
+    q: 'Is Local Creator Crew free to join?',
     a: 'Yes. Creating an account, building your profile, and browsing collabs is completely free for both creators and businesses. Local spots only pay in the rewards they offer.',
   },
   {

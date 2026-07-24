@@ -64,7 +64,7 @@ export async function generateMetadata({
     title: campaign.title,
     description:
       campaign.description.slice(0, 180) +
-      (businessName ? `, a collab from ${businessName} on LocalShout.` : ''),
+      (businessName ? `, a collab from ${businessName} on Local Creator Crew.` : ''),
     path: `/campaign/${id}`,
     image: campaign.coverImage ?? undefined,
     ogEyebrow: `Campaign · ${campaign.category}`,

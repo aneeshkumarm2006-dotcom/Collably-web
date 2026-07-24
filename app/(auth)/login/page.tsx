@@ -5,7 +5,7 @@ import { LoginForm } from '@/components/auth/login-form';
 
 export const metadata: Metadata = {
   title: 'Log in',
-  description: 'Log in to your LocalShout account to manage campaigns, applications, and collabs.',
+  description: 'Log in to your Local Creator Crew account to manage campaigns, applications, and collabs.',
 };
 
 export default async function LoginPage({

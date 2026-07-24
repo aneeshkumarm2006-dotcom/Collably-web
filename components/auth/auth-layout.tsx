@@ -55,7 +55,7 @@ export function AuthLayout({ children, variant = 'welcome', next }: AuthLayoutPr
         {isJoin ? <JoinPanel /> : <WelcomePanel />}
 
         <p className="relative z-10 font-mono text-[12px] text-[#bbd6fb]">
-          © 2026 LocalShout · Made for your block
+          © 2026 Local Creator Crew · Made for your block
         </p>
       </aside>
 

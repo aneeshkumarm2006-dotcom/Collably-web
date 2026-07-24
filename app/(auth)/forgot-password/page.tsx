@@ -5,7 +5,7 @@ import { ForgotPasswordForm } from '@/components/auth/forgot-password-form';
 
 export const metadata: Metadata = {
   title: 'Forgot password',
-  description: 'Reset your LocalShout password.',
+  description: 'Reset your Local Creator Crew password.',
 };
 
 export default function ForgotPasswordPage() {

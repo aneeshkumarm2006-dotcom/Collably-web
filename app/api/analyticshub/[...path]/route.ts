@@ -35,7 +35,7 @@ import * as gads from '@/lib/analyticshub/providers/gads';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const DEFAULT_PROJECT = { name: 'LocalShout', primary: '#0064E0', accent: '#FF6A3D' };
+const DEFAULT_PROJECT = { name: 'Local Creator Crew', primary: '#0064E0', accent: '#FF6A3D' };
 const googleOAuthAvailable = Boolean(
   process.env.GOOGLE_OAUTH_CLIENT_ID && process.env.GOOGLE_OAUTH_CLIENT_SECRET,
 );
@@ -78,7 +78,7 @@ async function buildStatus(): Promise<HubStatus> {
         await google.connectionState('gsc'),
         await meta.connectionState(),
         await gads.connectionState(),
-        { source: 'users' as SourceId, connected: false, reconnectNeeded: false, note: 'Not available in this app — signups live in the LocalShout backend, not this dashboard.' },
+        { source: 'users' as SourceId, connected: false, reconnectNeeded: false, note: 'Not available in this app — signups live in the Local Creator Crew backend, not this dashboard.' },
       ]
     : [];
 

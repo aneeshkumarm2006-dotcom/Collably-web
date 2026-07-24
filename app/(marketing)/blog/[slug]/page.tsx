@@ -200,7 +200,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <CtaBand
           className="border-t-outline border-ink"
           title="Start your first collab free"
-          subtitle="Join LocalShout free, as a creator or a business, and put these ideas to work."
+          subtitle="Join Local Creator Crew free, as a creator or a business, and put these ideas to work."
           primary={{ label: 'Get started', href: '/signup' }}
           secondary={{ label: 'Browse campaigns', href: '/explore' }}
         />
@@ -211,7 +211,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
 /** Square social share tiles (LinkedIn / X / Facebook). Links open a share intent. */
 function ShareTiles({ title, slug }: { title: string; slug: string }) {
-  const url = `https://localshout.app/blog/${slug}`;
+  const url = `https://www.localcreatorcrew.com/blog/${slug}`;
   const enc = encodeURIComponent(url);
   const encTitle = encodeURIComponent(title);
   const tiles = [

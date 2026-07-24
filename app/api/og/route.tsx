@@ -15,7 +15,7 @@ const PANEL = '#1f2123';
 
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = (searchParams.get('title') ?? 'LocalShout').slice(0, 120);
+  const title = (searchParams.get('title') ?? 'Local Creator Crew').slice(0, 120);
   const subtitle = (searchParams.get('subtitle') ?? '').slice(0, 180);
   const eyebrow = (searchParams.get('eyebrow') ?? 'The local collab marketplace').slice(0, 60);
 
@@ -53,7 +53,7 @@ export function GET(request: Request) {
           >
             C
           </div>
-          <div style={{ fontSize: '34px', fontWeight: 700, letterSpacing: '-0.02em' }}>LocalShout</div>
+          <div style={{ fontSize: '34px', fontWeight: 700, letterSpacing: '-0.02em' }}>Local Creator Crew</div>
         </div>
 
         {/* Headline block */}

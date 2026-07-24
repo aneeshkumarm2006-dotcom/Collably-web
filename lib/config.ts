@@ -58,7 +58,7 @@ export const config = {
    * canonical URLs, Open Graph/Twitter tags, `sitemap.ts`, `robots.ts`, JSON-LD,
    * and the blog RSS feed. Defaults to the production domain.
    */
-  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://localshout.app').replace(/\/$/, ''),
+  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.localcreatorcrew.com').replace(/\/$/, ''),
 
   /**
    * Web analytics. Provider is one of `plausible` | `ga4` | `none` (default
@@ -71,12 +71,30 @@ export const config = {
       | 'plausible'
       | 'ga4'
       | 'none',
-    /** Plausible site domain (the `data-domain`), e.g. `localshout.app`. */
+    /** Plausible site domain (the `data-domain`), e.g. `localcreatorcrew.com`. */
     plausibleDomain: process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? '',
     /** Plausible script src (self-hosted instances override this). */
     plausibleSrc: process.env.NEXT_PUBLIC_PLAUSIBLE_SRC ?? 'https://plausible.io/js/script.tagged-events.js',
     /** GA4 measurement ID, e.g. `G-XXXXXXXXXX`. */
     ga4Id: process.env.NEXT_PUBLIC_GA4_ID ?? '',
+  },
+
+  /**
+   * Transactional email (Resend). Server-only — the API key must never reach the
+   * browser. Mirrors the backend's `env.resend` shape (`RESEND_API_KEY` /
+   * `RESEND_FROM`) so one Resend account and one verified sending domain serve
+   * both the API and the website.
+   *
+   * Sending is best-effort: when `apiKey`/`from` are empty the contact route logs
+   * a dev warning and still acknowledges the submitter rather than throwing.
+   */
+  email: {
+    /** Resend API key (resend.com → API Keys). Empty → email sending is skipped. */
+    resendApiKey: process.env.RESEND_API_KEY ?? '',
+    /** Verified sender, e.g. `"LocalShout <noreply@davnoot.com>"`. */
+    resendFrom: process.env.RESEND_FROM ?? '',
+    /** Inbox that contact-form submissions (incl. GDPR/CCPA rights requests) land in. */
+    contactTo: process.env.CONTACT_TO_EMAIL ?? 'support@localcreatorcrew.com',
   },
 
   /**

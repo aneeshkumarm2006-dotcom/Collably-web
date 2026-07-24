@@ -19,10 +19,13 @@ import { ConfirmModal } from '@/components/shared/confirm-modal';
  *
  * Only what the platform can actually back is wired:
  *   • Report — files a real moderation report (`POST /reports`).
+ *   • Block — `POST /blocks`; the server cuts sending in both directions, so the
+ *     thread stays readable but neither side can send. Required by App Store
+ *     Guideline 1.2 / Play's UGC policy.
  *   • Submit content (creator) — deep-links to the collab's submission flow.
- * Mute and Block are rendered but disabled ("Coming soon") because no
- * mute/block API exists yet; About / shared-media / links from the mock are
- * omitted rather than faked, since there's no data source for them.
+ * Mute stays disabled: there is no mute API, and unlike Block it is not required
+ * by either store. About / shared-media / links from the mock are omitted rather
+ * than faked, since there's no data source for them.
  */
 export function ContactPanel({
   conversation,
@@ -37,6 +40,8 @@ export function ContactPanel({
 }) {
   const [reportOpen, setReportOpen] = useState(false);
   const [reporting, setReporting] = useState(false);
+  const [blockOpen, setBlockOpen] = useState(false);
+  const [blocking, setBlocking] = useState(false);
 
   const name = other?.name ?? 'Contact';
   const kind = role === 'creator' ? 'business' : 'creator';
@@ -56,6 +61,23 @@ export function ContactPanel({
       toast.error(errorMessage(err, 'Could not submit that report.'));
     } finally {
       setReporting(false);
+    }
+  }
+
+  async function blockUser() {
+    if (!other?._id) return;
+    setBlocking(true);
+    try {
+      await clientApi.blocks.block(other._id);
+      toast.success(`${name} is blocked.`);
+      setBlockOpen(false);
+      // Close the rail: there is nothing further to do with this contact, and
+      // the composer will now reject sends server-side.
+      onClose();
+    } catch (err) {
+      toast.error(errorMessage(err, 'Could not block that account.'));
+    } finally {
+      setBlocking(false);
     }
   }
 
@@ -140,9 +162,8 @@ export function ContactPanel({
         </button>
         <button
           type="button"
-          disabled
-          title="Coming soon"
-          className="flex cursor-not-allowed items-center gap-2.5 rounded-md px-2 py-2.5 text-left text-[13.5px] font-semibold text-danger opacity-50"
+          onClick={() => setBlockOpen(true)}
+          className="flex items-center gap-2.5 rounded-md px-2 py-2.5 text-left text-[13.5px] font-semibold text-danger transition-colors hover:bg-danger-soft"
         >
           <ShieldBan className="h-4 w-4" />
           Block
@@ -158,6 +179,17 @@ export function ContactPanel({
         destructive
         loading={reporting}
         onConfirm={fileReport}
+      />
+
+      <ConfirmModal
+        open={blockOpen}
+        onOpenChange={setBlockOpen}
+        title={`Block ${name}?`}
+        description="Neither of you will be able to send new messages. Your existing conversation stays readable, and you can undo this any time from Settings."
+        confirmLabel="Block"
+        destructive
+        loading={blocking}
+        onConfirm={blockUser}
       />
     </aside>
   );

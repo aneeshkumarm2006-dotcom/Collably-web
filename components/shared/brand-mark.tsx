@@ -1,12 +1,13 @@
 import { cn } from '@/lib/utils';
 
 /**
- * LocalShout brand — concept 2c, "Talking O's".
+ * Local Creator Crew brand — concept 2c, "Talking O's".
  *
  * Typographic wordmark: the letters are one ink colour (white on dark surfaces)
- * and only the two o-glyphs carry colour. The `o` in "Local" is a map pin; the
- * `o` in "Shout" is a broadcasting speaker. SVG paths are ported verbatim from
- * the design's 2c lockup (`.oglyph`, .78em, vertical-align -0.12em).
+ * and only the two o-glyphs carry colour. The `o` in "Local" is a map pin (the
+ * place); the `o` in "Creator" is a broadcasting speaker (the voice). SVG paths
+ * are ported verbatim from the design's 2c lockup (`.oglyph`, .78em,
+ * vertical-align -0.12em).
  *
  * 2c ships no standalone icon, so `BrandGlyph` derives one from the pin — a
  * monochrome teardrop that works on any tile (favicon, collapsed sidebar).
@@ -113,18 +114,20 @@ export function BrandMark({ withWordmark = true, onDark, className }: BrandMarkP
   return (
     <span
       className={cn(
-        'inline-flex items-center font-display text-[22px] font-bold tracking-[-0.03em]',
+        // `whitespace-nowrap` keeps the three words on one line — the old
+        // single-word lockup could never wrap, this one can.
+        'inline-flex items-center whitespace-nowrap font-display text-[22px] font-bold tracking-[-0.03em]',
         onDark ? 'text-white' : 'text-ink',
         className,
       )}
       role="img"
-      aria-label="LocalShout"
+      aria-label="Local Creator Crew"
     >
       L
       <PinO onDark={onDark} className="h-[0.78em] w-[0.78em]" />
-      calSh
+      cal&nbsp;Creat
       <SpeakerO onDark={onDark} className="h-[0.78em] w-[0.78em]" />
-      ut
+      r&nbsp;Crew
     </span>
   );
 }

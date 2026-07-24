@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.collably.app",
+      "sha256_cert_fingerprints": [
+        "05:BA:C3:03:56:31:E4:DC:37:8F:FE:1D:0E:84:FB:9D:8D:BE:6E:B6:A5:32:E3:DC:9E:6D:8E:16:66:6A:F6:90"
+      ]
+    }
+  }
+]
